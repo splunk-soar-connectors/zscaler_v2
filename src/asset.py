@@ -15,11 +15,30 @@ from soar_sdk.asset import BaseAsset, AssetField
 
 
 class Asset(BaseAsset):
-    base_url: str = AssetField(
-        description="Base URL (e.g. https://admin.zscaler_instance.net)"
+    vanity_domain: str = AssetField(
+        description="Domain used by the organization",
+        required=True,
     )
-    api_key: str = AssetField(description="API Key")
-    username: str = AssetField(description="Username")
-    password: str = AssetField(description="Password")
-    sandbox_base_url: str | None = AssetField(description="Sandbox Base URL")
-    sandbox_api_token: str | None = AssetField(description="Sandbox API Token")
+    client_id: str = AssetField(
+        description="Client ID for authentication",
+        required=True,
+    )
+    client_secret: str = AssetField(
+        description="Client secret for authentication",
+        required=True,
+        sensitive=True,
+    )
+    cloud: str = AssetField(
+        description="Zscaler cloud environment",
+        default="PRODUCTION",
+        required=False,
+    )
+    sandbox_token: str | None = AssetField(
+        description="ZIA Sandbox token",
+        required=False,
+        sensitive=True,
+    )
+    sandbox_cloud: str | None = AssetField(
+        description="ZIA Sandbox cloud name",
+        required=False,
+    )

@@ -11,19 +11,16 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from soar_sdk.abstract import SOARClient
 from soar_sdk.app import App
-from soar_sdk.logging import getLogger
 
 from .actions import register_actions
 from .asset import Asset
-
-logger = getLogger()
+from .connectivity import test_connectivity
 
 
 def create_zscaler_soar_connector_app() -> App:
     """Create and configure the Zscaler v2 connector app."""
-    return App(
+    app = App(
         name="zscaler_v2",
         app_type="network security",
         logo="logo_zscaler.svg",
@@ -36,16 +33,13 @@ def create_zscaler_soar_connector_app() -> App:
         asset_cls=Asset,
     )
 
+    app.test_connectivity()(test_connectivity)
+    app = register_actions(app)
+
+    return app
+
 
 app = create_zscaler_soar_connector_app()
-
-
-@app.test_connectivity()
-def test_connectivity(soar: SOARClient, asset: Asset) -> None:
-    raise NotImplementedError()
-
-
-app = register_actions(app)
 
 
 if __name__ == "__main__":

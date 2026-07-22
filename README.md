@@ -14,12 +14,12 @@ This table lists the configuration variables required to operate zscaler_v2. The
 
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
-**base_url** | required | string | Base URL (e.g. https://admin.zscaler_instance.net) |
-**api_key** | required | string | API Key |
-**username** | required | string | Username |
-**password** | required | string | Password |
-**sandbox_base_url** | optional | string | Sandbox Base URL |
-**sandbox_api_token** | optional | string | Sandbox API Token |
+**vanity_domain** | required | string | Domain used by the organization |
+**client_id** | required | string | Client ID for authentication |
+**client_secret** | required | password | Client secret for authentication |
+**cloud** | optional | string | Zscaler cloud environment |
+**sandbox_token** | optional | password | ZIA Sandbox token |
+**sandbox_cloud** | optional | string | ZIA Sandbox cloud name |
 
 ### Supported Actions
 
