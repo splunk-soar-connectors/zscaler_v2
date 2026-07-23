@@ -613,6 +613,7 @@ action_result.data.\*.groups.\*.name | string | | test Super Admin |
 action_result.data.\*.id | numeric | `zscaler user id` | 889814 |
 action_result.data.\*.isNonEditable | boolean | | True False |
 action_result.data.\*.name | string | | test First Last |
+action_result.summary.total_users | numeric | | 10 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 

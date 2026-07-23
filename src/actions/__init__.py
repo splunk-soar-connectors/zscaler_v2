@@ -32,7 +32,7 @@ from .lookup_ip import lookup_ip
 from .lookup_url import lookup_url
 from .submit_file import submit_file
 from .get_admin_users import get_admin_users
-from .get_users import get_users
+from .get_users import GetUsersSummary, get_users
 from .get_groups import GetGroupsSummary, get_groups
 from .add_group_user import add_group_user
 from .remove_group_user import remove_group_user
@@ -166,6 +166,8 @@ def register_actions(app: App) -> App:
         action=get_users,
         description="Gets a list of all users and allows user filtering by name, department, or group",
         action_type="investigate",
+        render_as="table",
+        summary_type=GetUsersSummary,
         verbose="Gets a list of all users and allows user filtering by name, department, or group. The name search parameter performs a partial match. The dept and group parameters perform a 'starts with' match.",
     )
 
