@@ -1198,6 +1198,8 @@ action_result.data.\*.scopes.\*.Type | string | | test ORGANIZATION |
 action_result.data.\*.type | string | | test URL_CATEGORY |
 action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | 0 |
 action_result.data.\*.val | numeric | | 1 |
+action_result.summary.message | string | | Category details recieved |
+action_result.summary.total_categories | numeric | | 97 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
