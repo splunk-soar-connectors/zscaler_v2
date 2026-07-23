@@ -737,6 +737,8 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.data.\*.url | string | | |
+action_result.summary.total_allowlist_items | numeric | | 10 |
+action_result.summary.message | string | | Allowlist retrieved |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 

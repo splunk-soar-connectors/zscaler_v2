@@ -12,15 +12,55 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from soar_sdk.abstract import SOARClient
-from soar_sdk.action_results import ActionOutput
+from soar_sdk.action_results import ActionOutput, OutputField
+from soar_sdk.exceptions import ActionFailure
+from soar_sdk.logging import getLogger
 from soar_sdk.params import Params
 
 from ..asset import Asset
+from ..zscaler_client import get_client
+
+logger = getLogger()
 
 
 class GetAllowlistOutput(ActionOutput):
-    url: str
+    url: str = OutputField(column_name="allowlist url")
 
 
-def get_allowlist(params: Params, soar: SOARClient, asset: Asset) -> GetAllowlistOutput:
-    raise NotImplementedError()
+class GetAllowlistSummary(ActionOutput):
+    total_allowlist_items: int = OutputField(example_values=[10])
+    message: str = OutputField(example_values=["Allowlist retrieved"])
+
+
+def get_allowlist(
+    params: Params, soar: SOARClient, asset: Asset
+) -> list[GetAllowlistOutput]:
+    try:
+        with get_client(asset) as client:
+            settings, _response, error = (
+                client.zia.security_policy_settings.get_whitelist()
+            )
+            if error is not None:
+                raise RuntimeError(f"Zscaler API error: {error}")
+            if settings is None:
+                raise RuntimeError("Zscaler API returned no allowlist settings")
+
+            urls = settings.whitelist_urls
+            if not isinstance(urls, list):
+                raise RuntimeError("Zscaler API returned an invalid allowlist")
+    except Exception as exc:
+        logger.exception("Get allowlist failed")
+        message = f"Get allowlist failed: {exc}"
+        soar.set_message(message)
+        raise ActionFailure(message) from exc
+
+    rows = [GetAllowlistOutput(url=str(url)) for url in urls]
+    message = "Allowlist retrieved"
+    soar.set_summary(
+        GetAllowlistSummary(
+            total_allowlist_items=len(rows),
+            message=message,
+        )
+    )
+    soar.set_message(message)
+    return rows
