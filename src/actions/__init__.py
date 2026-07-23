@@ -21,7 +21,7 @@ from soar_sdk.app import App
 from .get_report import get_report
 from .list_url_categories import ListUrlCategoriesSummary, list_url_categories
 from .block_ip import BlockIpSummary, block_ip
-from .block_url import block_url
+from .block_url import BlockUrlSummary, block_url
 from .unblock_ip import UnblockIpSummary, unblock_ip
 from .unblock_url import unblock_url
 from .allow_ip import allow_ip
@@ -90,6 +90,7 @@ def register_actions(app: App) -> App:
         description="Block a URL",
         action_type="contain",
         read_only=False,
+        summary_type=BlockUrlSummary,
         verbose="If a <b>url_category</b> is specified, it will add the URL(s) as a rule to that category. If it is left blank, it will instead add the URL(s) to the global blocklist.",
     )
 
