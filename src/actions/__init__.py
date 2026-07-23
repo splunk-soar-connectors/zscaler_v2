@@ -140,6 +140,7 @@ def register_actions(app: App) -> App:
         action=lookup_ip,
         description="Lookup the categories related to an IP",
         action_type="investigate",
+        render_as="table",
     )
 
     app.register_action(
