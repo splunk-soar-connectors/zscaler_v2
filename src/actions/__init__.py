@@ -44,7 +44,10 @@ from .add_category_ip import add_category_ip
 from .remove_category_url import remove_category_url
 from .remove_category_ip import remove_category_ip
 from .create_destination_group import create_destination_group
-from .list_destination_group import list_destination_group
+from .list_destination_group import (
+    ListDestinationGroupSummary,
+    list_destination_group,
+)
 from .edit_destination_group import edit_destination_group
 from .delete_destination_group import delete_destination_group
 from .get_departments import GetDepartmentsSummary, get_departments
@@ -263,6 +266,8 @@ def register_actions(app: App) -> App:
         description="List destination group",
         action_type="investigate",
         read_only=False,
+        render_as="table",
+        summary_type=ListDestinationGroupSummary,
     )
 
     app.register_action(
