@@ -31,7 +31,7 @@ from .unallow_url import unallow_url
 from .lookup_ip import lookup_ip
 from .lookup_url import lookup_url
 from .submit_file import submit_file
-from .get_admin_users import get_admin_users
+from .get_admin_users import GetAdminUsersSummary, get_admin_users
 from .get_users import GetUsersSummary, get_users
 from .get_groups import GetGroupsSummary, get_groups
 from .add_group_user import add_group_user
@@ -160,6 +160,7 @@ def register_actions(app: App) -> App:
         action=get_admin_users,
         description="Get a list of admin users",
         action_type="investigate",
+        summary_type=GetAdminUsersSummary,
     )
 
     app.register_action(

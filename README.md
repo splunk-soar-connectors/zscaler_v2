@@ -570,6 +570,7 @@ action_result.data.\*.role.id | numeric | | |
 action_result.data.\*.role.isNameL10nTag | boolean | | True False |
 action_result.data.\*.role.name | string | | test Super Admin |
 action_result.data.\*.userName | string | | test Last, First |
+action_result.summary.total_admin_users | numeric | | 10 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
