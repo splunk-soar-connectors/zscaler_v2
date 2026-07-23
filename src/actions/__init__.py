@@ -47,7 +47,7 @@ from .create_destination_group import create_destination_group
 from .list_destination_group import list_destination_group
 from .edit_destination_group import edit_destination_group
 from .delete_destination_group import delete_destination_group
-from .get_departments import get_departments
+from .get_departments import GetDepartmentsSummary, get_departments
 from .get_category_details import get_category_details
 
 
@@ -275,6 +275,8 @@ def register_actions(app: App) -> App:
         action=get_departments,
         description="Get a list of departments",
         action_type="investigate",
+        render_as="table",
+        summary_type=GetDepartmentsSummary,
     )
 
     app.register_action(

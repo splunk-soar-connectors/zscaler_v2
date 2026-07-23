@@ -1154,6 +1154,8 @@ action_result.parameter.pageSize | numeric | | |
 action_result.data.\*.id | numeric | | |
 action_result.data.\*.name | string | | |
 action_result.data.\*.isNonEditable | boolean | | True False |
+action_result.summary.message | string | | Departments Retrieved |
+action_result.summary.total_deparments | numeric | | 97 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
