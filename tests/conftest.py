@@ -69,7 +69,9 @@ def connector_app() -> App:
 def build_soar_action_input(
     live_asset_config: dict[str, str],
 ) -> Callable[..., dict[str, Any]]:
-    def _build_soar_action_input(*, action: str) -> dict[str, Any]:
+    def _build_soar_action_input(
+        *, action: str, parameters: dict[str, Any] | None = None
+    ) -> dict[str, Any]:
         asset_id = os.environ.get("SOAR_ASSET_ID", "123")
         asset_config = dict(live_asset_config)
         for sensitive_key in ("client_secret", "sandbox_token"):
@@ -90,7 +92,7 @@ def build_soar_action_input(
                 "main_module": "src.app:app",
                 **asset_config,
             },
-            "parameters": [{}],
+            "parameters": [parameters or {}],
         }
 
     return _build_soar_action_input

@@ -37,7 +37,7 @@ from .get_groups import get_groups
 from .add_group_user import add_group_user
 from .remove_group_user import remove_group_user
 from .get_allowlist import GetAllowlistSummary, get_allowlist
-from .get_denylist import get_denylist
+from .get_denylist import GetDenylistSummary, get_denylist
 from .update_user import update_user
 from .add_category_url import add_category_url
 from .add_category_ip import add_category_ip
@@ -204,6 +204,8 @@ def register_actions(app: App) -> App:
         action=get_denylist,
         description="Get urls on the deny list",
         action_type="investigate",
+        render_as="table",
+        summary_type=GetDenylistSummary,
     )
 
     app.register_action(

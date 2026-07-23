@@ -765,6 +765,8 @@ action_result.message | string | | |
 action_result.parameter.filter | string | | |
 action_result.parameter.query | string | | |
 action_result.data.\*.url | string | | |
+action_result.summary.message | string | | Blacklist retrieved |
+action_result.summary.total_denylist_items | numeric | | 10 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
