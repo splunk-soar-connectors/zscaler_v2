@@ -19,7 +19,7 @@
 from soar_sdk.app import App
 
 from .get_report import get_report
-from .list_url_categories import list_url_categories
+from .list_url_categories import ListUrlCategoriesSummary, list_url_categories
 from .block_ip import block_ip
 from .block_url import block_url
 from .unblock_ip import unblock_ip
@@ -70,6 +70,7 @@ def register_actions(app: App) -> App:
         action=list_url_categories,
         description="List all URL categories",
         action_type="investigate",
+        summary_type=ListUrlCategoriesSummary,
     )
 
     app.register_action(
