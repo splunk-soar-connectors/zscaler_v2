@@ -644,6 +644,7 @@ action_result.data.\*.comments | string | | test This is for testing |
 action_result.data.\*.id | numeric | `zscaler group id` | 8894813 |
 action_result.data.\*.isNonEditable | boolean | | True False |
 action_result.data.\*.name | string | | test Frothly Internet Access |
+action_result.summary.total_groups | numeric | | 4 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 

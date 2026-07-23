@@ -33,7 +33,7 @@ from .lookup_url import lookup_url
 from .submit_file import submit_file
 from .get_admin_users import get_admin_users
 from .get_users import get_users
-from .get_groups import get_groups
+from .get_groups import GetGroupsSummary, get_groups
 from .add_group_user import add_group_user
 from .remove_group_user import remove_group_user
 from .get_allowlist import GetAllowlistSummary, get_allowlist
@@ -173,6 +173,8 @@ def register_actions(app: App) -> App:
         action=get_groups,
         description="Gets a list of groups",
         action_type="investigate",
+        render_as="table",
+        summary_type=GetGroupsSummary,
         verbose="Gets a list of groups. The search parameters find matching values in the name or comments attributes.",
     )
 
