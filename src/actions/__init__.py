@@ -147,6 +147,7 @@ def register_actions(app: App) -> App:
         action=lookup_url,
         description="Lookup the categories related to a URL",
         action_type="investigate",
+        render_as="table",
     )
 
     app.register_action(
