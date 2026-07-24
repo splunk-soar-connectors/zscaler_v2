@@ -414,6 +414,8 @@ action_result.data.\*.dbCategorizedUrls | string | | |
 action_result.data.\*.description | string | | |
 action_result.data.\*.id | string | | test CUSTOM_01 |
 action_result.data.\*.val | numeric | | 128 |
+action_result.summary.ignored | string | | test 8.8.8.8 |
+action_result.summary.updated | string | | test 208.67.222.222 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 

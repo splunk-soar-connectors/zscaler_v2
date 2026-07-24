@@ -26,7 +26,7 @@ from .unblock_ip import UnblockIpSummary, unblock_ip
 from .unblock_url import UnblockUrlSummary, unblock_url
 from .allow_ip import AllowIpSummary, allow_ip
 from .allow_url import AllowUrlSummary, allow_url
-from .unallow_ip import unallow_ip
+from .unallow_ip import UnallowIpSummary, unallow_ip
 from .unallow_url import unallow_url
 from .lookup_ip import lookup_ip
 from .lookup_url import lookup_url
@@ -135,6 +135,7 @@ def register_actions(app: App) -> App:
         description="Remove an IP address from the allowlist",
         action_type="correct",
         read_only=False,
+        summary_type=UnallowIpSummary,
         verbose="If a <b>url_category</b> is specified, it will remove the IP(s) from that category. If it is left blank, it will instead remove the IP(s) from the global allowlist.",
     )
 
