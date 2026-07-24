@@ -13,9 +13,14 @@
 # limitations under the License.
 from soar_sdk.abstract import SOARClient
 from soar_sdk.action_results import ActionOutput, OutputField
+from soar_sdk.exceptions import ActionFailure
+from soar_sdk.logging import getLogger
 from soar_sdk.params import Param, Params
 
 from ..asset import Asset
+from ..zscaler_client import get_client
+
+logger = getLogger()
 
 
 class EditDestinationGroupParams(Params):
@@ -55,7 +60,86 @@ class EditDestinationGroupOutput(ActionOutput):
     creatorContext: str
 
 
+class EditDestinationGroupSummary(ActionOutput):
+    message: str = OutputField(example_values=["Destination Group Edited"])
+
+
 def edit_destination_group(
     params: EditDestinationGroupParams, soar: SOARClient, asset: Asset
 ) -> EditDestinationGroupOutput:
-    raise NotImplementedError()
+    if not params.ip_group_id.is_integer():
+        message = "Edit destination group failed: ip_group_id must be an integer"
+        soar.set_message(message)
+        raise ActionFailure(message)
+    if params.ip_group_id <= 0:
+        message = "Edit destination group failed: ip_group_id must be positive"
+        soar.set_message(message)
+        raise ActionFailure(message)
+
+    numeric_group_id = int(params.ip_group_id)
+    group_id = str(numeric_group_id)
+
+    try:
+        with get_client(asset) as client:
+            group, group_response, group_error = (
+                client.zia.cloud_firewall.get_ip_destination_group(numeric_group_id)
+            )
+            if group_error is not None:
+                raise RuntimeError(f"Zscaler API error: {group_error}")
+            if group is None or group_response is None:
+                raise RuntimeError("Zscaler API returned no destination group")
+
+            raw_group = group_response.get_body()
+            if not isinstance(raw_group, dict):
+                raise RuntimeError("Zscaler API returned an invalid destination group")
+
+            if params.name is not None:
+                raw_group["name"] = params.name
+            if params.addresses:
+                raw_group["addresses"] = [
+                    item.strip() for item in params.addresses.split(",") if item.strip()
+                ]
+            if params.description is not None:
+                raw_group["description"] = params.description
+            if params.ip_categories:
+                raw_group["ipCategories"] = [
+                    item.strip()
+                    for item in params.ip_categories.split(",")
+                    if item.strip()
+                ]
+            if params.countries:
+                raw_group["countries"] = [
+                    item.strip() for item in params.countries.split(",") if item.strip()
+                ]
+            raw_group["isNonEditable"] = params.is_non_editable
+
+            updated, updated_response, update_error = (
+                client.zia.cloud_firewall.update_ip_destination_group(
+                    group_id,
+                    **raw_group,
+                )
+            )
+            if update_error is not None:
+                raise RuntimeError(f"Zscaler API error: {update_error}")
+            if updated is None or updated_response is None:
+                raise RuntimeError("Zscaler API returned no updated destination group")
+
+            raw_updated = updated_response.get_body()
+            if not isinstance(raw_updated, dict):
+                raise RuntimeError(
+                    "Zscaler API returned an invalid updated destination group"
+                )
+
+            activation, _response, activation_error = client.zia.activate.activate()
+            if activation_error is not None:
+                raise RuntimeError(f"Zscaler API error: {activation_error}")
+            if activation is None:
+                raise RuntimeError("Zscaler API returned no activation response")
+    except Exception as exc:
+        logger.exception("Edit destination group failed")
+        message = f"Edit destination group failed: {exc}"
+        soar.set_message(message)
+        raise ActionFailure(message) from exc
+
+    soar.set_summary(EditDestinationGroupSummary(message="Destination Group Edited"))
+    return EditDestinationGroupOutput.model_construct(**raw_updated)
