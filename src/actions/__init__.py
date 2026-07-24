@@ -23,7 +23,7 @@ from .list_url_categories import ListUrlCategoriesSummary, list_url_categories
 from .block_ip import BlockIpSummary, block_ip
 from .block_url import BlockUrlSummary, block_url
 from .unblock_ip import UnblockIpSummary, unblock_ip
-from .unblock_url import unblock_url
+from .unblock_url import UnblockUrlSummary, unblock_url
 from .allow_ip import allow_ip
 from .allow_url import allow_url
 from .unallow_ip import unallow_ip
@@ -108,6 +108,7 @@ def register_actions(app: App) -> App:
         description="Unblock a URL",
         action_type="correct",
         read_only=False,
+        summary_type=UnblockUrlSummary,
         verbose="If a <b>url_category</b> is specified, it will remove the URL(s) from that category. If it is left blank, it will instead remove the URL(s) from the global blocklist.",
     )
 
