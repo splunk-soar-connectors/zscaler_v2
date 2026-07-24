@@ -39,7 +39,7 @@ from .remove_group_user import remove_group_user
 from .get_allowlist import GetAllowlistSummary, get_allowlist
 from .get_denylist import GetDenylistSummary, get_denylist
 from .update_user import update_user
-from .add_category_url import add_category_url
+from .add_category_url import AddCategoryUrlSummary, add_category_url
 from .add_category_ip import add_category_ip
 from .remove_category_url import remove_category_url
 from .remove_category_ip import remove_category_ip
@@ -239,6 +239,7 @@ def register_actions(app: App) -> App:
         description="Add urls to a cetgory",
         action_type="generic",
         read_only=False,
+        summary_type=AddCategoryUrlSummary,
     )
 
     app.register_action(
