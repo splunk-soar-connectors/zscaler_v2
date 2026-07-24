@@ -997,6 +997,7 @@ action_result.data.\*.customIpRangesCount | numeric | | |
 action_result.data.\*.keywordsRetainingParentCategory | string | | |
 action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | |
 action_result.data.\*.ipRangesRetainingParentCategoryCount | numeric | | |
+action_result.summary.message | string | | Category ips removed |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 

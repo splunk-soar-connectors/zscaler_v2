@@ -12,10 +12,15 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from soar_sdk.abstract import SOARClient
-from soar_sdk.action_results import ActionOutput
+from soar_sdk.action_results import ActionOutput, OutputField
+from soar_sdk.exceptions import ActionFailure
+from soar_sdk.logging import getLogger
 from soar_sdk.params import Param, Params
 
 from ..asset import Asset
+from ..zscaler_client import get_client
+
+logger = getLogger()
 
 
 class RemoveCategoryIpParams(Params):
@@ -56,7 +61,64 @@ class RemoveCategoryIpOutput(ActionOutput):
     ipRangesRetainingParentCategoryCount: float
 
 
+class RemoveCategoryIpSummary(ActionOutput):
+    message: str = OutputField(example_values=["Category ips removed"])
+
+
 def remove_category_ip(
     params: RemoveCategoryIpParams, soar: SOARClient, asset: Asset
 ) -> RemoveCategoryIpOutput:
-    raise NotImplementedError()
+    ips = [item.strip() for item in (params.ips or "").split(",") if item.strip()]
+    parent_ips = [
+        item.strip()
+        for item in (params.retaining_parent_category_ip or "").split(",")
+        if item.strip()
+    ]
+
+    try:
+        with get_client(asset) as client:
+            category, category_response, category_error = (
+                client.zia.url_categories.get_category(params.category_id)
+            )
+            if category_error is not None:
+                raise RuntimeError(f"Zscaler API error: {category_error}")
+            if category is None or category_response is None:
+                raise RuntimeError("Zscaler API returned no category")
+
+            raw_category = category_response.get_body()
+            if not isinstance(raw_category, dict):
+                raise RuntimeError("Zscaler API returned an invalid category")
+            configured_name = raw_category.get("configuredName")
+            if not isinstance(configured_name, str):
+                raise RuntimeError("Zscaler API returned a category without a name")
+
+            updated, updated_response, update_error = (
+                client.zia.url_categories.delete_urls_from_category(
+                    params.category_id,
+                    configuredName=configured_name,
+                    urls=ips,
+                    dbCategorizedUrls=parent_ips,
+                )
+            )
+            if update_error is not None:
+                raise RuntimeError(f"Zscaler API error: {update_error}")
+            if updated is None or updated_response is None:
+                raise RuntimeError("Zscaler API returned no updated category")
+
+            raw_updated = updated_response.get_body()
+            if not isinstance(raw_updated, dict):
+                raise RuntimeError("Zscaler API returned an invalid updated category")
+
+            activation, _response, activation_error = client.zia.activate.activate()
+            if activation_error is not None:
+                raise RuntimeError(f"Zscaler API error: {activation_error}")
+            if activation is None:
+                raise RuntimeError("Zscaler API returned no activation response")
+    except Exception as exc:
+        logger.exception("Remove category IP failed")
+        message = f"Remove category IP failed: {exc}"
+        soar.set_message(message)
+        raise ActionFailure(message) from exc
+
+    soar.set_summary(RemoveCategoryIpSummary(message="Category ips removed"))
+    return RemoveCategoryIpOutput.model_construct(**raw_updated)
