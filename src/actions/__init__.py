@@ -43,7 +43,10 @@ from .add_category_url import AddCategoryUrlSummary, add_category_url
 from .add_category_ip import AddCategoryIpSummary, add_category_ip
 from .remove_category_url import RemoveCategoryUrlSummary, remove_category_url
 from .remove_category_ip import RemoveCategoryIpSummary, remove_category_ip
-from .create_destination_group import create_destination_group
+from .create_destination_group import (
+    CreateDestinationGroupSummary,
+    create_destination_group,
+)
 from .list_destination_group import (
     ListDestinationGroupSummary,
     list_destination_group,
@@ -271,6 +274,7 @@ def register_actions(app: App) -> App:
         description="Create destination group",
         action_type="generic",
         read_only=False,
+        summary_type=CreateDestinationGroupSummary,
     )
 
     app.register_action(

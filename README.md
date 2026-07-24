@@ -1040,6 +1040,7 @@ action_result.data.\*.description | string | | |
 action_result.data.\*.ipCategories | string | | TRADING_BROKARAGE_INSURANCE |
 action_result.data.\*.isNonEditable | boolean | | True False |
 action_result.data.\*.creatorContext | string | | |
+action_result.summary.message | string | | Destination Group Created |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
