@@ -24,7 +24,7 @@ from .block_ip import BlockIpSummary, block_ip
 from .block_url import BlockUrlSummary, block_url
 from .unblock_ip import UnblockIpSummary, unblock_ip
 from .unblock_url import UnblockUrlSummary, unblock_url
-from .allow_ip import allow_ip
+from .allow_ip import AllowIpSummary, allow_ip
 from .allow_url import allow_url
 from .unallow_ip import unallow_ip
 from .unallow_url import unallow_url
@@ -117,6 +117,7 @@ def register_actions(app: App) -> App:
         description="Add an IP address to the allowlist",
         action_type="contain",
         read_only=False,
+        summary_type=AllowIpSummary,
         verbose="If a <b>url_category</b> is specified, it will add the IP(s) as a rule to that category. If it is left blank, it will instead add this IP(s) to the global allowlist.",
     )
 
