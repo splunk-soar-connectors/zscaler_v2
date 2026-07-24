@@ -40,7 +40,7 @@ from .get_allowlist import GetAllowlistSummary, get_allowlist
 from .get_denylist import GetDenylistSummary, get_denylist
 from .update_user import update_user
 from .add_category_url import AddCategoryUrlSummary, add_category_url
-from .add_category_ip import add_category_ip
+from .add_category_ip import AddCategoryIpSummary, add_category_ip
 from .remove_category_url import remove_category_url
 from .remove_category_ip import remove_category_ip
 from .create_destination_group import create_destination_group
@@ -247,6 +247,7 @@ def register_actions(app: App) -> App:
         description="Add IPs to a cetgory",
         action_type="generic",
         read_only=False,
+        summary_type=AddCategoryIpSummary,
     )
 
     app.register_action(
