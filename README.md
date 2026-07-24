@@ -1151,6 +1151,7 @@ action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.ip_group_ids | string | | |
 action_result.data.\*.ip_group_ids | string | | |
+action_result.summary.message | string | | Destination groups deleted |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 

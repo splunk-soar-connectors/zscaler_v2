@@ -52,7 +52,10 @@ from .list_destination_group import (
     list_destination_group,
 )
 from .edit_destination_group import EditDestinationGroupSummary, edit_destination_group
-from .delete_destination_group import delete_destination_group
+from .delete_destination_group import (
+    DeleteDestinationGroupSummary,
+    delete_destination_group,
+)
 from .get_departments import GetDepartmentsSummary, get_departments
 from .get_category_details import GetCategoryDetailsSummary, get_category_details
 
@@ -299,6 +302,7 @@ def register_actions(app: App) -> App:
         description="Delete destination group",
         action_type="generic",
         read_only=False,
+        summary_type=DeleteDestinationGroupSummary,
     )
 
     app.register_action(
