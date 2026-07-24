@@ -25,7 +25,7 @@ from .block_url import BlockUrlSummary, block_url
 from .unblock_ip import UnblockIpSummary, unblock_ip
 from .unblock_url import UnblockUrlSummary, unblock_url
 from .allow_ip import AllowIpSummary, allow_ip
-from .allow_url import allow_url
+from .allow_url import AllowUrlSummary, allow_url
 from .unallow_ip import unallow_ip
 from .unallow_url import unallow_url
 from .lookup_ip import lookup_ip
@@ -126,6 +126,7 @@ def register_actions(app: App) -> App:
         description="Add a URL to the allowed list",
         action_type="contain",
         read_only=False,
+        summary_type=AllowUrlSummary,
         verbose="If a <b>url_category</b> is specified, it will add the URL(s) as a rule to that category. If it is left blank, it will instead add the URL(s) to the global allowed list.",
     )
 
