@@ -449,6 +449,8 @@ action_result.data.\*.dbCategorizedUrls | string | | |
 action_result.data.\*.description | string | | |
 action_result.data.\*.id | string | | test CUSTOM_01 |
 action_result.data.\*.val | numeric | | 128 |
+action_result.summary.ignored | string | | test www.test.com |
+action_result.summary.updated | string | | test www.test123.com |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
