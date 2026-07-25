@@ -34,7 +34,7 @@ from .submit_file import submit_file
 from .get_admin_users import GetAdminUsersSummary, get_admin_users
 from .get_users import GetUsersSummary, get_users
 from .get_groups import GetGroupsSummary, get_groups
-from .add_group_user import add_group_user
+from .add_group_user import AddGroupUserSummary, add_group_user
 from .remove_group_user import remove_group_user
 from .get_allowlist import GetAllowlistSummary, get_allowlist
 from .get_denylist import GetDenylistSummary, get_denylist
@@ -206,6 +206,7 @@ def register_actions(app: App) -> App:
         description="Add user to group",
         action_type="generic",
         read_only=False,
+        summary_type=AddGroupUserSummary,
         verbose="Add a group to the user's profile.",
     )
 

@@ -12,14 +12,19 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import os
+import secrets
 from collections.abc import Callable
-from typing import Any
+from collections.abc import Iterator
+from typing import Any, TypedDict
+from uuid import uuid4
 
 import pytest
 from soar_sdk.app import App
 from soar_sdk.shims.phantom.encryption_helper import encryption_helper
 
 from src.app import create_zscaler_soar_connector_app
+from src.asset import Asset
+from src.zscaler_client import get_client
 
 from . import config as test_config
 
@@ -29,6 +34,13 @@ class RedactedAssetConfig(dict[str, str]):
 
     def __repr__(self) -> str:
         return f"{type(self).__name__}(<redacted>)"
+
+
+class ManagedZiaTestIdentity(TypedDict):
+    """Identifiers for ZIA resources owned by the live test session."""
+
+    user_id: int
+    target_group_id: int
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -58,6 +70,98 @@ def live_asset_config(load_dotenv: None) -> RedactedAssetConfig:
             config[asset_key] = value
 
     return config
+
+
+@pytest.fixture(scope="session")
+def managed_zia_test_identity(
+    live_asset_config: dict[str, str],
+) -> Iterator[ManagedZiaTestIdentity]:
+    """Create an isolated ZIA identity and remove it after the live test session."""
+    domain = os.environ.get("ZSCALER_TEST_DOMAIN", "").strip().removeprefix("@")
+    assert domain, "ZSCALER_TEST_DOMAIN must be a registered ZIA tenant domain"
+    assert "@" not in domain, "ZSCALER_TEST_DOMAIN must contain only the domain"
+
+    asset = Asset.model_validate(live_asset_config)
+    suffix = uuid4().hex
+    department_id: int | None = None
+    base_group_id: int | None = None
+    target_group_id: int | None = None
+    user_id: int | None = None
+    cleanup_errors: list[str] = []
+
+    with get_client(asset) as client:
+        try:
+            department, _response, error = client.zia.user_management.add_department(
+                name=f"PAPP-38277 department {suffix}",
+                comments="Temporary resource created by zscaler_v2 live tests",
+            )
+            assert error is None, f"Unable to create test department: {error}"
+            assert department is not None
+            assert department.id is not None
+            department_id = int(department.id)
+
+            base_group, _response, error = client.zia.user_management.add_group(
+                name=f"PAPP-38277 base group {suffix}",
+                comments="Temporary resource created by zscaler_v2 live tests",
+            )
+            assert error is None, f"Unable to create base test group: {error}"
+            assert base_group is not None
+            assert base_group.id is not None
+            base_group_id = int(base_group.id)
+
+            target_group, _response, error = client.zia.user_management.add_group(
+                name=f"PAPP-38277 target group {suffix}",
+                comments="Temporary resource created by zscaler_v2 live tests",
+            )
+            assert error is None, f"Unable to create target test group: {error}"
+            assert target_group is not None
+            assert target_group.id is not None
+            target_group_id = int(target_group.id)
+
+            user, _response, error = client.zia.user_management.add_user(
+                name=f"PAPP-38277 user {suffix}",
+                email=f"papp-38277-{suffix}@{domain}",
+                groups=[{"id": base_group_id}],
+                department={"id": department_id},
+                comments="Temporary resource created by zscaler_v2 live tests",
+                password=f"Zia!9aA-{secrets.token_urlsafe(24)}",
+            )
+            assert error is None, f"Unable to create test user: {error}"
+            assert user is not None
+            assert user.id is not None
+            user_id = int(user.id)
+
+            yield {
+                "user_id": user_id,
+                "target_group_id": target_group_id,
+            }
+        finally:
+            if user_id is not None:
+                _result, _response, error = client.zia.user_management.delete_user(
+                    str(user_id)
+                )
+                if error is not None:
+                    cleanup_errors.append(f"user {user_id}: {error}")
+
+            for group_id in (target_group_id, base_group_id):
+                if group_id is None:
+                    continue
+                _result, _response, error = client.zia.user_management.delete_group(
+                    group_id
+                )
+                if error is not None:
+                    cleanup_errors.append(f"group {group_id}: {error}")
+
+            if department_id is not None:
+                _result, _response, error = (
+                    client.zia.user_management.delete_department(department_id)
+                )
+                if error is not None:
+                    cleanup_errors.append(f"department {department_id}: {error}")
+
+    assert not cleanup_errors, "Unable to clean up live-test resources: " + "; ".join(
+        cleanup_errors
+    )
 
 
 @pytest.fixture

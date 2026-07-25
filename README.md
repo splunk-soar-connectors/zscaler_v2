@@ -700,6 +700,7 @@ action_result.data.\*.groups.\*.id | numeric | | 4460341 |
 action_result.data.\*.groups.\*.name | string | | test Example App |
 action_result.data.\*.id | numeric | | 9840695 |
 action_result.data.\*.name | string | | test Test user |
+action_result.summary.message | string | | User successfully added to group |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
