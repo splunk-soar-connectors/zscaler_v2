@@ -52,10 +52,12 @@ class EditDestinationGroupOutput(ActionOutput):
     type: str = OutputField(
         example_values=["DSTN_IP", "DSTN_FQDN", "DSTN_DOMAIN", "DSTN_OTHER"]
     )
-    addresses: str = OutputField(example_values=["192.168.1.1"])
-    countries: str
+    addresses: list[str] = OutputField(example_values=["192.168.1.1"])
+    countries: list[str]
     description: str
-    ipCategories: str = OutputField(example_values=["TRADING_BROKARAGE_INSURANCE"])
+    ipCategories: list[str] = OutputField(
+        example_values=["TRADING_BROKARAGE_INSURANCE"]
+    )
     isNonEditable: bool
     creatorContext: str
 

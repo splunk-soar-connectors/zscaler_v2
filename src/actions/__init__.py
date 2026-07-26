@@ -285,7 +285,7 @@ def register_actions(app: App) -> App:
         action=list_destination_group,
         description="List destination group",
         action_type="investigate",
-        read_only=False,
+        read_only=True,
         render_as="table",
         summary_type=ListDestinationGroupSummary,
     )

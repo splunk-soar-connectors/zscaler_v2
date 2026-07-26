@@ -53,10 +53,10 @@ class ListDestinationGroupOutput(PermissiveActionOutput):
     type: str | None = OutputField(
         example_values=["DSTN_IP", "DSTN_FQDN", "DSTN_DOMAIN", "DSTN_OTHER"]
     )
-    addresses: str | None = OutputField(example_values=["192.168.1.1"])
-    countries: str | None = None
+    addresses: list[str] | None = OutputField(example_values=["192.168.1.1"])
+    countries: list[str] | None = None
     description: str | None = None
-    ipCategories: str | None = OutputField(
+    ipCategories: list[str] | None = OutputField(
         example_values=["TRADING_BROKARAGE_INSURANCE"]
     )
     isNonEditable: bool | None = None

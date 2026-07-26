@@ -18,11 +18,16 @@ from uuid import uuid4
 
 from soar_sdk.app import App
 
+from src.actions.delete_destination_group import DeleteDestinationGroupParams
 from src.asset import Asset
 from src.zscaler_client import get_client
 
 
-def test_delete_destination_group_live_deletes_multiple_and_preserves_legacy_rows(
+def test_delete_destination_group_requires_group_ids() -> None:
+    assert DeleteDestinationGroupParams.model_fields["ip_group_ids"].is_required()
+
+
+def test_delete_destination_group_live_returns_one_row_per_deleted_group(
     connector_app: App,
     build_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],

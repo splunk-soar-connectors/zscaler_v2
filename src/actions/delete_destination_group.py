@@ -24,14 +24,14 @@ logger = getLogger()
 
 
 class DeleteDestinationGroupParams(Params):
-    ip_group_ids: str | None = Param(
+    ip_group_ids: str = Param(
         description="A comma-separated list of unique identifiers for the IP destination groups",
         primary=True,
     )
 
 
 class DeleteDestinationGroupOutput(PermissiveActionOutput):
-    ip_group_ids: str | None
+    ip_group_id: str
 
 
 class DeleteDestinationGroupSummary(ActionOutput):
@@ -42,7 +42,7 @@ def delete_destination_group(
     params: DeleteDestinationGroupParams, soar: SOARClient, asset: Asset
 ) -> list[DeleteDestinationGroupOutput]:
     group_ids = [
-        item.strip() for item in (params.ip_group_ids or "").split(",") if item.strip()
+        item.strip() for item in params.ip_group_ids.split(",") if item.strip()
     ]
 
     try:
