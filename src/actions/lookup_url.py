@@ -39,11 +39,11 @@ class LookupUrlOutput(PermissiveActionOutput):
         column_name="Ip/Url",
         example_values=["test www.test.com"],
     )
-    urlClassifications: str | None = OutputField(
+    urlClassifications: list[str] | None = OutputField(
         column_name="Classifications",
         example_values=["test MISCELLANEOUS_OR_UNKNOWN"],
     )
-    urlClassificationsWithSecurityAlert: str | None = OutputField(
+    urlClassificationsWithSecurityAlert: list[str] | None = OutputField(
         column_name="Security Alerts"
     )
 
