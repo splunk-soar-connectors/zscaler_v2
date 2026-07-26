@@ -27,7 +27,7 @@ logger = getLogger()
 class GetDepartmentsParams(Params):
     name: str | None = Param(description="Filter by department name", primary=True)
     page: float | None = Param(description="Specifies the page offset", primary=True)
-    pageSize: float | None = Param(
+    page_size: float | None = Param(
         description="Specifies the page size", primary=True, default=100
     )
 
@@ -47,7 +47,7 @@ def get_departments(
     params: GetDepartmentsParams, soar: SOARClient, asset: Asset
 ) -> list[GetDepartmentsOutput]:
     page = params.page if params.page is not None else 1
-    page_size = params.pageSize if params.pageSize is not None else 100
+    page_size = params.page_size if params.page_size is not None else 100
     if isinstance(page, float) and page.is_integer():
         page = int(page)
     if isinstance(page_size, float) and page_size.is_integer():

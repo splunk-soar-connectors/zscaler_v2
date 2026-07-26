@@ -18,7 +18,7 @@ from typing import Any
 from soar_sdk.app import App
 
 
-def test_get_users_live_preserves_raw_contract(
+def test_get_users_live_returns_oneapi_rows(
     connector_app: App,
     build_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
@@ -64,7 +64,7 @@ def test_get_users_live_filters_by_department(
 
     filtered_input = build_soar_action_input(
         action="get_users",
-        parameters={"dept": department_name, "limit": 10},
+        parameters={"department": department_name, "limit": 10},
     )
     connector_app.handle(json.dumps(filtered_input))
     filtered_result = connector_app.actions_manager.get_action_results()[-1]

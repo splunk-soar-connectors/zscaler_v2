@@ -18,13 +18,13 @@ from typing import Any
 from soar_sdk.app import App
 
 
-def test_get_departments_live_preserves_legacy_rows(
+def test_get_departments_live_returns_oneapi_rows(
     connector_app: App,
     build_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
     input_data = build_soar_action_input(
         action="get_departments",
-        parameters={"page": 1, "pageSize": 2},
+        parameters={"page": 1, "page_size": 2},
     )
 
     connector_app.handle(json.dumps(input_data))
@@ -55,7 +55,7 @@ def test_get_departments_live_filters_by_name(
 ) -> None:
     initial_input = build_soar_action_input(
         action="get_departments",
-        parameters={"page": 1, "pageSize": 1},
+        parameters={"page": 1, "page_size": 1},
     )
     connector_app.handle(json.dumps(initial_input))
     initial_result = connector_app.actions_manager.get_action_results()[-1]
@@ -64,7 +64,7 @@ def test_get_departments_live_filters_by_name(
 
     filtered_input = build_soar_action_input(
         action="get_departments",
-        parameters={"name": department_name, "page": 1, "pageSize": 100},
+        parameters={"name": department_name, "page": 1, "page_size": 100},
     )
     connector_app.handle(json.dumps(filtered_input))
     filtered_result = connector_app.actions_manager.get_action_results()[-1]

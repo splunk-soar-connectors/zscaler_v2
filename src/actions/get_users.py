@@ -29,7 +29,7 @@ _MAX_PAGE_SIZE = 1000
 
 class GetUsersParams(Params):
     name: str | None = Param(description="User Name/ID")
-    dept: str | None = Param(description="User department")
+    department: str | None = Param(description="User department")
     group: str | None = Param(description="User group")
     limit: float | None = Param(
         description="Maximum number of records to fetch", default=1000
@@ -106,7 +106,7 @@ def get_users(
                 }
                 for key, value in (
                     ("name", params.name),
-                    ("dept", params.dept),
+                    ("dept", params.department),
                     ("group", params.group),
                 ):
                     if value:
