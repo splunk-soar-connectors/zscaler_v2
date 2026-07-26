@@ -14,16 +14,16 @@ This table lists the configuration variables required to operate zscaler_v2. The
 
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
-**vanity_domain** | required | string | Domain used by the organization |
-**client_id** | required | string | Client ID for authentication |
-**client_secret** | required | password | Client secret for authentication |
-**cloud** | optional | string | Zscaler cloud environment |
-**sandbox_token** | optional | password | ZIA Sandbox token |
-**sandbox_cloud** | optional | string | ZIA Sandbox cloud name |
+**vanity_domain** | required | string | Zscaler OneAPI vanity-domain prefix, for example 'dev-new-soar-splunk' rather than a full URL or email address |
+**client_id** | required | string | OAuth client ID for the Zscaler OneAPI API client |
+**client_secret** | required | password | OAuth client secret for the Zscaler OneAPI API client |
+**cloud** | optional | string | Zscaler OneAPI cloud environment used to derive OAuth and API endpoints |
+**sandbox_token** | optional | password | Optional ZIA Sandbox Submission API token required only by submit file |
+**sandbox_cloud** | optional | string | Optional ZIA Sandbox cloud name used with the Sandbox Submission API token |
 
 ### Supported Actions
 
-[test connectivity](#action-test-connectivity) - test connectivity <br>
+[test connectivity](#action-test-connectivity) - Authenticate through OneAPI and read the ZIA configuration activation status. <br>
 [get report](#action-get-report) - Fetch sandbox report for provided md5 file hash <br>
 [list url categories](#action-list-url-categories) - List all URL categories <br>
 [block ip](#action-block-ip) - Block an IP <br>
@@ -58,7 +58,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 
 ## action: 'test connectivity'
 
-test connectivity
+Authenticate through OneAPI and read the ZIA configuration activation status.
 
 Type: **test** <br>
 Read only: **True**
@@ -149,7 +149,7 @@ action_result.data.\*.configuredName | string | | test Test-Caution |
 action_result.data.\*.customCategory | boolean | | True False |
 action_result.data.\*.customIpRangesCount | numeric | | 0 |
 action_result.data.\*.customUrlsCount | numeric | | 0 |
-action_result.data.\*.dbCategorizedUrls | string | | test 6.5.3.2.4 |
+action_result.data.\*.dbCategorizedUrls.\* | string | | test 6.5.3.2.4 |
 action_result.data.\*.description | string | | test OTHER_RESTRICTED_WEBSITE_DESC |
 action_result.data.\*.editable | boolean | | True False |
 action_result.data.\*.id | string | `zscaler url category` | test OTHER_RESTRICTED_WEBSITE |
@@ -188,12 +188,12 @@ action_result.parameter.ip | string | `ip` `ipv6` | |
 action_result.parameter.url_category | string | `zscaler url category` | |
 action_result.data.\*.configuredName | string | | test Test-Block |
 action_result.data.\*.customCategory | boolean | | True False |
-action_result.data.\*.dbCategorizedUrls | string | | |
+action_result.data.\*.dbCategorizedUrls.\* | string | | |
 action_result.data.\*.description | string | | |
 action_result.data.\*.id | string | | test CUSTOM_01 |
 action_result.data.\*.val | numeric | | 128 |
-action_result.summary.ignored | string | | test 8.8.8.8 |
-action_result.summary.updated | string | | test 208.67.222.222 |
+action_result.summary.ignored.\* | string | | test 8.8.8.8 |
+action_result.summary.updated.\* | string | | test 208.67.222.222 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
@@ -224,15 +224,15 @@ action_result.parameter.url_category | string | `zscaler url category` | |
 action_result.data.\*.configuredName | string | | test Test-Block |
 action_result.data.\*.customCategory | boolean | | True False |
 action_result.data.\*.customUrlsCount | numeric | | 0 |
-action_result.data.\*.dbCategorizedUrls | string | | |
+action_result.data.\*.dbCategorizedUrls.\* | string | | |
 action_result.data.\*.description | string | | |
 action_result.data.\*.editable | boolean | | True False |
 action_result.data.\*.id | string | | test CUSTOM_01 |
 action_result.data.\*.type | string | | test URL_CATEGORY |
 action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | 3 |
 action_result.data.\*.val | numeric | | 128 |
-action_result.summary.ignored | string | | test www.test.com |
-action_result.summary.updated | string | | test www.test123.com |
+action_result.summary.ignored.\* | string | | test www.test.com |
+action_result.summary.updated.\* | string | | test www.test123.com |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
@@ -262,12 +262,12 @@ action_result.parameter.ip | string | `ip` `ipv6` | |
 action_result.parameter.url_category | string | `zscaler url category` | |
 action_result.data.\*.configuredName | string | | test Test-Block |
 action_result.data.\*.customCategory | boolean | | True False |
-action_result.data.\*.dbCategorizedUrls | string | | |
+action_result.data.\*.dbCategorizedUrls.\* | string | | |
 action_result.data.\*.description | string | | |
 action_result.data.\*.id | string | | test CUSTOM_01 |
 action_result.data.\*.val | numeric | | 128 |
-action_result.summary.ignored | string | | test 8.8.8.8 |
-action_result.summary.updated | string | | test 208.67.222.222 |
+action_result.summary.ignored.\* | string | | test 8.8.8.8 |
+action_result.summary.updated.\* | string | | test 208.67.222.222 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
@@ -298,15 +298,15 @@ action_result.parameter.url_category | string | `zscaler url category` | |
 action_result.data.\*.configuredName | string | | test Test-Block |
 action_result.data.\*.customCategory | boolean | | True False |
 action_result.data.\*.customUrlsCount | numeric | | 0 |
-action_result.data.\*.dbCategorizedUrls | string | | |
+action_result.data.\*.dbCategorizedUrls.\* | string | | |
 action_result.data.\*.description | string | | |
 action_result.data.\*.editable | boolean | | True False |
 action_result.data.\*.id | string | | test CUSTOM_01 |
 action_result.data.\*.type | string | | test URL_CATEGORY |
 action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | 1 |
 action_result.data.\*.val | numeric | | 128 |
-action_result.summary.ignored | string | | test www.test.com |
-action_result.summary.updated | string | | test www.test123.com |
+action_result.summary.ignored.\* | string | | test www.test.com |
+action_result.summary.updated.\* | string | | test www.test123.com |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
@@ -336,12 +336,13 @@ action_result.parameter.ip | string | `ip` `ipv6` | |
 action_result.parameter.url_category | string | `zscaler url category` | |
 action_result.data.\*.configuredName | string | | test Test-Allowlist |
 action_result.data.\*.customCategory | boolean | | True False |
-action_result.data.\*.dbCategorizedUrls | string | | |
+action_result.data.\*.dbCategorizedUrls.\* | string | | |
 action_result.data.\*.description | string | | |
 action_result.data.\*.id | string | | test CUSTOM_01 |
 action_result.data.\*.val | numeric | | 128 |
-action_result.summary.ignored | string | | test 8.8.8.8 |
-action_result.summary.updated | string | | test 208.67.222.222 |
+action_result.data.\*.whitelistUrls.\* | string | | |
+action_result.summary.ignored.\* | string | | test 8.8.8.8 |
+action_result.summary.updated.\* | string | | test 208.67.222.222 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
@@ -372,15 +373,16 @@ action_result.parameter.url_category | string | `zscaler url category` | |
 action_result.data.\*.configuredName | string | | test Test-Allowlist |
 action_result.data.\*.customCategory | boolean | | True False |
 action_result.data.\*.customUrlsCount | numeric | | 0 |
-action_result.data.\*.dbCategorizedUrls | string | | |
+action_result.data.\*.dbCategorizedUrls.\* | string | | |
 action_result.data.\*.description | string | | |
 action_result.data.\*.editable | boolean | | True False |
 action_result.data.\*.id | string | | test CUSTOM_01 |
 action_result.data.\*.type | string | | test URL_CATEGORY |
 action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | 3 |
 action_result.data.\*.val | numeric | | 128 |
-action_result.summary.ignored | string | | test www.test.com |
-action_result.summary.updated | string | | test www.test123.com |
+action_result.data.\*.whitelistUrls.\* | string | | |
+action_result.summary.ignored.\* | string | | test www.test.com |
+action_result.summary.updated.\* | string | | test www.test123.com |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
@@ -410,12 +412,13 @@ action_result.parameter.ip | string | `ip` `ipv6` | |
 action_result.parameter.url_category | string | `zscaler url category` | |
 action_result.data.\*.configuredName | string | | test Test-Allowlist |
 action_result.data.\*.customCategory | boolean | | True False |
-action_result.data.\*.dbCategorizedUrls | string | | |
+action_result.data.\*.dbCategorizedUrls.\* | string | | |
 action_result.data.\*.description | string | | |
 action_result.data.\*.id | string | | test CUSTOM_01 |
 action_result.data.\*.val | numeric | | 128 |
-action_result.summary.ignored | string | | test 8.8.8.8 |
-action_result.summary.updated | string | | test 208.67.222.222 |
+action_result.data.\*.whitelistUrls.\* | string | | |
+action_result.summary.ignored.\* | string | | test 8.8.8.8 |
+action_result.summary.updated.\* | string | | test 208.67.222.222 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
@@ -445,12 +448,13 @@ action_result.parameter.url | string | `url` `domain` `url list` | |
 action_result.parameter.url_category | string | `zscaler url category` | |
 action_result.data.\*.configuredName | string | | test Test-Allowlist |
 action_result.data.\*.customCategory | boolean | | True False |
-action_result.data.\*.dbCategorizedUrls | string | | |
+action_result.data.\*.dbCategorizedUrls.\* | string | | |
 action_result.data.\*.description | string | | |
 action_result.data.\*.id | string | | test CUSTOM_01 |
 action_result.data.\*.val | numeric | | 128 |
-action_result.summary.ignored | string | | test www.test.com |
-action_result.summary.updated | string | | test www.test123.com |
+action_result.data.\*.whitelistUrls.\* | string | | |
+action_result.summary.ignored.\* | string | | test www.test.com |
+action_result.summary.updated.\* | string | | test www.test123.com |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
@@ -476,8 +480,8 @@ action_result.message | string | | |
 action_result.parameter.ip | string | `ip` `ipv6` | |
 action_result.data.\*.blocklisted | boolean | | True False |
 action_result.data.\*.url | string | `ip` `ipv6` | test 208.67.222.222 test 8.8.8.8 |
-action_result.data.\*.urlClassifications | string | | test WEB_SEARCH |
-action_result.data.\*.urlClassificationsWithSecurityAlert | string | | |
+action_result.data.\*.urlClassifications.\* | string | | test WEB_SEARCH |
+action_result.data.\*.urlClassificationsWithSecurityAlert.\* | string | | |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
@@ -503,8 +507,8 @@ action_result.message | string | | |
 action_result.parameter.url | string | `url` `domain` `url list` | |
 action_result.data.\*.blocklisted | boolean | | True False |
 action_result.data.\*.url | string | `url` `domain` `url list` | test www.test.com |
-action_result.data.\*.urlClassifications | string | | test MISCELLANEOUS_OR_UNKNOWN |
-action_result.data.\*.urlClassificationsWithSecurityAlert | string | | |
+action_result.data.\*.urlClassifications.\* | string | | test MISCELLANEOUS_OR_UNKNOWN |
+action_result.data.\*.urlClassificationsWithSecurityAlert.\* | string | | |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
@@ -605,7 +609,7 @@ Gets a list of all users and allows user filtering by name, department, or group
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **name** | optional | User Name/ID | string | |
-**dept** | optional | User department | string | |
+**department** | optional | User department | string | |
 **group** | optional | User group | string | |
 **limit** | optional | Maximum number of records to fetch | numeric | |
 
@@ -616,7 +620,7 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.name | string | | |
-action_result.parameter.dept | string | | |
+action_result.parameter.department | string | | |
 action_result.parameter.group | string | | |
 action_result.parameter.limit | numeric | | |
 action_result.data.\*.adminUser | boolean | | True False |
@@ -839,7 +843,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **category_id** | required | The ID of the category to add the specified URLs to | string | |
 **urls** | optional | A comma-separated list of URLs to add to the specified category | string | |
-**retaining-parent-category-url** | optional | A comma-separated list of URLs to add to the retaining parent category section inside the specified category | string | |
+**retaining_parent_category_url** | optional | A comma-separated list of URLs to add to the retaining parent category section inside the specified category | string | |
 
 #### Action Output
 
@@ -849,21 +853,21 @@ action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.category_id | string | | |
 action_result.parameter.urls | string | | |
-action_result.parameter.retaining-parent-category-url | string | | |
+action_result.parameter.retaining_parent_category_url | string | | |
 action_result.data.\*.id | string | | |
 action_result.data.\*.val | numeric | | |
 action_result.data.\*.type | string | | |
-action_result.data.\*.urls | string | | |
+action_result.data.\*.urls.\* | string | | |
 action_result.data.\*.scopes.\*.Type | string | | |
 action_result.data.\*.editable | boolean | | True False |
-action_result.data.\*.keywords | string | | |
+action_result.data.\*.keywords.\* | string | | |
 action_result.data.\*.description | string | | |
 action_result.data.\*.configuredName | string | | |
 action_result.data.\*.customCategory | boolean | | True False |
 action_result.data.\*.customUrlsCount | numeric | | |
-action_result.data.\*.dbCategorizedUrls | string | | |
+action_result.data.\*.dbCategorizedUrls.\* | string | | |
 action_result.data.\*.customIpRangesCount | numeric | | |
-action_result.data.\*.keywordsRetainingParentCategory | string | | |
+action_result.data.\*.keywordsRetainingParentCategory.\* | string | | |
 action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | |
 action_result.data.\*.ipRangesRetainingParentCategoryCount | numeric | | |
 action_result.summary.message | string | | Category urls updated |
@@ -883,7 +887,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **category_id** | required | The ID of the category to add the specified URLs to | string | |
 **ips** | optional | A comma-separated list of IP addresses to add to the specified category | string | |
-**retaining-parent-category-ip** | optional | A comma-separated list of IPs to add to the retaining parent category section inside the specified category | string | |
+**retaining_parent_category_ip** | optional | A comma-separated list of IPs to add to the retaining parent category section inside the specified category | string | |
 
 #### Action Output
 
@@ -893,21 +897,21 @@ action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.category_id | string | | |
 action_result.parameter.ips | string | | |
-action_result.parameter.retaining-parent-category-ip | string | | |
+action_result.parameter.retaining_parent_category_ip | string | | |
 action_result.data.\*.id | string | | |
 action_result.data.\*.val | numeric | | |
 action_result.data.\*.type | string | | |
-action_result.data.\*.urls | string | | |
+action_result.data.\*.urls.\* | string | | |
 action_result.data.\*.scopes.\*.Type | string | | |
 action_result.data.\*.editable | boolean | | True False |
-action_result.data.\*.keywords | string | | |
+action_result.data.\*.keywords.\* | string | | |
 action_result.data.\*.description | string | | |
 action_result.data.\*.configuredName | string | | |
 action_result.data.\*.customCategory | boolean | | True False |
 action_result.data.\*.customUrlsCount | numeric | | |
-action_result.data.\*.dbCategorizedUrls | string | | |
+action_result.data.\*.dbCategorizedUrls.\* | string | | |
 action_result.data.\*.customIpRangesCount | numeric | | |
-action_result.data.\*.keywordsRetainingParentCategory | string | | |
+action_result.data.\*.keywordsRetainingParentCategory.\* | string | | |
 action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | |
 action_result.data.\*.ipRangesRetainingParentCategoryCount | numeric | | |
 action_result.summary.message | string | | Category ips updated |
@@ -927,7 +931,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **category_id** | required | The ID of the category to add the specified URLs to | string | |
 **urls** | optional | A comma-separated list of URLs to remove from the specified category | string | |
-**retaining-parent-category-url** | optional | A comma-separated list of URLs to remove from the retaining parent category section inside the specified category | string | |
+**retaining_parent_category_url** | optional | A comma-separated list of URLs to remove from the retaining parent category section inside the specified category | string | |
 
 #### Action Output
 
@@ -937,21 +941,21 @@ action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.category_id | string | | |
 action_result.parameter.urls | string | | |
-action_result.parameter.retaining-parent-category-url | string | | |
+action_result.parameter.retaining_parent_category_url | string | | |
 action_result.data.\*.id | string | | |
 action_result.data.\*.val | numeric | | |
 action_result.data.\*.type | string | | |
-action_result.data.\*.urls | string | | |
+action_result.data.\*.urls.\* | string | | |
 action_result.data.\*.scopes.\*.Type | string | | |
 action_result.data.\*.editable | boolean | | True False |
-action_result.data.\*.keywords | string | | |
+action_result.data.\*.keywords.\* | string | | |
 action_result.data.\*.description | string | | |
 action_result.data.\*.configuredName | string | | |
 action_result.data.\*.customCategory | boolean | | True False |
 action_result.data.\*.customUrlsCount | numeric | | |
-action_result.data.\*.dbCategorizedUrls | string | | |
+action_result.data.\*.dbCategorizedUrls.\* | string | | |
 action_result.data.\*.customIpRangesCount | numeric | | |
-action_result.data.\*.keywordsRetainingParentCategory | string | | |
+action_result.data.\*.keywordsRetainingParentCategory.\* | string | | |
 action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | |
 action_result.data.\*.ipRangesRetainingParentCategoryCount | numeric | | |
 action_result.summary.message | string | | Category urls removed |
@@ -971,7 +975,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **category_id** | required | The ID of the category to add the specified URLs to | string | |
 **ips** | optional | A comma-separated list of IP addresses to add to the specified category | string | |
-**retaining-parent-category-ip** | optional | A comma-separated list of IPs to add to the retaining parent category section inside the specified category | string | |
+**retaining_parent_category_ip** | optional | A comma-separated list of IPs to add to the retaining parent category section inside the specified category | string | |
 
 #### Action Output
 
@@ -981,21 +985,21 @@ action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.category_id | string | | |
 action_result.parameter.ips | string | | |
-action_result.parameter.retaining-parent-category-ip | string | | |
+action_result.parameter.retaining_parent_category_ip | string | | |
 action_result.data.\*.id | string | | |
 action_result.data.\*.val | numeric | | |
 action_result.data.\*.type | string | | |
-action_result.data.\*.urls | string | | |
+action_result.data.\*.urls.\* | string | | |
 action_result.data.\*.scopes.\*.Type | string | | |
 action_result.data.\*.editable | boolean | | True False |
-action_result.data.\*.keywords | string | | |
+action_result.data.\*.keywords.\* | string | | |
 action_result.data.\*.description | string | | |
 action_result.data.\*.configuredName | string | | |
 action_result.data.\*.customCategory | boolean | | True False |
 action_result.data.\*.customUrlsCount | numeric | | |
-action_result.data.\*.dbCategorizedUrls | string | | |
+action_result.data.\*.dbCategorizedUrls.\* | string | | |
 action_result.data.\*.customIpRangesCount | numeric | | |
-action_result.data.\*.keywordsRetainingParentCategory | string | | |
+action_result.data.\*.keywordsRetainingParentCategory.\* | string | | |
 action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | |
 action_result.data.\*.ipRangesRetainingParentCategoryCount | numeric | | |
 action_result.summary.message | string | | Category ips removed |
@@ -1035,10 +1039,10 @@ action_result.parameter.countries | string | | |
 action_result.data.\*.id | numeric | | |
 action_result.data.\*.name | string | | |
 action_result.data.\*.type | string | | DSTN_IP DSTN_FQDN DSTN_DOMAIN DSTN_OTHER |
-action_result.data.\*.addresses | string | | 192.168.1.1 |
-action_result.data.\*.countries | string | | |
+action_result.data.\*.addresses.\* | string | | 192.168.1.1 |
+action_result.data.\*.countries.\* | string | | |
 action_result.data.\*.description | string | | |
-action_result.data.\*.ipCategories | string | | TRADING_BROKARAGE_INSURANCE |
+action_result.data.\*.ipCategories.\* | string | | TRADING_BROKARAGE_INSURANCE |
 action_result.data.\*.isNonEditable | boolean | | True False |
 action_result.data.\*.creatorContext | string | | |
 action_result.summary.message | string | | Destination Group Created |
@@ -1050,7 +1054,7 @@ summary.total_objects_successful | numeric | | 1 |
 List destination group
 
 Type: **investigate** <br>
-Read only: **False**
+Read only: **True**
 
 #### Action Parameters
 
@@ -1076,10 +1080,10 @@ action_result.parameter.lite | boolean | | |
 action_result.data.\*.id | numeric | | |
 action_result.data.\*.name | string | | |
 action_result.data.\*.type | string | | DSTN_IP DSTN_FQDN DSTN_DOMAIN DSTN_OTHER |
-action_result.data.\*.addresses | string | | 192.168.1.1 |
-action_result.data.\*.countries | string | | |
+action_result.data.\*.addresses.\* | string | | 192.168.1.1 |
+action_result.data.\*.countries.\* | string | | |
 action_result.data.\*.description | string | | |
-action_result.data.\*.ipCategories | string | | TRADING_BROKARAGE_INSURANCE |
+action_result.data.\*.ipCategories.\* | string | | TRADING_BROKARAGE_INSURANCE |
 action_result.data.\*.isNonEditable | boolean | | True False |
 action_result.data.\*.creatorContext | string | | |
 action_result.summary.message | string | | Destination groups retrieved |
@@ -1121,10 +1125,10 @@ action_result.parameter.is_non_editable | boolean | | |
 action_result.data.\*.id | numeric | | |
 action_result.data.\*.name | string | | |
 action_result.data.\*.type | string | | DSTN_IP DSTN_FQDN DSTN_DOMAIN DSTN_OTHER |
-action_result.data.\*.addresses | string | | 192.168.1.1 |
-action_result.data.\*.countries | string | | |
+action_result.data.\*.addresses.\* | string | | 192.168.1.1 |
+action_result.data.\*.countries.\* | string | | |
 action_result.data.\*.description | string | | |
-action_result.data.\*.ipCategories | string | | TRADING_BROKARAGE_INSURANCE |
+action_result.data.\*.ipCategories.\* | string | | TRADING_BROKARAGE_INSURANCE |
 action_result.data.\*.isNonEditable | boolean | | True False |
 action_result.data.\*.creatorContext | string | | |
 action_result.summary.message | string | | Destination Group Edited |
@@ -1142,7 +1146,7 @@ Read only: **False**
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**ip_group_ids** | optional | A comma-separated list of unique identifiers for the IP destination groups | string | |
+**ip_group_ids** | required | A comma-separated list of unique identifiers for the IP destination groups | string | |
 
 #### Action Output
 
@@ -1151,7 +1155,7 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.ip_group_ids | string | | |
-action_result.data.\*.ip_group_ids | string | | |
+action_result.data.\*.ip_group_id | string | | |
 action_result.summary.message | string | | Destination groups deleted |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
@@ -1169,7 +1173,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **name** | optional | Filter by department name | string | |
 **page** | optional | Specifies the page offset | numeric | |
-**pageSize** | optional | Specifies the page size | numeric | |
+**page_size** | optional | Specifies the page size | numeric | |
 
 #### Action Output
 
@@ -1179,7 +1183,7 @@ action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.name | string | | |
 action_result.parameter.page | numeric | | |
-action_result.parameter.pageSize | numeric | | |
+action_result.parameter.page_size | numeric | | |
 action_result.data.\*.id | numeric | | |
 action_result.data.\*.name | string | | |
 action_result.data.\*.isNonEditable | boolean | | True False |
@@ -1199,7 +1203,7 @@ Read only: **True**
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**category_ids** | optional | Comma seperated string of category id's to query | string | |
+**category_ids** | required | Comma-separated list of category IDs to query | string | |
 
 #### Action Output
 
@@ -1210,11 +1214,12 @@ action_result.message | string | | |
 action_result.parameter.category_ids | string | | |
 action_result.data.\*.configuredName | string | | test Test-Caution |
 action_result.data.\*.customCategory | boolean | | True False |
-action_result.data.\*.keywords | string | | |
-action_result.data.\*.urls | string | | |
+action_result.data.\*.keywords.\* | string | | |
+action_result.data.\*.urls.\* | string | | |
 action_result.data.\*.customIpRangesCount | numeric | | 0 |
 action_result.data.\*.customUrlsCount | numeric | | 0 |
-action_result.data.\*.dbCategorizedUrls | string | | test 6.5.3.2.4 |
+action_result.data.\*.dbCategorizedUrls.\* | string | | test 6.5.3.2.4 |
+action_result.data.\*.keywordsRetainingParentCategory.\* | string | | |
 action_result.data.\*.description | string | | test OTHER_RESTRICTED_WEBSITE_DESC |
 action_result.data.\*.editable | boolean | | True False |
 action_result.data.\*.id | string | `zscaler url category` | test OTHER_RESTRICTED_WEBSITE |
