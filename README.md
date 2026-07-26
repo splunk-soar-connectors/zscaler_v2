@@ -98,30 +98,30 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.file_hash | string | `md5` | |
-action_result.data.\*.Full_Details.Classification.Category | string | | test BENIGN |
-action_result.data.\*.Full_Details.Classification.DetectedMalware | string | | |
-action_result.data.\*.Full_Details.Classification.Score | numeric | | 10 |
-action_result.data.\*.Full_Details.Classification.Type | string | | test BENIGN |
-action_result.data.\*.Full_Details.FileProperties.DigitalCerificate | string | | |
-action_result.data.\*.Full_Details.FileProperties.FileSize | numeric | | 350084 |
-action_result.data.\*.Full_Details.FileProperties.FileType | string | | test EXE |
-action_result.data.\*.Full_Details.FileProperties.Issuer | string | | |
-action_result.data.\*.Full_Details.FileProperties.MD5 | string | `md5` | test 1043ca3fc2e83f0c6f100e46d2ea16be |
-action_result.data.\*.Full_Details.FileProperties.RootCA | string | | |
-action_result.data.\*.Full_Details.FileProperties.SHA1 | string | `sha1` | test efbd493b33543341d43df6db4c92de2473cf49f3 |
-action_result.data.\*.Full_Details.FileProperties.SSDeep | string | | test 6144:IFkS+8dpN9EtEnROO4T0LbTbHiXuFW0XPBGunX9v62HCTAA1PSahJj3zDbSJ8:CkMy4TGWXuFR5JAxS6Lnbu8 |
-action_result.data.\*.Full_Details.FileProperties.Sha256 | string | `sha256` | test 0e7fd4dde827a7f0bda82bbfbce4b92a551d0cd296f72e936b8968310d2181cd |
-action_result.data.\*.Full_Details.Origin.Country | string | | test United States |
-action_result.data.\*.Full_Details.Origin.Language | string | | test English |
-action_result.data.\*.Full_Details.Origin.Risk | string | | test LOW |
-action_result.data.\*.Full_Details.Summary.Category | string | | test EXECS |
-action_result.data.\*.Full_Details.Summary.Duration | numeric | | 524114 |
-action_result.data.\*.Full_Details.Summary.FileType | string | | test EXE |
-action_result.data.\*.Full_Details.Summary.StartTime | numeric | | 1520334357 |
-action_result.data.\*.Full_Details.Summary.Status | string | | test COMPLETED |
-action_result.data.\*.Full_Details.SystemSummary.\*.Risk | string | | test LOW |
-action_result.data.\*.Full_Details.SystemSummary.\*.Signature | string | | test Binary contains paths to development resources |
-action_result.data.\*.Full_Details.SystemSummary.\*.SignatureSources | string | | test no activity detected |
+action_result.data.\*.Full Details.Classification.Category | string | | test BENIGN |
+action_result.data.\*.Full Details.Classification.DetectedMalware | string | | |
+action_result.data.\*.Full Details.Classification.Score | numeric | | 10 |
+action_result.data.\*.Full Details.Classification.Type | string | | test BENIGN |
+action_result.data.\*.Full Details.FileProperties.DigitalCerificate | string | | |
+action_result.data.\*.Full Details.FileProperties.FileSize | numeric | | 350084 |
+action_result.data.\*.Full Details.FileProperties.FileType | string | | test EXE |
+action_result.data.\*.Full Details.FileProperties.Issuer | string | | |
+action_result.data.\*.Full Details.FileProperties.MD5 | string | `md5` | test 1043ca3fc2e83f0c6f100e46d2ea16be |
+action_result.data.\*.Full Details.FileProperties.RootCA | string | | |
+action_result.data.\*.Full Details.FileProperties.SHA1 | string | `sha1` | test efbd493b33543341d43df6db4c92de2473cf49f3 |
+action_result.data.\*.Full Details.FileProperties.SSDeep | string | | test 6144:IFkS+8dpN9EtEnROO4T0LbTbHiXuFW0XPBGunX9v62HCTAA1PSahJj3zDbSJ8:CkMy4TGWXuFR5JAxS6Lnbu8 |
+action_result.data.\*.Full Details.FileProperties.Sha256 | string | `sha256` | test 0e7fd4dde827a7f0bda82bbfbce4b92a551d0cd296f72e936b8968310d2181cd |
+action_result.data.\*.Full Details.Origin.Country | string | | test United States |
+action_result.data.\*.Full Details.Origin.Language | string | | test English |
+action_result.data.\*.Full Details.Origin.Risk | string | | test LOW |
+action_result.data.\*.Full Details.Summary.Category | string | | test EXECS |
+action_result.data.\*.Full Details.Summary.Duration | numeric | | 524114 |
+action_result.data.\*.Full Details.Summary.FileType | string | | test EXE |
+action_result.data.\*.Full Details.Summary.StartTime | numeric | | 1520334357 |
+action_result.data.\*.Full Details.Summary.Status | string | | test COMPLETED |
+action_result.data.\*.Full Details.SystemSummary.\*.Risk | string | | test LOW |
+action_result.data.\*.Full Details.SystemSummary.\*.Signature | string | | test Binary contains paths to development resources |
+action_result.data.\*.Full Details.SystemSummary.\*.SignatureSources | string | | test no activity detected |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 

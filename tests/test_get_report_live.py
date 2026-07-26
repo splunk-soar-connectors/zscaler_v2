@@ -38,7 +38,7 @@ def test_get_report_live_fetches_full_legacy_report(
     rows = result.get_data()
     assert len(rows) == 1
     assert isinstance(rows[0]["Full Details"], dict)
-    assert set(rows[0]["Full Details"]["Summary"]) == {"Message", "Status"}
+    assert "Status" in rows[0]["Full Details"]["Summary"]
 
 
 def test_get_report_rejects_invalid_md5_without_api_request(

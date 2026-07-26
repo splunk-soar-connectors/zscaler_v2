@@ -101,7 +101,7 @@ class FullDetailsOutput(ActionOutput):
 
 
 class GetReportOutput(PermissiveActionOutput):
-    Full_Details: FullDetailsOutput | None
+    Full_Details: FullDetailsOutput | None = OutputField(alias="Full Details")
 
 
 def get_report(
