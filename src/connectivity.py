@@ -22,6 +22,7 @@ logger = getLogger()
 
 
 def test_connectivity(soar: SOARClient, asset: Asset) -> None:
+    """Authenticate through OneAPI and read the ZIA configuration activation status."""
     try:
         with get_client(asset) as client:
             activation, _response, error = client.zia.activate.status()

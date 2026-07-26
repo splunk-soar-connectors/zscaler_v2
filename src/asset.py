@@ -16,29 +16,38 @@ from soar_sdk.asset import BaseAsset, AssetField
 
 class Asset(BaseAsset):
     vanity_domain: str = AssetField(
-        description="Domain used by the organization",
+        description=(
+            "Zscaler OneAPI vanity-domain prefix, for example "
+            "'dev-new-soar-splunk' rather than a full URL or email address"
+        ),
         required=True,
     )
     client_id: str = AssetField(
-        description="Client ID for authentication",
+        description="OAuth client ID for the Zscaler OneAPI API client",
         required=True,
     )
     client_secret: str = AssetField(
-        description="Client secret for authentication",
+        description="OAuth client secret for the Zscaler OneAPI API client",
         required=True,
         sensitive=True,
     )
     cloud: str = AssetField(
-        description="Zscaler cloud environment",
+        description=(
+            "Zscaler OneAPI cloud environment used to derive OAuth and API endpoints"
+        ),
         default="PRODUCTION",
         required=False,
     )
     sandbox_token: str | None = AssetField(
-        description="ZIA Sandbox token",
+        description=(
+            "Optional ZIA Sandbox Submission API token required only by submit file"
+        ),
         required=False,
         sensitive=True,
     )
     sandbox_cloud: str | None = AssetField(
-        description="ZIA Sandbox cloud name",
+        description=(
+            "Optional ZIA Sandbox cloud name used with the Sandbox Submission API token"
+        ),
         required=False,
     )
