@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Any, cast
 
 from soar_sdk.abstract import SOARClient
 from soar_sdk.action_results import OutputField, PermissiveActionOutput
@@ -42,19 +41,20 @@ class AllowIpParams(Params):
 class AllowIpOutput(PermissiveActionOutput):
     configuredName: str | None = OutputField(example_values=["test Test-Allowlist"])
     customCategory: bool | None = None
-    dbCategorizedUrls: str | None = None
+    dbCategorizedUrls: list[str] | None = None
     description: str | None = None
     id: str | None = OutputField(example_values=["test CUSTOM_01"])
     val: float | None = OutputField(example_values=[128])
+    whitelistUrls: list[str] | None = None
 
 
 class AllowIpSummary(PermissiveActionOutput):
-    ignored: str | None = OutputField(example_values=["test 8.8.8.8"])
-    updated: str | None = OutputField(example_values=["test 208.67.222.222"])
+    ignored: list[str] = OutputField(example_values=["test 8.8.8.8"])
+    updated: list[str] = OutputField(example_values=["test 208.67.222.222"])
 
 
 def _summary(updated: list[str], ignored: list[str]) -> AllowIpSummary:
-    return AllowIpSummary(**cast(Any, {"updated": updated, "ignored": ignored}))
+    return AllowIpSummary(updated=updated, ignored=ignored)
 
 
 def allow_ip(

@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from typing import Any, cast
 
 from soar_sdk.abstract import SOARClient
 from soar_sdk.action_results import OutputField, PermissiveActionOutput
@@ -43,7 +42,7 @@ class UnblockUrlOutput(PermissiveActionOutput):
     configuredName: str | None = OutputField(example_values=["test Test-Block"])
     customCategory: bool | None = None
     customUrlsCount: float | None = OutputField(example_values=[0])
-    dbCategorizedUrls: str | None = None
+    dbCategorizedUrls: list[str] | None = None
     description: str | None = None
     editable: bool | None = None
     id: str | None = OutputField(example_values=["test CUSTOM_01"])
@@ -53,12 +52,12 @@ class UnblockUrlOutput(PermissiveActionOutput):
 
 
 class UnblockUrlSummary(PermissiveActionOutput):
-    ignored: str | None = OutputField(example_values=["test www.test.com"])
-    updated: str | None = OutputField(example_values=["test www.test123.com"])
+    ignored: list[str] = OutputField(example_values=["test www.test.com"])
+    updated: list[str] = OutputField(example_values=["test www.test123.com"])
 
 
 def _summary(updated: list[str], ignored: list[str]) -> UnblockUrlSummary:
-    return UnblockUrlSummary(**cast(Any, {"updated": updated, "ignored": ignored}))
+    return UnblockUrlSummary(updated=updated, ignored=ignored)
 
 
 def unblock_url(

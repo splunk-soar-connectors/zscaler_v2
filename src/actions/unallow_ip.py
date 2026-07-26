@@ -12,7 +12,6 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from soar_sdk.abstract import SOARClient
-from typing import Any, cast
 
 from soar_sdk.action_results import OutputField, PermissiveActionOutput
 from soar_sdk.exceptions import ActionFailure
@@ -42,19 +41,20 @@ class UnallowIpParams(Params):
 class UnallowIpOutput(PermissiveActionOutput):
     configuredName: str | None = OutputField(example_values=["test Test-Allowlist"])
     customCategory: bool | None = None
-    dbCategorizedUrls: str | None = None
+    dbCategorizedUrls: list[str] | None = None
     description: str | None = None
     id: str | None = OutputField(example_values=["test CUSTOM_01"])
     val: float | None = OutputField(example_values=[128])
+    whitelistUrls: list[str] | None = None
 
 
 class UnallowIpSummary(PermissiveActionOutput):
-    ignored: str | None = OutputField(example_values=["test 8.8.8.8"])
-    updated: str | None = OutputField(example_values=["test 208.67.222.222"])
+    ignored: list[str] = OutputField(example_values=["test 8.8.8.8"])
+    updated: list[str] = OutputField(example_values=["test 208.67.222.222"])
 
 
 def _summary(updated: list[str], ignored: list[str]) -> UnallowIpSummary:
-    return UnallowIpSummary(**cast(Any, {"updated": updated, "ignored": ignored}))
+    return UnallowIpSummary(updated=updated, ignored=ignored)
 
 
 def unallow_ip(

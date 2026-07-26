@@ -42,19 +42,20 @@ class UnallowUrlParams(Params):
 class UnallowUrlOutput(PermissiveActionOutput):
     configuredName: str | None = OutputField(example_values=["test Test-Allowlist"])
     customCategory: bool | None = None
-    dbCategorizedUrls: str | None = None
+    dbCategorizedUrls: list[str] | None = None
     description: str | None = None
     id: str | None = OutputField(example_values=["test CUSTOM_01"])
     val: float | None = OutputField(example_values=[128])
+    whitelistUrls: list[str] | None = None
 
 
 class UnallowUrlSummary(PermissiveActionOutput):
-    ignored: str | None = OutputField(example_values=["test www.test.com"])
-    updated: str | None = OutputField(example_values=["test www.test123.com"])
+    ignored: list[str] = OutputField(example_values=["test www.test.com"])
+    updated: list[str] = OutputField(example_values=["test www.test123.com"])
 
 
 def _summary(updated: list[str], ignored: list[str]) -> UnallowUrlSummary:
-    return UnallowUrlSummary(**cast(Any, {"updated": updated, "ignored": ignored}))
+    return UnallowUrlSummary(updated=updated, ignored=ignored)
 
 
 def unallow_url(
