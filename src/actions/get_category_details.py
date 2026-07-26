@@ -24,8 +24,8 @@ logger = getLogger()
 
 
 class GetCategoryDetailsParams(Params):
-    category_ids: str | None = Param(
-        description="Comma seperated string of category id's to query", primary=True
+    category_ids: str = Param(
+        description="Comma-separated list of category IDs to query", primary=True
     )
 
 
@@ -36,11 +36,12 @@ class ScopesOutput(ActionOutput):
 class GetCategoryDetailsOutput(PermissiveActionOutput):
     configuredName: str | None = OutputField(example_values=["test Test-Caution"])
     customCategory: bool | None = None
-    keywords: str | None = None
-    urls: str | None = None
+    keywords: list[str] | None = None
+    urls: list[str] | None = None
     customIpRangesCount: float | None = OutputField(example_values=[0])
     customUrlsCount: float | None = OutputField(example_values=[0])
-    dbCategorizedUrls: str | None = OutputField(example_values=["test 6.5.3.2.4"])
+    dbCategorizedUrls: list[str] | None = OutputField(example_values=["test 6.5.3.2.4"])
+    keywordsRetainingParentCategory: list[str] | None = None
     description: str | None = OutputField(
         example_values=["test OTHER_RESTRICTED_WEBSITE_DESC"]
     )
@@ -66,7 +67,7 @@ def get_category_details(
 ) -> list[GetCategoryDetailsOutput]:
     category_ids = [
         category_id.strip()
-        for category_id in (params.category_ids or "").split(",")
+        for category_id in params.category_ids.split(",")
         if category_id.strip()
     ]
 

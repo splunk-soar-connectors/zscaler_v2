@@ -17,8 +17,14 @@ from typing import Any
 
 from soar_sdk.app import App
 
+from src.actions.get_category_details import GetCategoryDetailsParams
 
-def test_get_category_details_live_preserves_legacy_response(
+
+def test_get_category_details_requires_category_ids() -> None:
+    assert GetCategoryDetailsParams.model_fields["category_ids"].is_required()
+
+
+def test_get_category_details_live_returns_oneapi_lists(
     connector_app: App,
     build_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:

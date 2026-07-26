@@ -18,7 +18,7 @@ from typing import Any
 from soar_sdk.app import App
 
 
-def test_list_url_categories_live_preserves_full_legacy_response(
+def test_list_url_categories_live_returns_full_oneapi_response(
     connector_app: App,
     build_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:

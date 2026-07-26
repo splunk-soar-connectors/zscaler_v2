@@ -30,11 +30,12 @@ class RemoveCategoryUrlParams(Params):
     urls: str | None = Param(
         description="A comma-separated list of URLs to remove from the specified category",
         primary=True,
+        default=None,
     )
     retaining_parent_category_url: str | None = Param(
         description="A comma-separated list of URLs to remove from the retaining parent category section inside the specified category",
         primary=True,
-        alias="retaining-parent-category-url",
+        default=None,
     )
 
 
@@ -46,17 +47,17 @@ class RemoveCategoryUrlOutput(ActionOutput):
     id: str
     val: float
     type: str
-    urls: str
+    urls: list[str]
     scopes: list[ScopesOutput]
     editable: bool
-    keywords: str
+    keywords: list[str]
     description: str
     configuredName: str
     customCategory: bool
     customUrlsCount: float
-    dbCategorizedUrls: str
+    dbCategorizedUrls: list[str]
     customIpRangesCount: float
-    keywordsRetainingParentCategory: str
+    keywordsRetainingParentCategory: list[str]
     urlsRetainingParentCategoryCount: float
     ipRangesRetainingParentCategoryCount: float
 
@@ -74,6 +75,10 @@ def remove_category_url(
         for item in (params.retaining_parent_category_url or "").split(",")
         if item.strip()
     ]
+    if not urls and not parent_urls:
+        message = "Provide at least one URL in urls or retaining_parent_category_url"
+        soar.set_message(message)
+        raise ActionFailure(message)
 
     try:
         with get_client(asset) as client:

@@ -24,7 +24,22 @@ _TEST_IP = "203.0.113.199"
 _TEST_PARENT_IP = "203.0.113.200"
 
 
-def test_remove_category_ip_live_removes_activates_and_preserves_legacy_lists(
+def test_remove_category_ip_requires_an_ip_value(
+    connector_app: App,
+    build_soar_action_input: Callable[..., dict[str, Any]],
+) -> None:
+    input_data = build_soar_action_input(
+        action="remove_category_ip",
+        parameters={"category_id": "CUSTOM_01"},
+    )
+    connector_app.handle(json.dumps(input_data))
+    result = connector_app.actions_manager.get_action_results()[-1]
+
+    assert result.get_status() is False
+    assert "Provide at least one IP" in result.get_message()
+
+
+def test_remove_category_ip_live_removes_activates_and_returns_oneapi_lists(
     connector_app: App,
     build_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
@@ -63,7 +78,7 @@ def test_remove_category_ip_live_removes_activates_and_preserves_legacy_lists(
             parameters={
                 "category_id": category_id,
                 "ips": _TEST_IP,
-                "retaining-parent-category-ip": _TEST_PARENT_IP,
+                "retaining_parent_category_ip": _TEST_PARENT_IP,
             },
         )
         connector_app.handle(json.dumps(input_data))

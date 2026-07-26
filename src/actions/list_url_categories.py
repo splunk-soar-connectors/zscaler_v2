@@ -40,7 +40,7 @@ class ListUrlCategoriesOutput(PermissiveActionOutput):
     customCategory: bool | None = None
     customIpRangesCount: float | None = OutputField(example_values=[0])
     customUrlsCount: float | None = OutputField(example_values=[0])
-    dbCategorizedUrls: str | None = OutputField(example_values=["test 6.5.3.2.4"])
+    dbCategorizedUrls: list[str] | None = OutputField(example_values=["test 6.5.3.2.4"])
     description: str | None = OutputField(
         example_values=["test OTHER_RESTRICTED_WEBSITE_DESC"]
     )

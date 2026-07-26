@@ -24,7 +24,22 @@ _TEST_URL = "papp-38277-category.example"
 _TEST_PARENT_URL = "papp-38277-parent-category.example"
 
 
-def test_add_category_url_live_updates_activates_and_preserves_contract(
+def test_add_category_url_requires_a_url_value(
+    connector_app: App,
+    build_soar_action_input: Callable[..., dict[str, Any]],
+) -> None:
+    input_data = build_soar_action_input(
+        action="add_category_url",
+        parameters={"category_id": "CUSTOM_01"},
+    )
+    connector_app.handle(json.dumps(input_data))
+    result = connector_app.actions_manager.get_action_results()[-1]
+
+    assert result.get_status() is False
+    assert "Provide at least one URL" in result.get_message()
+
+
+def test_add_category_url_live_updates_activates_and_returns_oneapi_lists(
     connector_app: App,
     build_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
@@ -55,7 +70,7 @@ def test_add_category_url_live_updates_activates_and_preserves_contract(
             parameters={
                 "category_id": category_id,
                 "urls": _TEST_URL,
-                "retaining-parent-category-url": _TEST_PARENT_URL,
+                "retaining_parent_category_url": _TEST_PARENT_URL,
             },
         )
         connector_app.handle(json.dumps(input_data))
