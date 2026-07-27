@@ -51,19 +51,39 @@ class RoleOutput(ActionOutput):
     extensions: ExtensionsOutput
     id: float
     isNameL10nTag: bool = OutputField(example_values=[True])
-    name: str = OutputField(example_values=["test Super Admin"])
+    name: str = OutputField(
+        column_name="Role",
+        example_values=["test Super Admin"],
+    )
 
 
 class GetAdminUsersOutput(PermissiveActionOutput):
+    id: float = OutputField(
+        cef_types=["zscaler user id"],
+        column_name="Admin ID",
+        example_values=[889814],
+    )
+    name: str = OutputField(
+        column_name="Name",
+        example_values=[
+            "test new_test_long_email_id_new_test_long_email_id_new_test_long_email_id_new_test_long_email"
+        ],
+    )
+    loginName: str = OutputField(
+        column_name="Login",
+        example_values=["test first.last@domain.com"],
+    )
+    email: str = OutputField(
+        cef_types=["email"],
+        column_name="Email",
+        example_values=["test first.last@emaildomain.com"],
+    )
+    role: RoleOutput
+    disabled: bool = OutputField(column_name="Disabled", example_values=[True])
     adminScopeScopeEntities: list[AdminscopescopeentitiesOutput]
     adminScopeType: str
     adminScopescopeGroupMemberEntities: list[AdminscopescopegroupmemberentitiesOutput]
     comments: str = OutputField(example_values=["test This is test user"])
-    disabled: bool = OutputField(example_values=[True])
-    email: str = OutputField(
-        cef_types=["email"], example_values=["test first.last@emaildomain.com"]
-    )
-    id: float = OutputField(cef_types=["zscaler user id"], example_values=[889814])
     isDefaultAdmin: bool = OutputField(example_values=[True])
     isDeprecatedDefaultAdmin: bool = OutputField(example_values=[True])
     isExecMobileAppEnabled: bool = OutputField(example_values=[True])
@@ -72,14 +92,7 @@ class GetAdminUsersOutput(PermissiveActionOutput):
     isProductUpdateCommEnabled: bool = OutputField(example_values=[True])
     isSecurityReportCommEnabled: bool = OutputField(example_values=[True])
     isServiceUpdateCommEnabled: bool = OutputField(example_values=[True])
-    loginName: str = OutputField(example_values=["test first.last@domain.com"])
-    name: str = OutputField(
-        example_values=[
-            "test new_test_long_email_id_new_test_long_email_id_new_test_long_email_id_new_test_long_email"
-        ]
-    )
     pwdLastModifiedTime: float
-    role: RoleOutput
     userName: str = OutputField(example_values=["test Last, First"])
 
 

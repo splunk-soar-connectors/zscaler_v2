@@ -31,17 +31,15 @@ class GetDenylistParams(Params):
         description="Filter results be url or ip",
         primary=True,
         value_list=["url", "ip"],
-        column_name="Filter",
     )
     query: str | None = Param(
         description="Regular expression to match url or ip against",
         primary=True,
-        column_name="Query",
     )
 
 
 class GetDenylistOutput(ActionOutput):
-    url: str = OutputField(column_name="denylist url")
+    url: str = OutputField(column_name="URL")
 
 
 class GetDenylistSummary(ActionOutput):

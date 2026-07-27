@@ -145,14 +145,14 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.get_ids_and_names_only | boolean | | |
+action_result.data.\*.id | string | `zscaler url category` | test OTHER_RESTRICTED_WEBSITE |
 action_result.data.\*.configuredName | string | | test Test-Caution |
+action_result.data.\*.description | string | | test OTHER_RESTRICTED_WEBSITE_DESC |
 action_result.data.\*.customCategory | boolean | | True False |
+action_result.data.\*.editable | boolean | | True False |
 action_result.data.\*.customIpRangesCount | numeric | | 0 |
 action_result.data.\*.customUrlsCount | numeric | | 0 |
 action_result.data.\*.dbCategorizedUrls.\* | string | | test 6.5.3.2.4 |
-action_result.data.\*.description | string | | test OTHER_RESTRICTED_WEBSITE_DESC |
-action_result.data.\*.editable | boolean | | True False |
-action_result.data.\*.id | string | `zscaler url category` | test OTHER_RESTRICTED_WEBSITE |
 action_result.data.\*.ipRangesRetainingParentCategoryCount | numeric | | 0 |
 action_result.data.\*.scopes.\*.Type | string | | test ORGANIZATION |
 action_result.data.\*.type | string | | test URL_CATEGORY |
@@ -478,10 +478,10 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.ip | string | `ip` `ipv6` | |
-action_result.data.\*.blocklisted | boolean | | True False |
 action_result.data.\*.url | string | `ip` `ipv6` | test 208.67.222.222 test 8.8.8.8 |
 action_result.data.\*.urlClassifications.\* | string | | test WEB_SEARCH |
 action_result.data.\*.urlClassificationsWithSecurityAlert.\* | string | | |
+action_result.data.\*.blocklisted | boolean | | True False |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
@@ -505,10 +505,10 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.url | string | `url` `domain` `url list` | |
-action_result.data.\*.blocklisted | boolean | | True False |
 action_result.data.\*.url | string | `url` `domain` `url list` | test www.test.com |
 action_result.data.\*.urlClassifications.\* | string | | test MISCELLANEOUS_OR_UNKNOWN |
 action_result.data.\*.urlClassificationsWithSecurityAlert.\* | string | | |
+action_result.data.\*.blocklisted | boolean | | True False |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
@@ -566,14 +566,21 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.limit | numeric | | |
+action_result.data.\*.id | numeric | `zscaler user id` | 889814 |
+action_result.data.\*.name | string | | test new_test_long_email_id_new_test_long_email_id_new_test_long_email_id_new_test_long_email |
+action_result.data.\*.loginName | string | | test first.last@domain.com |
+action_result.data.\*.email | string | `email` | test first.last@emaildomain.com |
+action_result.data.\*.role.extensions.adminRank | string | | |
+action_result.data.\*.role.extensions.roleType | string | | |
+action_result.data.\*.role.id | numeric | | |
+action_result.data.\*.role.isNameL10nTag | boolean | | True False |
+action_result.data.\*.role.name | string | | test Super Admin |
+action_result.data.\*.disabled | boolean | | True False |
 action_result.data.\*.adminScopeScopeEntities.\*.id | numeric | | 4460340 |
 action_result.data.\*.adminScopeScopeEntities.\*.name | string | | test Example App |
 action_result.data.\*.adminScopeType | string | | |
 action_result.data.\*.adminScopescopeGroupMemberEntities.\*.id | numeric | | 8035054 |
 action_result.data.\*.comments | string | | test This is test user |
-action_result.data.\*.disabled | boolean | | True False |
-action_result.data.\*.email | string | `email` | test first.last@emaildomain.com |
-action_result.data.\*.id | numeric | `zscaler user id` | 889814 |
 action_result.data.\*.isDefaultAdmin | boolean | | True False |
 action_result.data.\*.isDeprecatedDefaultAdmin | boolean | | True False |
 action_result.data.\*.isExecMobileAppEnabled | boolean | | True False |
@@ -582,14 +589,7 @@ action_result.data.\*.isPasswordLoginAllowed | boolean | | True False |
 action_result.data.\*.isProductUpdateCommEnabled | boolean | | True False |
 action_result.data.\*.isSecurityReportCommEnabled | boolean | | True False |
 action_result.data.\*.isServiceUpdateCommEnabled | boolean | | True False |
-action_result.data.\*.loginName | string | | test first.last@domain.com |
-action_result.data.\*.name | string | | test new_test_long_email_id_new_test_long_email_id_new_test_long_email_id_new_test_long_email |
 action_result.data.\*.pwdLastModifiedTime | numeric | | |
-action_result.data.\*.role.extensions.adminRank | string | | |
-action_result.data.\*.role.extensions.roleType | string | | |
-action_result.data.\*.role.id | numeric | | |
-action_result.data.\*.role.isNameL10nTag | boolean | | True False |
-action_result.data.\*.role.name | string | | test Super Admin |
 action_result.data.\*.userName | string | | test Last, First |
 action_result.summary.total_admin_users | numeric | | 10 |
 summary.total_objects | numeric | | 1 |
@@ -623,18 +623,18 @@ action_result.parameter.name | string | | |
 action_result.parameter.department | string | | |
 action_result.parameter.group | string | | |
 action_result.parameter.limit | numeric | | |
-action_result.data.\*.adminUser | boolean | | True False |
-action_result.data.\*.comments | string | | test This is test user |
-action_result.data.\*.deleted | boolean | | True False |
+action_result.data.\*.id | numeric | `zscaler user id` | 889814 |
+action_result.data.\*.name | string | | test First Last |
+action_result.data.\*.email | string | `email` | test first.last@domain.com |
 action_result.data.\*.department.id | numeric | | 81896690 |
 action_result.data.\*.department.name | string | | test IT |
 action_result.data.\*.disabled | boolean | | True False |
-action_result.data.\*.email | string | `email` | test first.last@domain.com |
 action_result.data.\*.groups.\*.id | numeric | `zscaler group id` | 8894813 |
 action_result.data.\*.groups.\*.name | string | | test Super Admin |
-action_result.data.\*.id | numeric | `zscaler user id` | 889814 |
+action_result.data.\*.adminUser | boolean | | True False |
+action_result.data.\*.comments | string | | test This is test user |
+action_result.data.\*.deleted | boolean | | True False |
 action_result.data.\*.isNonEditable | boolean | | True False |
-action_result.data.\*.name | string | | test First Last |
 action_result.summary.total_users | numeric | | 10 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
@@ -663,10 +663,10 @@ action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.search | string | | |
 action_result.parameter.limit | numeric | | |
-action_result.data.\*.comments | string | | test This is for testing |
 action_result.data.\*.id | numeric | `zscaler group id` | 8894813 |
-action_result.data.\*.isNonEditable | boolean | | True False |
 action_result.data.\*.name | string | | test Frothly Internet Access |
+action_result.data.\*.comments | string | | test This is for testing |
+action_result.data.\*.isNonEditable | boolean | | True False |
 action_result.summary.total_groups | numeric | | 4 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
@@ -1212,17 +1212,17 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.category_ids | string | | |
+action_result.data.\*.id | string | `zscaler url category` | test OTHER_RESTRICTED_WEBSITE |
 action_result.data.\*.configuredName | string | | test Test-Caution |
+action_result.data.\*.description | string | | test OTHER_RESTRICTED_WEBSITE_DESC |
 action_result.data.\*.customCategory | boolean | | True False |
+action_result.data.\*.editable | boolean | | True False |
 action_result.data.\*.keywords.\* | string | | |
 action_result.data.\*.urls.\* | string | | |
 action_result.data.\*.customIpRangesCount | numeric | | 0 |
 action_result.data.\*.customUrlsCount | numeric | | 0 |
 action_result.data.\*.dbCategorizedUrls.\* | string | | test 6.5.3.2.4 |
 action_result.data.\*.keywordsRetainingParentCategory.\* | string | | |
-action_result.data.\*.description | string | | test OTHER_RESTRICTED_WEBSITE_DESC |
-action_result.data.\*.editable | boolean | | True False |
-action_result.data.\*.id | string | `zscaler url category` | test OTHER_RESTRICTED_WEBSITE |
 action_result.data.\*.ipRangesRetainingParentCategoryCount | numeric | | 0 |
 action_result.data.\*.scopes.\*.Type | string | | test ORGANIZATION |
 action_result.data.\*.type | string | | test URL_CATEGORY |

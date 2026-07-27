@@ -33,10 +33,9 @@ class LookupUrlParams(Params):
 
 
 class LookupUrlOutput(PermissiveActionOutput):
-    blocklisted: bool | None = OutputField(column_name="Blocklisted")
     url: str | None = OutputField(
         cef_types=["url", "domain", "url list"],
-        column_name="Ip/Url",
+        column_name="URL",
         example_values=["test www.test.com"],
     )
     urlClassifications: list[str] | None = OutputField(
@@ -46,6 +45,7 @@ class LookupUrlOutput(PermissiveActionOutput):
     urlClassificationsWithSecurityAlert: list[str] | None = OutputField(
         column_name="Security Alerts"
     )
+    blocklisted: bool | None = OutputField(column_name="Blocklisted")
 
 
 def lookup_url(

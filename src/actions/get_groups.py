@@ -38,16 +38,26 @@ class GetGroupsParams(Params):
 
 
 class GetGroupsOutput(ActionOutput):
-    comments: str = Field(json_schema_extra={"examples": ["test This is for testing"]})
     id: int = OutputField(
         cef_types=["zscaler group id"],
-        column_name="ID",
+        column_name="Group ID",
         example_values=[8894813],
     )
-    isNonEditable: bool = Field(json_schema_extra={"examples": [True]})
     name: str = OutputField(
         column_name="Group Name",
         example_values=["test Frothly Internet Access"],
+    )
+    comments: str = Field(
+        json_schema_extra={
+            "column_name": "Comments",
+            "examples": ["test This is for testing"],
+        }
+    )
+    isNonEditable: bool = Field(
+        json_schema_extra={
+            "column_name": "Non-editable",
+            "examples": [True],
+        }
     )
 
 

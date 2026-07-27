@@ -36,19 +36,24 @@ class ScopesOutput(ActionOutput):
 
 
 class ListUrlCategoriesOutput(PermissiveActionOutput):
-    configuredName: str | None = OutputField(example_values=["test Test-Caution"])
-    customCategory: bool | None = None
+    id: str | None = OutputField(
+        cef_types=["zscaler url category"],
+        column_name="Category ID",
+        example_values=["test OTHER_RESTRICTED_WEBSITE"],
+    )
+    configuredName: str | None = OutputField(
+        column_name="Configured Name",
+        example_values=["test Test-Caution"],
+    )
+    description: str | None = OutputField(
+        column_name="Description",
+        example_values=["test OTHER_RESTRICTED_WEBSITE_DESC"],
+    )
+    customCategory: bool | None = OutputField(column_name="Custom")
+    editable: bool | None = OutputField(column_name="Editable")
     customIpRangesCount: float | None = OutputField(example_values=[0])
     customUrlsCount: float | None = OutputField(example_values=[0])
     dbCategorizedUrls: list[str] | None = OutputField(example_values=["test 6.5.3.2.4"])
-    description: str | None = OutputField(
-        example_values=["test OTHER_RESTRICTED_WEBSITE_DESC"]
-    )
-    editable: bool | None = None
-    id: str | None = OutputField(
-        cef_types=["zscaler url category"],
-        example_values=["test OTHER_RESTRICTED_WEBSITE"],
-    )
     ipRangesRetainingParentCategoryCount: float | None = OutputField(example_values=[0])
     scopes: list[ScopesOutput] | None = None
     type: str | None = OutputField(example_values=["test URL_CATEGORY"])

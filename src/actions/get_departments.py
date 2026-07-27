@@ -35,7 +35,7 @@ class GetDepartmentsParams(Params):
 class GetDepartmentsOutput(ActionOutput):
     id: int = OutputField(column_name="Department Id")
     name: str = OutputField(column_name="Department Name")
-    isNonEditable: bool = Field(json_schema_extra={"column_name": "Is editable"})
+    isNonEditable: bool = Field(json_schema_extra={"column_name": "Non-editable"})
 
 
 class GetDepartmentsSummary(ActionOutput):

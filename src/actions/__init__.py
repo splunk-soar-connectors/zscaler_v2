@@ -79,6 +79,7 @@ def register_actions(app: App) -> App:
         action=list_url_categories,
         description="List all URL categories",
         action_type="investigate",
+        render_as="table",
         summary_type=ListUrlCategoriesSummary,
     )
 
@@ -180,6 +181,7 @@ def register_actions(app: App) -> App:
         action=get_admin_users,
         description="Get a list of admin users",
         action_type="investigate",
+        render_as="table",
         summary_type=GetAdminUsersSummary,
     )
 

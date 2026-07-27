@@ -38,43 +38,47 @@ class GetUsersParams(Params):
 
 class DepartmentOutput(ActionOutput):
     id: int | None = OutputField(example_values=[81896690])
-    name: str | None = OutputField(example_values=["test IT"])
+    name: str | None = OutputField(
+        column_name="Department",
+        example_values=["test IT"],
+    )
 
 
 class GroupsOutput(ActionOutput):
     id: int | None = OutputField(
         cef_types=["zscaler group id"],
-        column_name="Group ID",
         example_values=[8894813],
     )
     name: str | None = OutputField(
-        column_name="Group Name",
         example_values=["test Super Admin"],
     )
 
 
 class GetUsersOutput(PermissiveActionOutput):
-    adminUser: bool | None
-    comments: str | None = OutputField(example_values=["test This is test user"])
-    deleted: bool | None
-    department: DepartmentOutput | None
-    disabled: bool | None = OutputField(example_values=[True])
-    email: str | None = OutputField(
-        cef_types=["email"],
-        column_name="User Email",
-        example_values=["test first.last@domain.com"],
-    )
-    groups: list[GroupsOutput] | None
     id: int | None = OutputField(
         cef_types=["zscaler user id"],
         column_name="User ID",
         example_values=[889814],
     )
-    isNonEditable: bool | None
     name: str | None = OutputField(
         column_name="User Name",
         example_values=["test First Last"],
     )
+    email: str | None = OutputField(
+        cef_types=["email"],
+        column_name="Email",
+        example_values=["test first.last@domain.com"],
+    )
+    department: DepartmentOutput | None
+    disabled: bool | None = OutputField(
+        column_name="Disabled",
+        example_values=[True],
+    )
+    groups: list[GroupsOutput] | None
+    adminUser: bool | None
+    comments: str | None = OutputField(example_values=["test This is test user"])
+    deleted: bool | None
+    isNonEditable: bool | None
 
 
 class GetUsersSummary(ActionOutput):

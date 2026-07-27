@@ -48,18 +48,22 @@ class ListDestinationGroupParams(Params):
 
 
 class ListDestinationGroupOutput(PermissiveActionOutput):
-    id: int | None = None
-    name: str | None = None
+    id: int | None = OutputField(column_name="Group ID")
+    name: str | None = OutputField(column_name="Group Name")
     type: str | None = OutputField(
-        example_values=["DSTN_IP", "DSTN_FQDN", "DSTN_DOMAIN", "DSTN_OTHER"]
+        column_name="Type",
+        example_values=["DSTN_IP", "DSTN_FQDN", "DSTN_DOMAIN", "DSTN_OTHER"],
     )
-    addresses: list[str] | None = OutputField(example_values=["192.168.1.1"])
-    countries: list[str] | None = None
-    description: str | None = None
+    addresses: list[str] | None = OutputField(
+        column_name="Addresses",
+        example_values=["192.168.1.1"],
+    )
+    countries: list[str] | None = OutputField(column_name="Countries")
+    description: str | None = OutputField(column_name="Description")
     ipCategories: list[str] | None = OutputField(
-        example_values=["TRADING_BROKARAGE_INSURANCE"]
+        column_name="IP Categories", example_values=["TRADING_BROKARAGE_INSURANCE"]
     )
-    isNonEditable: bool | None = None
+    isNonEditable: bool | None = OutputField(column_name="Non-editable")
     creatorContext: str | None = None
 
 
