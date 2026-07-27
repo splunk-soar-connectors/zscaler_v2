@@ -21,7 +21,7 @@ from .connectivity import test_connectivity
 def create_zscaler_soar_connector_app() -> App:
     """Create and configure the Zscaler v2 connector app."""
     app = App(
-        name="zscaler_v2",
+        name="Zscaler v2",
         app_type="network security",
         logo="logo_zscaler.svg",
         logo_dark="logo_zscaler_dark.svg",

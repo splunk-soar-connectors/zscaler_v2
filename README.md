@@ -1,4 +1,4 @@
-# zscaler_v2
+# Zscaler v2
 
 Publisher: Splunk <br>
 Connector Version: 1.0.0 <br>
@@ -10,7 +10,7 @@ This app implements containment and investigative actions for Zscaler Internet A
 
 ### Configuration variables
 
-This table lists the configuration variables required to operate zscaler_v2. These variables are specified when configuring a Zscaler v2 asset in Splunk SOAR.
+This table lists the configuration variables required to operate Zscaler v2. These variables are specified when configuring a Zscaler v2 asset in Splunk SOAR.
 
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------
