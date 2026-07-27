@@ -24,37 +24,37 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 ### Supported Actions
 
 [test connectivity](#action-test-connectivity) - Authenticate through OneAPI and read the ZIA configuration activation status. <br>
-[get report](#action-get-report) - Fetch sandbox report for provided md5 file hash <br>
+[get report](#action-get-report) - Fetch a sandbox report for the provided MD5 file hash <br>
 [list url categories](#action-list-url-categories) - List all URL categories <br>
 [block ip](#action-block-ip) - Block an IP <br>
 [block url](#action-block-url) - Block a URL <br>
 [unblock ip](#action-unblock-ip) - Unblock an IP <br>
 [unblock url](#action-unblock-url) - Unblock a URL <br>
 [allow ip](#action-allow-ip) - Add an IP address to the allowlist <br>
-[allow url](#action-allow-url) - Add a URL to the allowed list <br>
+[allow url](#action-allow-url) - Add a URL to the allowlist <br>
 [unallow ip](#action-unallow-ip) - Remove an IP address from the allowlist <br>
-[unallow url](#action-unallow-url) - Remove a URL from the allowed list <br>
-[lookup ip](#action-lookup-ip) - Lookup the categories related to an IP <br>
-[lookup url](#action-lookup-url) - Lookup the categories related to a URL <br>
+[unallow url](#action-unallow-url) - Remove a URL from the allowlist <br>
+[lookup ip](#action-lookup-ip) - Look up the categories related to an IP <br>
+[lookup url](#action-lookup-url) - Look up the categories related to a URL <br>
 [submit file](#action-submit-file) - Submit a file to Zscaler Sandbox <br>
 [get admin users](#action-get-admin-users) - Get a list of admin users <br>
-[get users](#action-get-users) - Gets a list of all users and allows user filtering by name, department, or group <br>
-[get groups](#action-get-groups) - Gets a list of groups <br>
-[add group user](#action-add-group-user) - Add user to group <br>
-[remove group user](#action-remove-group-user) - Remove user from group <br>
-[get allowlist](#action-get-allowlist) - Get urls on the allow list <br>
-[get denylist](#action-get-denylist) - Get urls on the deny list <br>
-[update user](#action-update-user) - Update user with given id <br>
-[add category url](#action-add-category-url) - Add urls to a cetgory <br>
-[add category ip](#action-add-category-ip) - Add IPs to a cetgory <br>
-[remove category url](#action-remove-category-url) - Add urls to a cetgory <br>
-[remove category ip](#action-remove-category-ip) - Remove IPs to a cetgory <br>
-[create destination group](#action-create-destination-group) - Create destination group <br>
-[list destination group](#action-list-destination-group) - List destination group <br>
-[edit destination group](#action-edit-destination-group) - Edit destination group <br>
-[delete destination group](#action-delete-destination-group) - Delete destination group <br>
+[get users](#action-get-users) - Get users, optionally filtered by name, department, or group <br>
+[get groups](#action-get-groups) - Get a list of groups <br>
+[add group user](#action-add-group-user) - Add a user to a group <br>
+[remove group user](#action-remove-group-user) - Remove a user from a group <br>
+[get allowlist](#action-get-allowlist) - Get URLs on the allowlist <br>
+[get denylist](#action-get-denylist) - Get URLs on the denylist <br>
+[update user](#action-update-user) - Update the user with the specified ID <br>
+[add category url](#action-add-category-url) - Add URLs to a category <br>
+[add category ip](#action-add-category-ip) - Add IPs to a category <br>
+[remove category url](#action-remove-category-url) - Remove URLs from a category <br>
+[remove category ip](#action-remove-category-ip) - Remove IPs from a category <br>
+[create destination group](#action-create-destination-group) - Create a destination group <br>
+[list destination group](#action-list-destination-group) - List destination groups <br>
+[edit destination group](#action-edit-destination-group) - Edit a destination group <br>
+[delete destination group](#action-delete-destination-group) - Delete destination groups <br>
 [get departments](#action-get-departments) - Get a list of departments <br>
-[get category details](#action-get-category-details) - Get the urls and keywords of a category
+[get category details](#action-get-category-details) - Get the URLs and keywords of a category
 
 ## action: 'test connectivity'
 
@@ -80,7 +80,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'get report'
 
-Fetch sandbox report for provided md5 file hash
+Fetch a sandbox report for the provided MD5 file hash
 
 Type: **investigate** <br>
 Read only: **True**
@@ -89,7 +89,7 @@ Read only: **True**
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**file_hash** | required | The md5 file hash | string | `md5` |
+**file_hash** | required | The MD5 file hash | string | `md5` |
 
 #### Action Output
 
@@ -317,7 +317,7 @@ Add an IP address to the allowlist
 Type: **contain** <br>
 Read only: **False**
 
-If a <b>url_category</b> is specified, it will add the IP(s) as a rule to that category. If it is left blank, it will instead add this IP(s) to the global allowlist.
+If a <b>url_category</b> is specified, the action adds the IPs to that category. If it is left blank, the action adds the IPs to the global allowlist.
 
 #### Action Parameters
 
@@ -348,12 +348,12 @@ summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'allow url'
 
-Add a URL to the allowed list
+Add a URL to the allowlist
 
 Type: **contain** <br>
 Read only: **False**
 
-If a <b>url_category</b> is specified, it will add the URL(s) as a rule to that category. If it is left blank, it will instead add the URL(s) to the global allowed list.
+If a <b>url_category</b> is specified, the action adds the URLs to that category. If it is left blank, the action adds the URLs to the global allowlist.
 
 #### Action Parameters
 
@@ -424,12 +424,12 @@ summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'unallow url'
 
-Remove a URL from the allowed list
+Remove a URL from the allowlist
 
 Type: **correct** <br>
 Read only: **False**
 
-If a <b>url_category</b> is specified, it will remove the URL(s) from that category. If it is left blank, it will instead remove the URL(s) from the global allowed list.
+If a <b>url_category</b> is specified, the action removes the URLs from that category. If it is left blank, the action removes the URLs from the global allowlist.
 
 #### Action Parameters
 
@@ -460,7 +460,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'lookup ip'
 
-Lookup the categories related to an IP
+Look up the categories related to an IP
 
 Type: **investigate** <br>
 Read only: **True**
@@ -487,7 +487,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'lookup url'
 
-Lookup the categories related to a URL
+Look up the categories related to a URL
 
 Type: **investigate** <br>
 Read only: **True**
@@ -519,7 +519,7 @@ Submit a file to Zscaler Sandbox
 Type: **generic** <br>
 Read only: **False**
 
-This action requires a Sandbox Submission API token. By default, files are scanned by Zscaler antivirus (AV) and submitted directly to the sandbox in order to obtain a verdict. However, if a verdict already exists for the file, you can use the 'force' parameter to make the sandbox to reanalyze it. You can submit up to 100 files per day.
+This action requires a Sandbox Submission API token. By default, Zscaler antivirus (AV) scans files before submitting them to the sandbox for a verdict. If a verdict already exists, set the 'force' parameter to make the sandbox analyze the file again. You can submit up to 100 files per day.
 
 #### Action Parameters
 
@@ -597,12 +597,12 @@ summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'get users'
 
-Gets a list of all users and allows user filtering by name, department, or group
+Get users, optionally filtered by name, department, or group
 
 Type: **investigate** <br>
 Read only: **True**
 
-Gets a list of all users and allows user filtering by name, department, or group. The name search parameter performs a partial match. The dept and group parameters perform a 'starts with' match.
+Get users, optionally filtered by name, department, or group. The name parameter performs a partial match. The department and group parameters perform a 'starts with' match.
 
 #### Action Parameters
 
@@ -641,12 +641,12 @@ summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'get groups'
 
-Gets a list of groups
+Get a list of groups
 
 Type: **investigate** <br>
 Read only: **True**
 
-Gets a list of groups. The search parameters find matching values in the name or comments attributes.
+Get groups whose name or comments match the search parameter.
 
 #### Action Parameters
 
@@ -673,7 +673,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'add group user'
 
-Add user to group
+Add a user to a group
 
 Type: **generic** <br>
 Read only: **False**
@@ -684,8 +684,8 @@ Add a group to the user's profile.
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**user_id** | required | ZScaler User ID | numeric | `zscaler user id` |
-**group_id** | required | ZScaler Group ID | numeric | `zscaler group id` |
+**user_id** | required | Zscaler user ID | numeric | `zscaler user id` |
+**group_id** | required | Zscaler group ID | numeric | `zscaler group id` |
 
 #### Action Output
 
@@ -704,13 +704,12 @@ action_result.data.\*.groups.\*.id | numeric | | 4460341 |
 action_result.data.\*.groups.\*.name | string | | test Example App |
 action_result.data.\*.id | numeric | | 9840695 |
 action_result.data.\*.name | string | | test Test user |
-action_result.summary.message | string | | User successfully added to group |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'remove group user'
 
-Remove user from group
+Remove a user from a group
 
 Type: **correct** <br>
 Read only: **False**
@@ -721,8 +720,8 @@ Remove a group from the user's profile.
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**user_id** | required | ZScaler User Id | numeric | `zscaler user id` |
-**group_id** | required | ZScaler Group Id | numeric | `zscaler group id` |
+**user_id** | required | Zscaler user ID | numeric | `zscaler user id` |
+**group_id** | required | Zscaler group ID | numeric | `zscaler group id` |
 
 #### Action Output
 
@@ -746,7 +745,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'get allowlist'
 
-Get urls on the allow list
+Get URLs on the allowlist
 
 Type: **investigate** <br>
 Read only: **True**
@@ -763,13 +762,12 @@ action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.data.\*.url | string | | |
 action_result.summary.total_allowlist_items | numeric | | 10 |
-action_result.summary.message | string | | Allowlist retrieved |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'get denylist'
 
-Get urls on the deny list
+Get URLs on the denylist
 
 Type: **investigate** <br>
 Read only: **True**
@@ -778,8 +776,8 @@ Read only: **True**
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**filter** | optional | Filter results be url or ip | string | |
-**query** | optional | Regular expression to match url or ip against | string | |
+**filter** | optional | Filter results by URL or IP | string | |
+**query** | optional | Regular expression to match against each URL or IP | string | |
 
 #### Action Output
 
@@ -790,14 +788,13 @@ action_result.message | string | | |
 action_result.parameter.filter | string | | |
 action_result.parameter.query | string | | |
 action_result.data.\*.url | string | | |
-action_result.summary.message | string | | Blacklist retrieved |
 action_result.summary.total_denylist_items | numeric | | 10 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'update user'
 
-Update user with given id
+Update the user with the specified ID
 
 Type: **correct** <br>
 Read only: **False**
@@ -806,7 +803,7 @@ Read only: **False**
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**user_id** | required | ZScaler User Id | numeric | `zscaler user id` |
+**user_id** | required | Zscaler user ID | numeric | `zscaler user id` |
 **user** | optional | JSON object containing the user details (see https://help.zscaler.com/zia/user-management#/users/{userId}-put) | string | |
 
 #### Action Output
@@ -832,7 +829,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'add category url'
 
-Add urls to a cetgory
+Add URLs to a category
 
 Type: **generic** <br>
 Read only: **False**
@@ -870,13 +867,12 @@ action_result.data.\*.customIpRangesCount | numeric | | |
 action_result.data.\*.keywordsRetainingParentCategory.\* | string | | |
 action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | |
 action_result.data.\*.ipRangesRetainingParentCategoryCount | numeric | | |
-action_result.summary.message | string | | Category urls updated |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'add category ip'
 
-Add IPs to a cetgory
+Add IPs to a category
 
 Type: **generic** <br>
 Read only: **False**
@@ -914,13 +910,12 @@ action_result.data.\*.customIpRangesCount | numeric | | |
 action_result.data.\*.keywordsRetainingParentCategory.\* | string | | |
 action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | |
 action_result.data.\*.ipRangesRetainingParentCategoryCount | numeric | | |
-action_result.summary.message | string | | Category ips updated |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'remove category url'
 
-Add urls to a cetgory
+Remove URLs from a category
 
 Type: **generic** <br>
 Read only: **False**
@@ -958,13 +953,12 @@ action_result.data.\*.customIpRangesCount | numeric | | |
 action_result.data.\*.keywordsRetainingParentCategory.\* | string | | |
 action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | |
 action_result.data.\*.ipRangesRetainingParentCategoryCount | numeric | | |
-action_result.summary.message | string | | Category urls removed |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'remove category ip'
 
-Remove IPs to a cetgory
+Remove IPs from a category
 
 Type: **generic** <br>
 Read only: **False**
@@ -1002,13 +996,12 @@ action_result.data.\*.customIpRangesCount | numeric | | |
 action_result.data.\*.keywordsRetainingParentCategory.\* | string | | |
 action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | |
 action_result.data.\*.ipRangesRetainingParentCategoryCount | numeric | | |
-action_result.summary.message | string | | Category ips removed |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'create destination group'
 
-Create destination group
+Create a destination group
 
 Type: **generic** <br>
 Read only: **False**
@@ -1019,7 +1012,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **name** | required | Destination IP group name | string | |
 **type** | required | Destination IP group type (i.e., the group can contain destination IP addresses, countries, URL categories or FQDNs) | string | |
-**addresses** | optional | Comma seperated string of destination IP addresses, FQDNs, or wildcard FQDNs added to the group | string | |
+**addresses** | optional | Comma-separated destination IP addresses, FQDNs, or wildcard FQDNs to add to the group | string | |
 **description** | optional | Additional information about the destination IP group. | string | |
 **ip_categories** | optional | Destination IP address URL categories | string | |
 **countries** | optional | Destination IP address countries. You can identify destinations based on the location of a server. | string | |
@@ -1045,13 +1038,12 @@ action_result.data.\*.description | string | | |
 action_result.data.\*.ipCategories.\* | string | | TRADING_BROKARAGE_INSURANCE |
 action_result.data.\*.isNonEditable | boolean | | True False |
 action_result.data.\*.creatorContext | string | | |
-action_result.summary.message | string | | Destination Group Created |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'list destination group'
 
-List destination group
+List destination groups
 
 Type: **investigate** <br>
 Read only: **True**
@@ -1062,7 +1054,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **ip_group_ids** | optional | A comma-separated list of unique identifiers for the IP destination groups | string | |
 **exclude_type** | optional | The IP group type to be excluded from the results | string | |
-**category_type** | optional | Comma seperated list of IP group types to be filtered from results. This argument is only supported when the 'lite' argument is set to True | string | |
+**category_type** | optional | Comma-separated IP group types to include. This parameter is supported only when 'lite' is true | string | |
 **limit** | optional | Limit of the results to be retrieved | numeric | |
 **lite** | optional | Whether to retrieve only limited information of IP destination groups. Includes ID, name and type of the IP destination groups | boolean | |
 
@@ -1086,13 +1078,13 @@ action_result.data.\*.description | string | | |
 action_result.data.\*.ipCategories.\* | string | | TRADING_BROKARAGE_INSURANCE |
 action_result.data.\*.isNonEditable | boolean | | True False |
 action_result.data.\*.creatorContext | string | | |
-action_result.summary.message | string | | Destination groups retrieved |
+action_result.summary.total_destination_groups | numeric | | 10 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'edit destination group'
 
-Edit destination group
+Edit a destination group
 
 Type: **generic** <br>
 Read only: **False**
@@ -1103,7 +1095,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **ip_group_id** | required | The unique identifier for the IP destination group | numeric | |
 **name** | optional | Destination IP group name | string | |
-**addresses** | optional | Comma seperated string of destination IP addresses, FQDNs, or wildcard FQDNs added to the group | string | |
+**addresses** | optional | Comma-separated destination IP addresses, FQDNs, or wildcard FQDNs to assign to the group | string | |
 **description** | optional | Additional information about the destination IP group. | string | |
 **ip_categories** | optional | Destination IP address URL categories | string | |
 **countries** | optional | Destination IP address countries. You can identify destinations based on the location of a server. | string | |
@@ -1131,13 +1123,12 @@ action_result.data.\*.description | string | | |
 action_result.data.\*.ipCategories.\* | string | | TRADING_BROKARAGE_INSURANCE |
 action_result.data.\*.isNonEditable | boolean | | True False |
 action_result.data.\*.creatorContext | string | | |
-action_result.summary.message | string | | Destination Group Edited |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'delete destination group'
 
-Delete destination group
+Delete destination groups
 
 Type: **generic** <br>
 Read only: **False**
@@ -1156,7 +1147,7 @@ action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.ip_group_ids | string | | |
 action_result.data.\*.ip_group_id | string | | |
-action_result.summary.message | string | | Destination groups deleted |
+action_result.summary.deleted_destination_groups | numeric | | 1 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
@@ -1187,14 +1178,13 @@ action_result.parameter.page_size | numeric | | |
 action_result.data.\*.id | numeric | | |
 action_result.data.\*.name | string | | |
 action_result.data.\*.isNonEditable | boolean | | True False |
-action_result.summary.message | string | | Departments Retrieved |
-action_result.summary.total_deparments | numeric | | 97 |
+action_result.summary.total_departments | numeric | | 97 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'get category details'
 
-Get the urls and keywords of a category
+Get the URLs and keywords of a category
 
 Type: **investigate** <br>
 Read only: **True**
@@ -1228,7 +1218,6 @@ action_result.data.\*.scopes.\*.Type | string | | test ORGANIZATION |
 action_result.data.\*.type | string | | test URL_CATEGORY |
 action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | 0 |
 action_result.data.\*.val | numeric | | 1 |
-action_result.summary.message | string | | Category details recieved |
 action_result.summary.total_categories | numeric | | 97 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
