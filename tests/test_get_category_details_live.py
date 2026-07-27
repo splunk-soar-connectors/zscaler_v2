@@ -46,13 +46,12 @@ def test_get_category_details_live_returns_oneapi_lists(
 
     result = connector_app.actions_manager.get_action_results()[-1]
     assert result.get_status() is True, result.get_message()
-    assert result.get_message() == "Category details recieved"
+    assert result.get_message() == "Category details received"
 
     rows = result.get_data()
     assert [row["id"] for row in rows] == category_ids
     for field in ("keywords", "urls", "dbCategorizedUrls"):
         assert all(field not in row or isinstance(row[field], list) for row in rows)
     assert result.get_summary() == {
-        "message": "Category details recieved",
         "total_categories": len(rows),
     }

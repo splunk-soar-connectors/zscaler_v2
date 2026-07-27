@@ -93,6 +93,7 @@ def test_create_destination_group_live_creates_activates_and_cleans_up(
 
     assert result is not None
     assert result.get_status() is True, result.get_message()
+    assert result.get_message() == "Destination group created"
     assert result.get_data()[0]["name"] == group_name
     assert result.get_data()[0]["addresses"] == _TEST_ADDRESSES
-    assert result.get_summary() == {"message": "Destination Group Created"}
+    assert result.get_summary() == {}

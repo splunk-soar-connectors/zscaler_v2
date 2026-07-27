@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from soar_sdk.abstract import SOARClient
-from soar_sdk.action_results import ActionOutput, OutputField
+from soar_sdk.action_results import ActionOutput
 from soar_sdk.exceptions import ActionFailure
 from soar_sdk.logging import getLogger
 from soar_sdk.params import Param, Params
@@ -60,10 +60,6 @@ class RemoveCategoryIpOutput(ActionOutput):
     keywordsRetainingParentCategory: list[str]
     urlsRetainingParentCategoryCount: float
     ipRangesRetainingParentCategoryCount: float
-
-
-class RemoveCategoryIpSummary(ActionOutput):
-    message: str = OutputField(example_values=["Category ips removed"])
 
 
 def remove_category_ip(
@@ -125,5 +121,5 @@ def remove_category_ip(
         soar.set_message(message)
         raise ActionFailure(message) from exc
 
-    soar.set_summary(RemoveCategoryIpSummary(message="Category ips removed"))
+    soar.set_message("Category IPs removed")
     return RemoveCategoryIpOutput.model_construct(**raw_updated)

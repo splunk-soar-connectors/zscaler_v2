@@ -35,7 +35,7 @@ class DeleteDestinationGroupOutput(PermissiveActionOutput):
 
 
 class DeleteDestinationGroupSummary(ActionOutput):
-    message: str = OutputField(example_values=["Destination groups deleted"])
+    deleted_destination_groups: int = OutputField(example_values=[1])
 
 
 def delete_destination_group(
@@ -68,6 +68,7 @@ def delete_destination_group(
         raise ActionFailure(message) from exc
 
     soar.set_summary(
-        DeleteDestinationGroupSummary(message="Destination groups deleted")
+        DeleteDestinationGroupSummary(deleted_destination_groups=len(rows))
     )
+    soar.set_message("Destination groups deleted")
     return rows

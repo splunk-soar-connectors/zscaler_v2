@@ -120,7 +120,8 @@ def test_remove_category_url_live_removes_activates_and_returns_oneapi_lists(
 
     assert result is not None
     assert result.get_status() is True, result.get_message()
+    assert result.get_message() == "Category URLs removed"
     assert result.get_data()[0]["id"] == category_id
     assert _TEST_URL not in result.get_data()[0]["urls"]
     assert _TEST_PARENT_URL not in result.get_data()[0]["dbCategorizedUrls"]
-    assert result.get_summary() == {"message": "Category urls removed"}
+    assert result.get_summary() == {}

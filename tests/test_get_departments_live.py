@@ -44,8 +44,7 @@ def test_get_departments_live_returns_oneapi_rows(
         for row in rows
     )
     assert result.get_summary() == {
-        "message": "Departments retrieved",
-        "total_deparments": len(rows),
+        "total_departments": len(rows),
     }
 
 

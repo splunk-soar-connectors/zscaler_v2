@@ -34,24 +34,21 @@ from .submit_file import submit_file
 from .get_admin_users import GetAdminUsersSummary, get_admin_users
 from .get_users import GetUsersSummary, get_users
 from .get_groups import GetGroupsSummary, get_groups
-from .add_group_user import AddGroupUserSummary, add_group_user
+from .add_group_user import add_group_user
 from .remove_group_user import remove_group_user
 from .get_allowlist import GetAllowlistSummary, get_allowlist
 from .get_denylist import GetDenylistSummary, get_denylist
 from .update_user import update_user
-from .add_category_url import AddCategoryUrlSummary, add_category_url
-from .add_category_ip import AddCategoryIpSummary, add_category_ip
-from .remove_category_url import RemoveCategoryUrlSummary, remove_category_url
-from .remove_category_ip import RemoveCategoryIpSummary, remove_category_ip
-from .create_destination_group import (
-    CreateDestinationGroupSummary,
-    create_destination_group,
-)
+from .add_category_url import add_category_url
+from .add_category_ip import add_category_ip
+from .remove_category_url import remove_category_url
+from .remove_category_ip import remove_category_ip
+from .create_destination_group import create_destination_group
 from .list_destination_group import (
     ListDestinationGroupSummary,
     list_destination_group,
 )
-from .edit_destination_group import EditDestinationGroupSummary, edit_destination_group
+from .edit_destination_group import edit_destination_group
 from .delete_destination_group import (
     DeleteDestinationGroupSummary,
     delete_destination_group,
@@ -208,7 +205,6 @@ def register_actions(app: App) -> App:
         description="Add a user to a group",
         action_type="generic",
         read_only=False,
-        summary_type=AddGroupUserSummary,
         verbose="Add a group to the user's profile.",
     )
 
@@ -248,7 +244,6 @@ def register_actions(app: App) -> App:
         description="Add URLs to a category",
         action_type="generic",
         read_only=False,
-        summary_type=AddCategoryUrlSummary,
     )
 
     app.register_action(
@@ -256,7 +251,6 @@ def register_actions(app: App) -> App:
         description="Add IPs to a category",
         action_type="generic",
         read_only=False,
-        summary_type=AddCategoryIpSummary,
     )
 
     app.register_action(
@@ -264,7 +258,6 @@ def register_actions(app: App) -> App:
         description="Remove URLs from a category",
         action_type="generic",
         read_only=False,
-        summary_type=RemoveCategoryUrlSummary,
     )
 
     app.register_action(
@@ -272,7 +265,6 @@ def register_actions(app: App) -> App:
         description="Remove IPs from a category",
         action_type="generic",
         read_only=False,
-        summary_type=RemoveCategoryIpSummary,
     )
 
     app.register_action(
@@ -280,7 +272,6 @@ def register_actions(app: App) -> App:
         description="Create a destination group",
         action_type="generic",
         read_only=False,
-        summary_type=CreateDestinationGroupSummary,
     )
 
     app.register_action(
@@ -297,7 +288,6 @@ def register_actions(app: App) -> App:
         description="Edit a destination group",
         action_type="generic",
         read_only=False,
-        summary_type=EditDestinationGroupSummary,
     )
 
     app.register_action(

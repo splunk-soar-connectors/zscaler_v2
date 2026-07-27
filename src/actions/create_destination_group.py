@@ -59,10 +59,6 @@ class CreateDestinationGroupOutput(ActionOutput):
     creatorContext: str
 
 
-class CreateDestinationGroupSummary(ActionOutput):
-    message: str = OutputField(example_values=["Destination Group Created"])
-
-
 def create_destination_group(
     params: CreateDestinationGroupParams, soar: SOARClient, asset: Asset
 ) -> CreateDestinationGroupOutput:
@@ -105,5 +101,5 @@ def create_destination_group(
         soar.set_message(message)
         raise ActionFailure(message) from exc
 
-    soar.set_summary(CreateDestinationGroupSummary(message="Destination Group Created"))
+    soar.set_message("Destination group created")
     return CreateDestinationGroupOutput.model_construct(**raw_created)

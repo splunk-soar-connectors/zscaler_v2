@@ -29,7 +29,6 @@ class GetAllowlistOutput(ActionOutput):
 
 class GetAllowlistSummary(ActionOutput):
     total_allowlist_items: int = OutputField(example_values=[10])
-    message: str = OutputField(example_values=["Allowlist retrieved"])
 
 
 def get_allowlist(
@@ -56,11 +55,6 @@ def get_allowlist(
 
     rows = [GetAllowlistOutput(url=str(url)) for url in urls]
     message = "Allowlist retrieved"
-    soar.set_summary(
-        GetAllowlistSummary(
-            total_allowlist_items=len(rows),
-            message=message,
-        )
-    )
+    soar.set_summary(GetAllowlistSummary(total_allowlist_items=len(rows)))
     soar.set_message(message)
     return rows

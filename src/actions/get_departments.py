@@ -39,8 +39,7 @@ class GetDepartmentsOutput(ActionOutput):
 
 
 class GetDepartmentsSummary(ActionOutput):
-    message: str = OutputField(example_values=["Departments Retrieved"])
-    total_deparments: int = OutputField(example_values=[97])
+    total_departments: int = OutputField(example_values=[97])
 
 
 def get_departments(
@@ -97,10 +96,6 @@ def get_departments(
         soar.set_message(message)
         raise ActionFailure(message) from exc
 
-    soar.set_summary(
-        GetDepartmentsSummary(
-            message="Departments retrieved",
-            total_deparments=len(rows),
-        )
-    )
+    soar.set_summary(GetDepartmentsSummary(total_departments=len(rows)))
+    soar.set_message("Departments retrieved")
     return rows

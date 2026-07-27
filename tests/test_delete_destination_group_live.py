@@ -82,4 +82,5 @@ def test_delete_destination_group_live_returns_one_row_per_deleted_group(
     assert result.get_data() == [
         {"ip_group_id": str(group_id)} for group_id in group_ids
     ]
-    assert result.get_summary() == {"message": "Destination groups deleted"}
+    assert result.get_message() == "Destination groups deleted"
+    assert result.get_summary() == {"deleted_destination_groups": len(group_ids)}

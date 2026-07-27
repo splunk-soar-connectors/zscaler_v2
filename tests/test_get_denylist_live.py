@@ -44,7 +44,6 @@ def test_get_denylist_live(
     rows = result.get_data()
     assert all(isinstance(row.get("url"), str) for row in rows)
     assert result.get_summary() == {
-        "message": "Denylist retrieved",
         "total_denylist_items": len(rows),
     }
 

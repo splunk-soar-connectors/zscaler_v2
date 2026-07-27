@@ -52,10 +52,6 @@ class AddGroupUserOutput(PermissiveActionOutput):
     name: str | None = OutputField(example_values=["test Test user"])
 
 
-class AddGroupUserSummary(ActionOutput):
-    message: str = OutputField(example_values=["User successfully added to group"])
-
-
 def add_group_user(
     params: AddGroupUserParams, soar: SOARClient, asset: Asset
 ) -> AddGroupUserOutput:
@@ -102,7 +98,6 @@ def add_group_user(
 
             if any(existing.id == group_id for existing in user.groups):
                 message = "User already in group"
-                soar.set_summary(AddGroupUserSummary(message=message))
                 soar.set_message(message)
                 return AddGroupUserOutput(**raw_group)
 
@@ -132,5 +127,5 @@ def add_group_user(
         soar.set_message(message)
         raise ActionFailure(message) from exc
 
-    soar.set_summary(AddGroupUserSummary(message="User successfully added to group"))
+    soar.set_message("User successfully added to group")
     return AddGroupUserOutput(**raw_user)

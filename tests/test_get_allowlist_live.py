@@ -34,5 +34,4 @@ def test_get_allowlist_live(
     assert all(isinstance(row.get("url"), str) for row in rows)
     assert result.get_summary() == {
         "total_allowlist_items": len(rows),
-        "message": "Allowlist retrieved",
     }

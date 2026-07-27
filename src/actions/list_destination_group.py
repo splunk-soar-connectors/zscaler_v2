@@ -68,7 +68,7 @@ class ListDestinationGroupOutput(PermissiveActionOutput):
 
 
 class ListDestinationGroupSummary(ActionOutput):
-    message: str = OutputField(example_values=["Destination groups retrieved"])
+    total_destination_groups: int = OutputField(example_values=[10])
 
 
 def list_destination_group(
@@ -170,6 +170,6 @@ def list_destination_group(
         raise ActionFailure(message) from exc
 
     message = "Destination groups retrieved"
-    soar.set_summary(ListDestinationGroupSummary(message=message))
+    soar.set_summary(ListDestinationGroupSummary(total_destination_groups=len(rows)))
     soar.set_message(message)
     return rows

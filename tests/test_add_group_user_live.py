@@ -75,12 +75,13 @@ def test_add_group_user_live_updates_user_and_preserves_contract(
 
     assert result is not None
     assert result.get_status() is True, result.get_message()
+    assert result.get_message() == "User successfully added to group"
     assert result.get_data()[0]["id"] == user_id
     assert group_id in [group["id"] for group in result.get_data()[0]["groups"]]
-    assert result.get_summary() == {"message": "User successfully added to group"}
+    assert result.get_summary() == {}
 
     assert idempotent_result is not None
     assert idempotent_result.get_status() is True, idempotent_result.get_message()
     assert idempotent_result.get_message() == "User already in group"
     assert idempotent_result.get_data() == [expected_group]
-    assert idempotent_result.get_summary() == {"message": "User already in group"}
+    assert idempotent_result.get_summary() == {}

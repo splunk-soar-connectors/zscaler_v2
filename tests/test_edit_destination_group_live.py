@@ -104,7 +104,8 @@ def test_edit_destination_group_live_edits_activates_and_cleans_up(
 
     assert result is not None
     assert result.get_status() is True, result.get_message()
+    assert result.get_message() == "Destination group edited"
     assert result.get_data()[0]["id"] == group_id
     assert result.get_data()[0]["name"] == updated_name
     assert result.get_data()[0]["addresses"] == _UPDATED_ADDRESSES
-    assert result.get_summary() == {"message": "Destination Group Edited"}
+    assert result.get_summary() == {}

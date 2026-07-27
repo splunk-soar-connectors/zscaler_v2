@@ -43,7 +43,6 @@ class GetDenylistOutput(ActionOutput):
 
 
 class GetDenylistSummary(ActionOutput):
-    message: str = OutputField(example_values=["Blacklist retrieved"])
     total_denylist_items: int = OutputField(example_values=[10])
 
 
@@ -89,11 +88,6 @@ def get_denylist(
         raise ActionFailure(message) from exc
 
     message = "Denylist retrieved"
-    soar.set_summary(
-        GetDenylistSummary(
-            message=message,
-            total_denylist_items=len(rows),
-        )
-    )
+    soar.set_summary(GetDenylistSummary(total_denylist_items=len(rows)))
     soar.set_message(message)
     return rows

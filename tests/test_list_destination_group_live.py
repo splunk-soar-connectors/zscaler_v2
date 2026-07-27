@@ -35,7 +35,7 @@ def test_list_destination_group_live_supports_full_and_lite_id_queries(
     assert all(isinstance(row["id"], int) for row in full_rows)
     assert all(isinstance(row["name"], str) for row in full_rows)
     assert all(isinstance(row["type"], str) for row in full_rows)
-    assert list_result.get_summary() == {"message": "Destination groups retrieved"}
+    assert list_result.get_summary() == {"total_destination_groups": len(full_rows)}
 
     group_ids = [str(row["id"]) for row in full_rows]
     lite_input = build_soar_action_input(
@@ -52,5 +52,6 @@ def test_list_destination_group_live_supports_full_and_lite_id_queries(
     assert lite_result.get_status() is True, lite_result.get_message()
     assert lite_result.get_message() == "Destination groups retrieved"
     lite_rows = lite_result.get_data()
+    assert lite_result.get_summary() == {"total_destination_groups": len(lite_rows)}
     assert [str(row["id"]) for row in lite_rows] == group_ids
     assert all(set(row) == {"id", "name", "type"} for row in lite_rows)

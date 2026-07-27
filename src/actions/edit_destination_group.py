@@ -62,10 +62,6 @@ class EditDestinationGroupOutput(ActionOutput):
     creatorContext: str
 
 
-class EditDestinationGroupSummary(ActionOutput):
-    message: str = OutputField(example_values=["Destination Group Edited"])
-
-
 def edit_destination_group(
     params: EditDestinationGroupParams, soar: SOARClient, asset: Asset
 ) -> EditDestinationGroupOutput:
@@ -143,5 +139,5 @@ def edit_destination_group(
         soar.set_message(message)
         raise ActionFailure(message) from exc
 
-    soar.set_summary(EditDestinationGroupSummary(message="Destination Group Edited"))
+    soar.set_message("Destination group edited")
     return EditDestinationGroupOutput.model_construct(**raw_updated)

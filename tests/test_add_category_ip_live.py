@@ -103,7 +103,8 @@ def test_add_category_ip_live_updates_activates_and_returns_oneapi_lists(
 
     assert result is not None
     assert result.get_status() is True, result.get_message()
+    assert result.get_message() == "Category IPs updated"
     assert result.get_data()[0]["id"] == category_id
     assert _TEST_IP in result.get_data()[0]["urls"]
     assert _TEST_PARENT_IP in result.get_data()[0]["dbCategorizedUrls"]
-    assert result.get_summary() == {"message": "Category ips updated"}
+    assert result.get_summary() == {}
