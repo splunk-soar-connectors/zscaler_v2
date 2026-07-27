@@ -25,10 +25,10 @@ logger = getLogger()
 
 class AddGroupUserParams(Params):
     user_id: float = Param(
-        description="ZScaler User ID", primary=True, cef_types=["zscaler user id"]
+        description="Zscaler user ID", primary=True, cef_types=["zscaler user id"]
     )
     group_id: float = Param(
-        description="ZScaler Group ID", primary=True, cef_types=["zscaler group id"]
+        description="Zscaler group ID", primary=True, cef_types=["zscaler group id"]
     )
 
 

@@ -71,7 +71,7 @@ def register_actions(app: App) -> App:
     """
     app.register_action(
         action=get_report,
-        description="Fetch sandbox report for provided md5 file hash",
+        description="Fetch a sandbox report for the provided MD5 file hash",
         action_type="investigate",
     )
 
@@ -125,16 +125,16 @@ def register_actions(app: App) -> App:
         action_type="contain",
         read_only=False,
         summary_type=AllowIpSummary,
-        verbose="If a <b>url_category</b> is specified, it will add the IP(s) as a rule to that category. If it is left blank, it will instead add this IP(s) to the global allowlist.",
+        verbose="If a <b>url_category</b> is specified, the action adds the IPs to that category. If it is left blank, the action adds the IPs to the global allowlist.",
     )
 
     app.register_action(
         action=allow_url,
-        description="Add a URL to the allowed list",
+        description="Add a URL to the allowlist",
         action_type="contain",
         read_only=False,
         summary_type=AllowUrlSummary,
-        verbose="If a <b>url_category</b> is specified, it will add the URL(s) as a rule to that category. If it is left blank, it will instead add the URL(s) to the global allowed list.",
+        verbose="If a <b>url_category</b> is specified, the action adds the URLs to that category. If it is left blank, the action adds the URLs to the global allowlist.",
     )
 
     app.register_action(
@@ -148,23 +148,23 @@ def register_actions(app: App) -> App:
 
     app.register_action(
         action=unallow_url,
-        description="Remove a URL from the allowed list",
+        description="Remove a URL from the allowlist",
         action_type="correct",
         read_only=False,
         summary_type=UnallowUrlSummary,
-        verbose="If a <b>url_category</b> is specified, it will remove the URL(s) from that category. If it is left blank, it will instead remove the URL(s) from the global allowed list.",
+        verbose="If a <b>url_category</b> is specified, the action removes the URLs from that category. If it is left blank, the action removes the URLs from the global allowlist.",
     )
 
     app.register_action(
         action=lookup_ip,
-        description="Lookup the categories related to an IP",
+        description="Look up the categories related to an IP",
         action_type="investigate",
         render_as="table",
     )
 
     app.register_action(
         action=lookup_url,
-        description="Lookup the categories related to a URL",
+        description="Look up the categories related to a URL",
         action_type="investigate",
         render_as="table",
     )
@@ -174,7 +174,7 @@ def register_actions(app: App) -> App:
         description="Submit a file to Zscaler Sandbox",
         action_type="generic",
         read_only=False,
-        verbose="This action requires a Sandbox Submission API token. By default, files are scanned by Zscaler antivirus (AV) and submitted directly to the sandbox in order to obtain a verdict. However, if a verdict already exists for the file, you can use the 'force' parameter to make the sandbox to reanalyze it. You can submit up to 100 files per day.",
+        verbose="This action requires a Sandbox Submission API token. By default, Zscaler antivirus (AV) scans files before submitting them to the sandbox for a verdict. If a verdict already exists, set the 'force' parameter to make the sandbox analyze the file again. You can submit up to 100 files per day.",
     )
 
     app.register_action(
@@ -187,25 +187,25 @@ def register_actions(app: App) -> App:
 
     app.register_action(
         action=get_users,
-        description="Gets a list of all users and allows user filtering by name, department, or group",
+        description="Get users, optionally filtered by name, department, or group",
         action_type="investigate",
         render_as="table",
         summary_type=GetUsersSummary,
-        verbose="Gets a list of all users and allows user filtering by name, department, or group. The name search parameter performs a partial match. The dept and group parameters perform a 'starts with' match.",
+        verbose="Get users, optionally filtered by name, department, or group. The name parameter performs a partial match. The department and group parameters perform a 'starts with' match.",
     )
 
     app.register_action(
         action=get_groups,
-        description="Gets a list of groups",
+        description="Get a list of groups",
         action_type="investigate",
         render_as="table",
         summary_type=GetGroupsSummary,
-        verbose="Gets a list of groups. The search parameters find matching values in the name or comments attributes.",
+        verbose="Get groups whose name or comments match the search parameter.",
     )
 
     app.register_action(
         action=add_group_user,
-        description="Add user to group",
+        description="Add a user to a group",
         action_type="generic",
         read_only=False,
         summary_type=AddGroupUserSummary,
@@ -214,7 +214,7 @@ def register_actions(app: App) -> App:
 
     app.register_action(
         action=remove_group_user,
-        description="Remove user from group",
+        description="Remove a user from a group",
         action_type="correct",
         read_only=False,
         verbose="Remove a group from the user's profile.",
@@ -222,7 +222,7 @@ def register_actions(app: App) -> App:
 
     app.register_action(
         action=get_allowlist,
-        description="Get urls on the allow list",
+        description="Get URLs on the allowlist",
         action_type="investigate",
         render_as="table",
         summary_type=GetAllowlistSummary,
@@ -230,7 +230,7 @@ def register_actions(app: App) -> App:
 
     app.register_action(
         action=get_denylist,
-        description="Get urls on the deny list",
+        description="Get URLs on the denylist",
         action_type="investigate",
         render_as="table",
         summary_type=GetDenylistSummary,
@@ -238,14 +238,14 @@ def register_actions(app: App) -> App:
 
     app.register_action(
         action=update_user,
-        description="Update user with given id",
+        description="Update the user with the specified ID",
         action_type="correct",
         read_only=False,
     )
 
     app.register_action(
         action=add_category_url,
-        description="Add urls to a cetgory",
+        description="Add URLs to a category",
         action_type="generic",
         read_only=False,
         summary_type=AddCategoryUrlSummary,
@@ -253,7 +253,7 @@ def register_actions(app: App) -> App:
 
     app.register_action(
         action=add_category_ip,
-        description="Add IPs to a cetgory",
+        description="Add IPs to a category",
         action_type="generic",
         read_only=False,
         summary_type=AddCategoryIpSummary,
@@ -261,7 +261,7 @@ def register_actions(app: App) -> App:
 
     app.register_action(
         action=remove_category_url,
-        description="Add urls to a cetgory",
+        description="Remove URLs from a category",
         action_type="generic",
         read_only=False,
         summary_type=RemoveCategoryUrlSummary,
@@ -269,7 +269,7 @@ def register_actions(app: App) -> App:
 
     app.register_action(
         action=remove_category_ip,
-        description="Remove IPs to a cetgory",
+        description="Remove IPs from a category",
         action_type="generic",
         read_only=False,
         summary_type=RemoveCategoryIpSummary,
@@ -277,7 +277,7 @@ def register_actions(app: App) -> App:
 
     app.register_action(
         action=create_destination_group,
-        description="Create destination group",
+        description="Create a destination group",
         action_type="generic",
         read_only=False,
         summary_type=CreateDestinationGroupSummary,
@@ -285,7 +285,7 @@ def register_actions(app: App) -> App:
 
     app.register_action(
         action=list_destination_group,
-        description="List destination group",
+        description="List destination groups",
         action_type="investigate",
         read_only=True,
         render_as="table",
@@ -294,7 +294,7 @@ def register_actions(app: App) -> App:
 
     app.register_action(
         action=edit_destination_group,
-        description="Edit destination group",
+        description="Edit a destination group",
         action_type="generic",
         read_only=False,
         summary_type=EditDestinationGroupSummary,
@@ -302,7 +302,7 @@ def register_actions(app: App) -> App:
 
     app.register_action(
         action=delete_destination_group,
-        description="Delete destination group",
+        description="Delete destination groups",
         action_type="generic",
         read_only=False,
         summary_type=DeleteDestinationGroupSummary,
@@ -318,7 +318,7 @@ def register_actions(app: App) -> App:
 
     app.register_action(
         action=get_category_details,
-        description="Get the urls and keywords of a category",
+        description="Get the URLs and keywords of a category",
         action_type="investigate",
         render_as="table",
         summary_type=GetCategoryDetailsSummary,

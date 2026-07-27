@@ -63,7 +63,7 @@ class GetCategoryDetailsOutput(PermissiveActionOutput):
 
 
 class GetCategoryDetailsSummary(ActionOutput):
-    message: str = OutputField(example_values=["Category details recieved"])
+    message: str = OutputField(example_values=["Category details received"])
     total_categories: int = OutputField(example_values=[97])
 
 
@@ -102,7 +102,7 @@ def get_category_details(
         soar.set_message(message)
         raise ActionFailure(message) from exc
 
-    message = "Category details recieved"
+    message = "Category details received"
     soar.set_summary(
         GetCategoryDetailsSummary(
             message=message,

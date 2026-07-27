@@ -20,10 +20,10 @@ from ..asset import Asset
 
 class RemoveGroupUserParams(Params):
     user_id: float = Param(
-        description="ZScaler User Id", primary=True, cef_types=["zscaler user id"]
+        description="Zscaler user ID", primary=True, cef_types=["zscaler user id"]
     )
     group_id: float = Param(
-        description="ZScaler Group Id", primary=True, cef_types=["zscaler group id"]
+        description="Zscaler group ID", primary=True, cef_types=["zscaler group id"]
     )
 
 

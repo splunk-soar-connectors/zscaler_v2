@@ -36,7 +36,7 @@ class ListDestinationGroupParams(Params):
         description="The IP group type to be excluded from the results", primary=True
     )
     category_type: str | None = Param(
-        description="Comma seperated list of IP group types to be filtered from results. This argument is only supported when the 'lite' argument is set to True"
+        description="Comma-separated IP group types to include. This parameter is supported only when 'lite' is true"
     )
     limit: float | None = Param(
         description="Limit of the results to be retrieved", default=50

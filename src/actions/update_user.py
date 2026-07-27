@@ -20,7 +20,7 @@ from ..asset import Asset
 
 class UpdateUserParams(Params):
     user_id: float = Param(
-        description="ZScaler User Id", primary=True, cef_types=["zscaler user id"]
+        description="Zscaler user ID", primary=True, cef_types=["zscaler user id"]
     )
     user: str | None = Param(
         description="JSON object containing the user details (see https://help.zscaler.com/zia/user-management#/users/{userId}-put)",

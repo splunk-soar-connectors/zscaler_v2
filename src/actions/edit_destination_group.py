@@ -29,7 +29,7 @@ class EditDestinationGroupParams(Params):
     )
     name: str | None = Param(description="Destination IP group name", primary=True)
     addresses: str | None = Param(
-        description="Comma seperated string of destination IP addresses, FQDNs, or wildcard FQDNs added to the group"
+        description="Comma-separated destination IP addresses, FQDNs, or wildcard FQDNs to assign to the group"
     )
     description: str | None = Param(
         description="Additional information about the destination IP group."

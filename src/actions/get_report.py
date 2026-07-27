@@ -25,13 +25,13 @@ from ..zscaler_client import get_client
 logger = getLogger()
 
 _MD5_PATTERN = re.compile(r"^[0-9a-fA-F]{32}$")
-_UNKNOWN_MD5_MESSAGE = "md5 is unknown or analysis has yet not been completed"
-_SUCCESS_MESSAGE = "Sandbox report successfully fetched for the provided md5 hash"
+_UNKNOWN_MD5_MESSAGE = "MD5 is unknown or its analysis has not been completed"
+_SUCCESS_MESSAGE = "Sandbox report successfully fetched for the provided MD5 hash"
 
 
 class GetReportParams(Params):
     file_hash: str = Param(
-        description="The md5 file hash", primary=True, cef_types=["md5"]
+        description="The MD5 file hash", primary=True, cef_types=["md5"]
     )
 
 

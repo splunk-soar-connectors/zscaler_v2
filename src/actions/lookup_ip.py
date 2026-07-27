@@ -55,7 +55,7 @@ def lookup_ip(
         endpoint.strip() for endpoint in params.ip.split(",") if endpoint.strip()
     ]
     if not endpoints:
-        message = "Please provide valid list of URL(s)"
+        message = "Please provide a valid list of IPs"
         soar.set_message(message)
         raise ActionFailure(message)
 

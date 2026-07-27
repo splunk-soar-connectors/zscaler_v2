@@ -61,7 +61,7 @@ def lookup_url(
             endpoints[index] = endpoint[len("https://") :]
 
     if not endpoints:
-        message = "Please provide valid list of URL(s)"
+        message = "Please provide a valid list of URLs"
         soar.set_message(message)
         raise ActionFailure(message)
     if any(len(endpoint) > 1024 for endpoint in endpoints):

@@ -28,12 +28,12 @@ logger = getLogger()
 
 class GetDenylistParams(Params):
     filter: str | None = Param(
-        description="Filter results be url or ip",
+        description="Filter results by URL or IP",
         primary=True,
         value_list=["url", "ip"],
     )
     query: str | None = Param(
-        description="Regular expression to match url or ip against",
+        description="Regular expression to match against each URL or IP",
         primary=True,
     )
 
