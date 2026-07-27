@@ -33,7 +33,7 @@ def test_get_report_live_fetches_full_legacy_report(
     assert result.get_status() is True, result.get_message()
     assert (
         result.get_message()
-        == "Sandbox report successfully fetched for the provided md5 hash"
+        == "Sandbox report successfully fetched for the provided MD5 hash"
     )
     rows = result.get_data()
     assert len(rows) == 1
