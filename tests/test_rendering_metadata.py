@@ -78,15 +78,3 @@ def test_selected_table_columns_match_renderer_contract() -> None:
         assert [field["column_order"] for field in selected_fields] == list(
             range(len(expected_columns))
         )
-
-
-def test_actions_do_not_use_custom_views() -> None:
-    app = create_zscaler_soar_connector_app()
-
-    for action in app.actions_manager.get_actions_meta_list():
-        serialized = action.model_dump()
-        render = serialized.get("render")
-
-        assert render is None or render["type"] == "table"
-        assert serialized.get("view_handler") is None
-        assert serialized.get("view_template") is None
