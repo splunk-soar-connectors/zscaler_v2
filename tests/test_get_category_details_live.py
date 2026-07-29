@@ -24,6 +24,21 @@ def test_get_category_details_requires_category_ids() -> None:
     assert GetCategoryDetailsParams.model_fields["category_ids"].is_required()
 
 
+def test_get_category_details_rejects_empty_category_ids(
+    connector_app: App,
+    build_soar_action_input: Callable[..., dict[str, Any]],
+) -> None:
+    input_data = build_soar_action_input(
+        action="get_category_details",
+        parameters={"category_ids": " , "},
+    )
+    connector_app.handle(json.dumps(input_data))
+    result = connector_app.actions_manager.get_action_results()[-1]
+
+    assert result.get_status() is False
+    assert "Provide at least one category ID." in result.get_message()
+
+
 def test_get_category_details_live_returns_oneapi_lists(
     connector_app: App,
     build_soar_action_input: Callable[..., dict[str, Any]],

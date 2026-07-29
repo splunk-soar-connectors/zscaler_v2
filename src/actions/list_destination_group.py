@@ -86,6 +86,18 @@ def list_destination_group(
         for group_id in (params.ip_group_ids or "").split(",")
         if group_id.strip()
     ]
+    try:
+        numeric_group_ids = [int(group_id) for group_id in group_ids]
+    except ValueError as exc:
+        message = "Destination group IDs must be positive integers."
+        soar.set_message(message)
+        raise ActionFailure(message) from exc
+    if any(group_id <= 0 for group_id in numeric_group_ids):
+        message = "Destination group IDs must be positive integers."
+        soar.set_message(message)
+        raise ActionFailure(message)
+
+    numeric_group_ids = numeric_group_ids[:limit]
     category_types = {
         category_type.strip()
         for category_type in (params.category_type or "").split(",")
@@ -95,12 +107,10 @@ def list_destination_group(
     try:
         raw_groups: list[dict[str, Any]] = []
         with get_client(asset) as client:
-            if group_ids:
-                for group_id in group_ids:
+            if numeric_group_ids:
+                for group_id in numeric_group_ids:
                     group, response, error = (
-                        client.zia.cloud_firewall.get_ip_destination_group(
-                            int(group_id)
-                        )
+                        client.zia.cloud_firewall.get_ip_destination_group(group_id)
                     )
                     if error is not None:
                         raise RuntimeError(f"Zscaler API error: {error}")

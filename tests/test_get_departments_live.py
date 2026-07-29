@@ -18,6 +18,27 @@ from typing import Any
 from soar_sdk.app import App
 
 
+def test_get_departments_rejects_invalid_pagination(
+    connector_app: App,
+    build_soar_action_input: Callable[..., dict[str, Any]],
+) -> None:
+    for parameters in (
+        {"page": 0},
+        {"page": 1.5},
+        {"page_size": 0},
+        {"page_size": 1001},
+    ):
+        input_data = build_soar_action_input(
+            action="get_departments",
+            parameters=parameters,
+        )
+        connector_app.handle(json.dumps(input_data))
+        result = connector_app.actions_manager.get_action_results()[-1]
+
+        assert result.get_status() is False
+        assert "must be" in result.get_message()
+
+
 def test_get_departments_live_returns_oneapi_rows(
     connector_app: App,
     build_soar_action_input: Callable[..., dict[str, Any]],

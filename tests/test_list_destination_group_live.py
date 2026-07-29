@@ -18,6 +18,24 @@ from typing import Any
 from soar_sdk.app import App
 
 
+def test_list_destination_group_rejects_invalid_ids(
+    connector_app: App,
+    build_soar_action_input: Callable[..., dict[str, Any]],
+) -> None:
+    for group_ids in ("abc", "1,-2"):
+        input_data = build_soar_action_input(
+            action="list_destination_group",
+            parameters={"ip_group_ids": group_ids},
+        )
+        connector_app.handle(json.dumps(input_data))
+        result = connector_app.actions_manager.get_action_results()[-1]
+
+        assert result.get_status() is False
+        assert "Destination group IDs must be positive integers." in (
+            result.get_message()
+        )
+
+
 def test_list_destination_group_live_supports_full_and_lite_id_queries(
     connector_app: App,
     build_soar_action_input: Callable[..., dict[str, Any]],

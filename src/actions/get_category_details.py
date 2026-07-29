@@ -74,6 +74,10 @@ def get_category_details(
         for category_id in params.category_ids.split(",")
         if category_id.strip()
     ]
+    if not category_ids:
+        message = "Provide at least one category ID."
+        soar.set_message(message)
+        raise ActionFailure(message)
 
     try:
         rows: list[GetCategoryDetailsOutput] = []

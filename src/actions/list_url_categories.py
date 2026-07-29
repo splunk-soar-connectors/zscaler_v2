@@ -25,7 +25,10 @@ logger = getLogger()
 
 class ListUrlCategoriesParams(Params):
     get_ids_and_names_only: bool | None = Param(
-        description="Whether to retrieve only a list containing URL category IDs and names. Even if displayURL is set to true, URLs will not be returned",
+        description=(
+            "Return only category IDs and configured names instead of complete "
+            "category records"
+        ),
         primary=True,
         default=False,
     )

@@ -23,12 +23,18 @@ from ..zscaler_client import get_client
 
 logger = getLogger()
 
+_MAX_PAGE_SIZE = 1000
+
 
 class GetDepartmentsParams(Params):
     name: str | None = Param(description="Filter by department name", primary=True)
-    page: float | None = Param(description="Specifies the page offset", primary=True)
+    page: float | None = Param(
+        description="Page number, starting at 1", primary=True, default=1
+    )
     page_size: float | None = Param(
-        description="Specifies the page size", primary=True, default=100
+        description="Number of departments per page, from 1 to 1000",
+        primary=True,
+        default=100,
     )
 
 
@@ -47,10 +53,21 @@ def get_departments(
 ) -> list[GetDepartmentsOutput]:
     page = params.page if params.page is not None else 1
     page_size = params.page_size if params.page_size is not None else 100
-    if isinstance(page, float) and page.is_integer():
-        page = int(page)
-    if isinstance(page_size, float) and page_size.is_integer():
-        page_size = int(page_size)
+    if not float(page).is_integer() or page < 1:
+        message = "Page must be a positive integer."
+        soar.set_message(message)
+        raise ActionFailure(message)
+    if (
+        not float(page_size).is_integer()
+        or page_size < 1
+        or page_size > _MAX_PAGE_SIZE
+    ):
+        message = f"Page size must be an integer from 1 to {_MAX_PAGE_SIZE}."
+        soar.set_message(message)
+        raise ActionFailure(message)
+
+    page = int(page)
+    page_size = int(page_size)
 
     query_params: dict[str, str | int | float | bool] = {
         "page": page,
