@@ -61,6 +61,10 @@ def unallow_ip(
     params: UnallowIpParams, soar: SOARClient, asset: Asset
 ) -> list[UnallowIpOutput]:
     endpoints = [value.strip() for value in params.ip.split(",") if value.strip()]
+    if not endpoints:
+        message = "Provide at least one non-empty IP address"
+        soar.set_message(message)
+        raise ActionFailure(message)
     try:
         rows: list[UnallowIpOutput] = []
         with get_client(asset) as client:

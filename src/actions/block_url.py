@@ -66,6 +66,10 @@ def block_url(
     endpoints = [
         endpoint.strip() for endpoint in params.url.split(",") if endpoint.strip()
     ]
+    if not endpoints:
+        message = "Provide at least one non-empty URL"
+        soar.set_message(message)
+        raise ActionFailure(message)
     for index, endpoint in enumerate(endpoints):
         if endpoint.startswith("http://"):
             endpoints[index] = endpoint[len("http://") :]

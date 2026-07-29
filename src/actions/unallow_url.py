@@ -62,6 +62,10 @@ def unallow_url(
     params: UnallowUrlParams, soar: SOARClient, asset: Asset
 ) -> list[UnallowUrlOutput]:
     endpoints = [value.strip() for value in params.url.split(",") if value.strip()]
+    if not endpoints:
+        message = "Provide at least one non-empty URL"
+        soar.set_message(message)
+        raise ActionFailure(message)
     endpoints = [
         value.removeprefix("http://").removeprefix("https://") for value in endpoints
     ]
