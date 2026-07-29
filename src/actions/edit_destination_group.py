@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from soar_sdk.abstract import SOARClient
-from soar_sdk.action_results import ActionOutput, OutputField
+from soar_sdk.action_results import OutputField, PermissiveActionOutput
 from soar_sdk.exceptions import ActionFailure
 from soar_sdk.logging import getLogger
 from soar_sdk.params import Param, Params
@@ -27,12 +27,12 @@ class EditDestinationGroupParams(Params):
     ip_group_id: float = Param(
         description="The unique identifier for the IP destination group", primary=True
     )
-    name: str | None = Param(description="Destination IP group name", primary=True)
+    name: str | None = Param(description="Destination group name", primary=True)
     addresses: str | None = Param(
         description="Comma-separated destination IP addresses, FQDNs, or wildcard FQDNs to assign to the group"
     )
     description: str | None = Param(
-        description="Additional information about the destination IP group."
+        description="Additional information about the destination group."
     )
     ip_categories: str | None = Param(
         description="Destination IP address URL categories"
@@ -42,24 +42,24 @@ class EditDestinationGroupParams(Params):
     )
     is_non_editable: bool | None = Param(
         description="If set to true, the destination IP address group is non-editable. This field is applicable only to predefined IP address groups, which cannot be modified",
-        default=False,
+        default=None,
     )
 
 
-class EditDestinationGroupOutput(ActionOutput):
-    id: float
-    name: str
-    type: str = OutputField(
-        example_values=["DSTN_IP", "DSTN_FQDN", "DSTN_DOMAIN", "DSTN_OTHER"]
+class EditDestinationGroupOutput(PermissiveActionOutput):
+    id: int | None = OutputField()
+    name: str | None = OutputField()
+    type: str | None = OutputField(
+        example_values=["DSTN_IP", "DSTN_FQDN", "DSTN_DOMAIN", "DSTN_OTHER"],
     )
-    addresses: list[str] = OutputField(example_values=["192.168.1.1"])
-    countries: list[str]
-    description: str
-    ipCategories: list[str] = OutputField(
+    addresses: list[str] | None = OutputField(example_values=["192.168.1.1"])
+    countries: list[str] | None = OutputField()
+    description: str | None = OutputField()
+    ipCategories: list[str] | None = OutputField(
         example_values=["TRADING_BROKARAGE_INSURANCE"]
     )
-    isNonEditable: bool
-    creatorContext: str
+    isNonEditable: bool | None = OutputField()
+    creatorContext: str | None = OutputField()
 
 
 def edit_destination_group(
@@ -71,6 +71,22 @@ def edit_destination_group(
         raise ActionFailure(message)
     if params.ip_group_id <= 0:
         message = "Edit destination group failed: ip_group_id must be positive"
+        soar.set_message(message)
+        raise ActionFailure(message)
+
+    editable_values = {
+        "name": params.name,
+        "addresses": params.addresses,
+        "description": params.description,
+        "ip_categories": params.ip_categories,
+        "countries": params.countries,
+        "is_non_editable": params.is_non_editable,
+    }
+    supplied_edits = {
+        field_name for field_name, value in editable_values.items() if value is not None
+    }
+    if not supplied_edits:
+        message = "Edit destination group failed: provide at least one field to update"
         soar.set_message(message)
         raise ActionFailure(message)
 
@@ -93,23 +109,28 @@ def edit_destination_group(
 
             if params.name is not None:
                 raw_group["name"] = params.name
-            if params.addresses:
+            if "addresses" in supplied_edits:
                 raw_group["addresses"] = [
-                    item.strip() for item in params.addresses.split(",") if item.strip()
+                    item.strip()
+                    for item in (params.addresses or "").split(",")
+                    if item.strip()
                 ]
             if params.description is not None:
                 raw_group["description"] = params.description
-            if params.ip_categories:
+            if "ip_categories" in supplied_edits:
                 raw_group["ipCategories"] = [
                     item.strip()
-                    for item in params.ip_categories.split(",")
+                    for item in (params.ip_categories or "").split(",")
                     if item.strip()
                 ]
-            if params.countries:
+            if "countries" in supplied_edits:
                 raw_group["countries"] = [
-                    item.strip() for item in params.countries.split(",") if item.strip()
+                    item.strip()
+                    for item in (params.countries or "").split(",")
+                    if item.strip()
                 ]
-            raw_group["isNonEditable"] = params.is_non_editable
+            if "is_non_editable" in supplied_edits:
+                raw_group["isNonEditable"] = params.is_non_editable
 
             updated, updated_response, update_error = (
                 client.zia.cloud_firewall.update_ip_destination_group(
@@ -129,10 +150,12 @@ def edit_destination_group(
                 )
 
             activation, _response, activation_error = client.zia.activate.activate()
-            if activation_error is not None:
-                raise RuntimeError(f"Zscaler API error: {activation_error}")
-            if activation is None:
-                raise RuntimeError("Zscaler API returned no activation response")
+            if activation_error is not None or activation is None:
+                detail = activation_error or "Zscaler API returned no activation data"
+                raise RuntimeError(
+                    "The destination group was updated but could not be activated and "
+                    f"is not yet enforced. {detail}"
+                )
     except Exception as exc:
         logger.exception("Edit destination group failed")
         message = f"Edit destination group failed: {exc}"
@@ -140,4 +163,4 @@ def edit_destination_group(
         raise ActionFailure(message) from exc
 
     soar.set_message("Destination group edited")
-    return EditDestinationGroupOutput.model_construct(**raw_updated)
+    return EditDestinationGroupOutput(**raw_updated)

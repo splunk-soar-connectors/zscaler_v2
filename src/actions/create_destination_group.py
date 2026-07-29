@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from soar_sdk.abstract import SOARClient
-from soar_sdk.action_results import ActionOutput, OutputField
+from soar_sdk.action_results import OutputField, PermissiveActionOutput
 from soar_sdk.exceptions import ActionFailure
 from soar_sdk.logging import getLogger
 from soar_sdk.params import Param, Params
@@ -22,18 +22,33 @@ from ..zscaler_client import get_client
 
 logger = getLogger()
 
+SUPPORTED_DESTINATION_GROUP_TYPES = {
+    "DSTN_DOMAIN",
+    "DSTN_FQDN",
+    "DSTN_IP",
+    "DSTN_OTHER",
+}
+
+
+def _comma_separated_values(value: str) -> list[str]:
+    return [item.strip() for item in value.split(",") if item.strip()]
+
 
 class CreateDestinationGroupParams(Params):
-    name: str = Param(description="Destination IP group name", primary=True)
+    name: str = Param(description="Destination group name", primary=True)
     type: str = Param(
-        description="Destination IP group type (i.e., the group can contain destination IP addresses, countries, URL categories or FQDNs)",
+        description=(
+            "Destination group type. Supported values: DSTN_IP, DSTN_FQDN, "
+            "DSTN_DOMAIN, and DSTN_OTHER"
+        ),
         primary=True,
+        value_list=sorted(SUPPORTED_DESTINATION_GROUP_TYPES),
     )
     addresses: str | None = Param(
         description="Comma-separated destination IP addresses, FQDNs, or wildcard FQDNs to add to the group"
     )
     description: str | None = Param(
-        description="Additional information about the destination IP group."
+        description="Additional information about the destination group."
     )
     ip_categories: str | None = Param(
         description="Destination IP address URL categories"
@@ -43,38 +58,42 @@ class CreateDestinationGroupParams(Params):
     )
 
 
-class CreateDestinationGroupOutput(ActionOutput):
-    id: float
-    name: str
-    type: str = OutputField(
-        example_values=["DSTN_IP", "DSTN_FQDN", "DSTN_DOMAIN", "DSTN_OTHER"]
+class CreateDestinationGroupOutput(PermissiveActionOutput):
+    id: int | None = OutputField()
+    name: str | None = OutputField()
+    type: str | None = OutputField(
+        example_values=["DSTN_IP", "DSTN_FQDN", "DSTN_DOMAIN", "DSTN_OTHER"],
     )
-    addresses: list[str] = OutputField(example_values=["192.168.1.1"])
-    countries: list[str]
-    description: str
-    ipCategories: list[str] = OutputField(
+    addresses: list[str] | None = OutputField(example_values=["192.168.1.1"])
+    countries: list[str] | None = OutputField()
+    description: str | None = OutputField()
+    ipCategories: list[str] | None = OutputField(
         example_values=["TRADING_BROKARAGE_INSURANCE"]
     )
-    isNonEditable: bool
-    creatorContext: str
+    isNonEditable: bool | None = OutputField()
+    creatorContext: str | None = OutputField()
 
 
 def create_destination_group(
     params: CreateDestinationGroupParams, soar: SOARClient, asset: Asset
 ) -> CreateDestinationGroupOutput:
+    if params.type not in SUPPORTED_DESTINATION_GROUP_TYPES:
+        supported = ", ".join(sorted(SUPPORTED_DESTINATION_GROUP_TYPES))
+        message = f"Create destination group failed: type must be one of {supported}"
+        soar.set_message(message)
+        raise ActionFailure(message)
+
     data: dict[str, str | list[str]] = {
         "name": params.name,
         "type": params.type,
         "description": params.description or "",
     }
     if params.addresses:
-        data["addresses"] = [item.strip() for item in params.addresses.split(",")]
+        data["addresses"] = _comma_separated_values(params.addresses)
     if params.ip_categories:
-        data["ipCategories"] = [
-            item.strip() for item in params.ip_categories.split(",")
-        ]
+        data["ipCategories"] = _comma_separated_values(params.ip_categories)
     if params.countries:
-        data["countries"] = [item.strip() for item in params.countries.split(",")]
+        data["countries"] = _comma_separated_values(params.countries)
 
     try:
         with get_client(asset) as client:
@@ -91,10 +110,12 @@ def create_destination_group(
                 raise RuntimeError("Zscaler API returned an invalid destination group")
 
             activation, _response, activation_error = client.zia.activate.activate()
-            if activation_error is not None:
-                raise RuntimeError(f"Zscaler API error: {activation_error}")
-            if activation is None:
-                raise RuntimeError("Zscaler API returned no activation response")
+            if activation_error is not None or activation is None:
+                detail = activation_error or "Zscaler API returned no activation data"
+                raise RuntimeError(
+                    "The destination group was created but could not be activated and "
+                    f"is not yet enforced. {detail}"
+                )
     except Exception as exc:
         logger.exception("Create destination group failed")
         message = f"Create destination group failed: {exc}"
@@ -102,4 +123,4 @@ def create_destination_group(
         raise ActionFailure(message) from exc
 
     soar.set_message("Destination group created")
-    return CreateDestinationGroupOutput.model_construct(**raw_created)
+    return CreateDestinationGroupOutput(**raw_created)
