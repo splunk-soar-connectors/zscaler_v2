@@ -109,3 +109,94 @@ def test_edit_destination_group_live_edits_activates_and_cleans_up(
     assert result.get_data()[0]["name"] == updated_name
     assert result.get_data()[0]["addresses"] == _UPDATED_ADDRESSES
     assert result.get_summary() == {}
+
+
+def test_edit_destination_group_live_preserves_omissions_and_clears_lists(
+    connector_app: App,
+    build_soar_action_input: Callable[..., dict[str, Any]],
+    live_asset_config: dict[str, str],
+) -> None:
+    asset = Asset.model_validate(live_asset_config)
+    with get_client(asset) as client:
+        categories, response, category_error = (
+            client.zia.url_categories.list_categories()
+        )
+        assert category_error is None
+        assert categories
+        assert response is not None
+        category = next(
+            item
+            for item in response.get_results()
+            if isinstance(item, dict) and item.get("customCategory", False)
+        )
+        category_id = category["id"]
+        assert isinstance(category_id, str)
+
+        original_name = f"PAPP-38277 edit optional {uuid4().hex}"
+        original_description = "Description must survive omitted edit parameters"
+        created, created_response, create_error = (
+            client.zia.cloud_firewall.add_ip_destination_group(
+                name=original_name,
+                type="DSTN_OTHER",
+                description=original_description,
+                countries=["COUNTRY_US"],
+                ipCategories=[category_id],
+            )
+        )
+        assert create_error is None
+        assert created is not None
+        assert created_response is not None
+        assert isinstance(created.id, int)
+        group_id = created.id
+        original_group = created_response.get_body()
+        assert isinstance(original_group, dict)
+        had_is_non_editable = "isNonEditable" in original_group
+        original_is_non_editable = original_group.get("isNonEditable")
+
+    updated_name = f"PAPP-38277 edit optional result {uuid4().hex}"
+    result = None
+    try:
+        input_data = build_soar_action_input(
+            action="edit_destination_group",
+            parameters={
+                "ip_group_id": group_id,
+                "name": updated_name,
+                "countries": "",
+                "ip_categories": category_id,
+            },
+        )
+        connector_app.handle(json.dumps(input_data))
+        result = connector_app.actions_manager.get_action_results()[-1]
+
+        with get_client(asset) as client:
+            _group, response, get_error = (
+                client.zia.cloud_firewall.get_ip_destination_group(group_id)
+            )
+            assert get_error is None
+            assert response is not None
+            changed = response.get_body()
+            assert changed["name"] == updated_name
+            assert changed["description"] == original_description
+            assert changed.get("countries", []) == []
+            assert changed["ipCategories"] == [category_id]
+            assert ("isNonEditable" in changed) is had_is_non_editable
+            assert changed.get("isNonEditable") == original_is_non_editable
+    finally:
+        with get_client(asset) as client:
+            _deleted, _response, delete_error = (
+                client.zia.cloud_firewall.delete_ip_destination_group(group_id)
+            )
+            assert delete_error is None
+            activation, _response, activation_error = client.zia.activate.activate()
+            assert activation_error is None
+            assert activation is not None
+
+    assert result is not None
+    assert result.get_status() is True, result.get_message()
+    row = result.get_data()[0]
+    assert row["name"] == updated_name
+    assert row["description"] == original_description
+    assert row.get("countries", []) == []
+    assert row["ipCategories"] == [category_id]
+    assert ("isNonEditable" in row) is had_is_non_editable
+    assert row.get("isNonEditable") == original_is_non_editable
