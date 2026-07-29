@@ -11,16 +11,21 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+from typing import Any
+
 from soar_sdk.abstract import SOARClient
 from soar_sdk.action_results import ActionOutput, OutputField, PermissiveActionOutput
 from soar_sdk.exceptions import ActionFailure
 from soar_sdk.logging import getLogger
 from soar_sdk.params import Param, Params
+from zscaler.zia.models.user_management import Groups, UserManagement
 
 from ..asset import Asset
 from ..zscaler_client import get_client
 
 logger = getLogger()
+
+_MAX_VISIBLE_USER_NAME_LENGTH = 127
 
 
 class AddGroupUserParams(Params):
@@ -50,6 +55,25 @@ class AddGroupUserOutput(PermissiveActionOutput):
     groups: list[GroupsOutput] | None
     id: float | None = OutputField(example_values=[9840695])
     name: str | None = OutputField(example_values=["test Test user"])
+
+
+def _user_update_payload(user: UserManagement, group: Groups) -> dict[str, Any]:
+    """Build an update payload without replaying a password returned by ZIA."""
+    user_update = user.request_format()
+    user_update.pop("password", None)
+    user_update["groups"] = [existing.request_format() for existing in user.groups] + [
+        group.request_format()
+    ]
+    return user_update
+
+
+def _require_visible_user_name(name: str | None) -> None:
+    """Reject names that cannot safely be sent back in a ZIA update."""
+    if not name or len(name) > _MAX_VISIBLE_USER_NAME_LENGTH:
+        raise RuntimeError(
+            "ZIA returned an obfuscated user name. Configure the OneAPI "
+            "client's ZIA API role to make user names visible."
+        )
 
 
 def add_group_user(
@@ -84,6 +108,10 @@ def add_group_user(
             if user is None or user_response is None:
                 raise RuntimeError("Zscaler API returned no user")
 
+            raw_user = user_response.get_body()
+            if not isinstance(raw_user, dict):
+                raise RuntimeError("Zscaler API returned an invalid user")
+
             group, group_response, group_error = client.zia.user_management.get_group(
                 str(group_id)
             )
@@ -92,25 +120,16 @@ def add_group_user(
             if group is None or group_response is None:
                 raise RuntimeError("Zscaler API returned no group")
 
-            raw_group = group_response.get_body()
-            if not isinstance(raw_group, dict):
-                raise RuntimeError("Zscaler API returned an invalid group")
-
             if any(existing.id == group_id for existing in user.groups):
                 message = "User already in group"
                 soar.set_message(message)
-                return AddGroupUserOutput(**raw_group)
+                return AddGroupUserOutput(**raw_user)
 
+            _require_visible_user_name(user.name)
             updated_user, updated_response, update_error = (
                 client.zia.user_management.update_user(
                     str(user_id),
-                    **{
-                        **user.request_format(),
-                        "groups": [
-                            existing.request_format() for existing in user.groups
-                        ]
-                        + [group.request_format()],
-                    },
+                    **_user_update_payload(user, group),
                 )
             )
             if update_error is not None:

@@ -41,9 +41,8 @@ def test_add_group_user_live_updates_user_and_preserves_contract(
         assert group_error is None
         assert target_group is not None
         assert group_response is not None
-        expected_group = group_response.get_body()
-        assert isinstance(expected_group, dict)
         original_user = user.request_format()
+        original_user.pop("password", None)
         assert group_id not in [group.id for group in user.groups]
 
     result = None
@@ -83,5 +82,8 @@ def test_add_group_user_live_updates_user_and_preserves_contract(
     assert idempotent_result is not None
     assert idempotent_result.get_status() is True, idempotent_result.get_message()
     assert idempotent_result.get_message() == "User already in group"
-    assert idempotent_result.get_data() == [expected_group]
+    assert idempotent_result.get_data()[0]["id"] == user_id
+    assert group_id in [
+        group["id"] for group in idempotent_result.get_data()[0]["groups"]
+    ]
     assert idempotent_result.get_summary() == {}
