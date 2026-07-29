@@ -73,3 +73,27 @@ def test_list_destination_group_live_supports_full_and_lite_id_queries(
     assert lite_result.get_summary() == {"total_destination_groups": len(lite_rows)}
     assert [str(row["id"]) for row in lite_rows] == group_ids
     assert all(set(row) == {"id", "name", "type"} for row in lite_rows)
+
+
+def test_list_destination_group_live_excludes_requested_type(
+    connector_app: App,
+    build_soar_action_input: Callable[..., dict[str, Any]],
+) -> None:
+    initial_input = build_soar_action_input(
+        action="list_destination_group",
+        parameters={"limit": 10},
+    )
+    connector_app.handle(json.dumps(initial_input))
+    initial_result = connector_app.actions_manager.get_action_results()[-1]
+    assert initial_result.get_status() is True, initial_result.get_message()
+    excluded_type = initial_result.get_data()[0]["type"]
+
+    filtered_input = build_soar_action_input(
+        action="list_destination_group",
+        parameters={"exclude_type": excluded_type, "limit": 10},
+    )
+    connector_app.handle(json.dumps(filtered_input))
+    filtered_result = connector_app.actions_manager.get_action_results()[-1]
+
+    assert filtered_result.get_status() is True, filtered_result.get_message()
+    assert all(row["type"] != excluded_type for row in filtered_result.get_data())
