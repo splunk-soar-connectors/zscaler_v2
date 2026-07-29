@@ -57,11 +57,7 @@ def get_departments(
         message = "Page must be a positive integer."
         soar.set_message(message)
         raise ActionFailure(message)
-    if (
-        not float(page_size).is_integer()
-        or page_size < 1
-        or page_size > _MAX_PAGE_SIZE
-    ):
+    if not float(page_size).is_integer() or page_size < 1 or page_size > _MAX_PAGE_SIZE:
         message = f"Page size must be an integer from 1 to {_MAX_PAGE_SIZE}."
         soar.set_message(message)
         raise ActionFailure(message)
