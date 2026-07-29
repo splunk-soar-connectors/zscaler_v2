@@ -112,6 +112,11 @@ def _unknown_report_message(raw_report: dict[str, object]) -> str | None:
         and _UNKNOWN_MD5_MESSAGE.casefold() in full_details.casefold()
     ):
         return full_details
+    if isinstance(full_details, dict):
+        summary = full_details.get("Summary")
+        if isinstance(summary, dict) and summary.get("Status") == "CONTENT_NOTFOUND":
+            message = summary.get("Message")
+            return message if isinstance(message, str) else _UNKNOWN_MD5_MESSAGE
     return None
 
 

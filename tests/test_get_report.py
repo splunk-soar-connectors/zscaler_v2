@@ -22,3 +22,19 @@ def test_unknown_report_message_is_matched_case_insensitively() -> None:
 
 def test_completed_report_is_not_treated_as_unknown() -> None:
     assert _unknown_report_message({"Full Details": {"Summary": {}}}) is None
+
+
+def test_unknown_report_status_returns_oneapi_message() -> None:
+    assert (
+        _unknown_report_message(
+            {
+                "Full Details": {
+                    "Summary": {
+                        "Status": "CONTENT_NOTFOUND",
+                        "Message": "Content lookup failed.",
+                    }
+                }
+            }
+        )
+        == "Content lookup failed."
+    )
