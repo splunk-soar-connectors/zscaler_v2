@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from soar_sdk.abstract import SOARClient
-from soar_sdk.action_results import ActionOutput
+from soar_sdk.action_results import PermissiveActionOutput
 from soar_sdk.exceptions import ActionFailure
 from soar_sdk.logging import getLogger
 from soar_sdk.params import Param, Params
@@ -25,7 +25,8 @@ logger = getLogger()
 
 class AddCategoryIpParams(Params):
     category_id: str = Param(
-        description="The ID of the category to add the specified URLs to", primary=True
+        description="The ID of the category to add the specified IP addresses to",
+        primary=True,
     )
     ips: str | None = Param(
         description="A comma-separated list of IP addresses to add to the specified category",
@@ -33,33 +34,33 @@ class AddCategoryIpParams(Params):
         default=None,
     )
     retaining_parent_category_ip: str | None = Param(
-        description="A comma-separated list of IPs to add to the retaining parent category section inside the specified category",
+        description="A comma-separated list of IP addresses to add to the category's retaining-parent-category list",
         primary=True,
         default=None,
     )
 
 
-class ScopesOutput(ActionOutput):
-    Type: str
+class ScopesOutput(PermissiveActionOutput):
+    Type: str | None = None
 
 
-class AddCategoryIpOutput(ActionOutput):
-    id: str
-    val: float
-    type: str
-    urls: list[str]
-    scopes: list[ScopesOutput]
-    editable: bool
-    keywords: list[str]
-    description: str
-    configuredName: str
-    customCategory: bool
-    customUrlsCount: float
-    dbCategorizedUrls: list[str]
-    customIpRangesCount: float
-    keywordsRetainingParentCategory: list[str]
-    urlsRetainingParentCategoryCount: float
-    ipRangesRetainingParentCategoryCount: float
+class AddCategoryIpOutput(PermissiveActionOutput):
+    id: str | None = None
+    val: float | None = None
+    type: str | None = None
+    urls: list[str] | None = None
+    scopes: list[ScopesOutput] | None = None
+    editable: bool | None = None
+    keywords: list[str] | None = None
+    description: str | None = None
+    configuredName: str | None = None
+    customCategory: bool | None = None
+    customUrlsCount: float | None = None
+    dbCategorizedUrls: list[str] | None = None
+    customIpRangesCount: float | None = None
+    keywordsRetainingParentCategory: list[str] | None = None
+    urlsRetainingParentCategoryCount: float | None = None
+    ipRangesRetainingParentCategoryCount: float | None = None
 
 
 def add_category_ip(
@@ -109,12 +110,15 @@ def add_category_ip(
             raw_updated = updated_response.get_body()
             if not isinstance(raw_updated, dict):
                 raise RuntimeError("Zscaler API returned an invalid updated category")
+            result = AddCategoryIpOutput(**raw_updated)
 
             activation, _response, activation_error = client.zia.activate.activate()
-            if activation_error is not None:
-                raise RuntimeError(f"Zscaler API error: {activation_error}")
-            if activation is None:
-                raise RuntimeError("Zscaler API returned no activation response")
+            if activation_error is not None or activation is None:
+                detail = activation_error or "Zscaler API returned no activation data"
+                raise RuntimeError(
+                    "The category change was saved but could not be activated and is "
+                    f"not yet enforced. {detail}"
+                )
     except Exception as exc:
         logger.exception("Add category IP failed")
         message = f"Add category IP failed: {exc}"
@@ -122,4 +126,4 @@ def add_category_ip(
         raise ActionFailure(message) from exc
 
     soar.set_message("Category IPs updated")
-    return AddCategoryIpOutput.model_construct(**raw_updated)
+    return result
