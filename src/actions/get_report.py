@@ -104,6 +104,17 @@ class GetReportOutput(PermissiveActionOutput):
     Full_Details: FullDetailsOutput | None = OutputField(alias="Full Details")
 
 
+def _unknown_report_message(raw_report: dict[str, object]) -> str | None:
+    """Return the API's unknown-report message when present."""
+    full_details = raw_report.get("Full Details")
+    if (
+        isinstance(full_details, str)
+        and _UNKNOWN_MD5_MESSAGE.casefold() in full_details.casefold()
+    ):
+        return full_details
+    return None
+
+
 def get_report(
     params: GetReportParams, soar: SOARClient, asset: Asset
 ) -> GetReportOutput:
@@ -132,10 +143,9 @@ def get_report(
         soar.set_message(message)
         raise ActionFailure(message) from exc
 
-    full_details = raw_report.get("Full Details")
-    if isinstance(full_details, str) and _UNKNOWN_MD5_MESSAGE in full_details.lower():
-        soar.set_message(full_details)
-        raise ActionFailure(full_details)
+    if unknown_message := _unknown_report_message(raw_report):
+        soar.set_message(unknown_message)
+        raise ActionFailure(unknown_message)
 
     soar.set_message(_SUCCESS_MESSAGE)
     return GetReportOutput(**raw_report)
