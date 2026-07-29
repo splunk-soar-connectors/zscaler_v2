@@ -84,3 +84,54 @@ def test_delete_destination_group_live_returns_one_row_per_deleted_group(
     ]
     assert result.get_message() == "Destination groups deleted"
     assert result.get_summary() == {"deleted_destination_groups": len(group_ids)}
+
+
+def test_delete_destination_group_live_reports_partial_success(
+    connector_app: App,
+    build_soar_action_input: Callable[..., dict[str, Any]],
+    live_asset_config: dict[str, str],
+) -> None:
+    asset = Asset.model_validate(live_asset_config)
+    missing_group_id = 2_147_483_647
+    with get_client(asset) as client:
+        _missing, _response, missing_error = (
+            client.zia.cloud_firewall.get_ip_destination_group(missing_group_id)
+        )
+        assert missing_error is not None
+
+        created, _response, create_error = (
+            client.zia.cloud_firewall.add_ip_destination_group(
+                name=f"PAPP-38277 partial delete {uuid4().hex}",
+                type="DSTN_IP",
+                addresses=["192.0.2.208"],
+                description="Temporary partial delete fixture",
+            )
+        )
+        assert create_error is None
+        assert created is not None
+        assert isinstance(created.id, int)
+        created_group_id = created.id
+
+    input_data = build_soar_action_input(
+        action="delete_destination_group",
+        parameters={
+            "ip_group_ids": f"{created_group_id},{missing_group_id}",
+        },
+    )
+    connector_app.handle(json.dumps(input_data))
+    result = connector_app.actions_manager.get_action_results()[-1]
+
+    with get_client(asset) as client:
+        _deleted, _response, deleted_error = (
+            client.zia.cloud_firewall.get_ip_destination_group(created_group_id)
+        )
+        assert deleted_error is not None
+
+    assert result.get_status() is False
+    assert f"Zscaler API error deleting destination group {missing_group_id}" in (
+        result.get_message()
+    )
+    assert (
+        f"Deleted and activated IDs before the failure: {created_group_id}"
+        in result.get_message()
+    )
