@@ -13,9 +13,16 @@
 # limitations under the License.
 from soar_sdk.abstract import SOARClient
 from soar_sdk.action_results import ActionOutput, OutputField
+from soar_sdk.exceptions import ActionFailure
+from soar_sdk.logging import getLogger
 from soar_sdk.params import Param, Params
 
 from ..asset import Asset
+from ..zscaler_client import get_client
+
+logger = getLogger()
+
+_SUCCESS_MESSAGE = "Successfully submitted the file to Sandbox"
 
 
 class SubmitFileParams(Params):
@@ -44,4 +51,52 @@ class SubmitFileOutput(ActionOutput):
 def submit_file(
     params: SubmitFileParams, soar: SOARClient, asset: Asset
 ) -> SubmitFileOutput:
-    raise NotImplementedError()
+    if not asset.sandbox_token:
+        message = "Sandbox API token is required to submit a file"
+        soar.set_message(message)
+        raise ActionFailure(message)
+    if not asset.sandbox_cloud:
+        message = "Sandbox cloud is required to submit a file"
+        soar.set_message(message)
+        raise ActionFailure(message)
+
+    try:
+        attachments = soar.vault.get_attachment(vault_id=params.vault_id)
+        if not attachments:
+            raise RuntimeError(
+                "Vault file could not be found with the supplied vault ID"
+            )
+        if len(attachments) != 1:
+            raise RuntimeError("The supplied vault ID resolved to multiple vault files")
+
+        attachment = attachments[0]
+        with get_client(asset) as client:
+            submission, response, error = client.zia.sandbox.submit_file(
+                file_path=attachment.path,
+                force=bool(params.force),
+            )
+            if error is not None:
+                raise RuntimeError(f"Zscaler API error: {error}")
+            if submission is None or response is None:
+                raise RuntimeError("Zscaler API returned no Sandbox submission")
+
+            raw_submission = response.get_body()
+            if not isinstance(raw_submission, dict):
+                raise RuntimeError("Zscaler API returned an invalid Sandbox submission")
+
+            code = raw_submission.get("code")
+            if code != 200:
+                detail = raw_submission.get("message") or "unknown error"
+                raise RuntimeError(
+                    f"Zscaler Sandbox returned status code {code}: {detail}"
+                )
+    except ActionFailure:
+        raise
+    except Exception as exc:
+        logger.exception("Submit file failed")
+        message = f"Submit file failed: {exc}"
+        soar.set_message(message)
+        raise ActionFailure(message) from exc
+
+    soar.set_message(_SUCCESS_MESSAGE)
+    return SubmitFileOutput(**raw_submission)
