@@ -136,7 +136,7 @@ Read only: **True**
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**get_ids_and_names_only** | optional | Whether to retrieve only a list containing URL category IDs and names. Even if displayURL is set to true, URLs will not be returned | boolean | |
+**get_ids_and_names_only** | optional | Return only category IDs and configured names instead of complete category records | boolean | |
 
 #### Action Output
 
@@ -804,7 +804,7 @@ Read only: **False**
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **user_id** | required | Zscaler user ID | numeric | `zscaler user id` |
-**user** | optional | JSON object containing the user details (see https://help.zscaler.com/zia/user-management#/users/{userId}-put) | string | |
+**user** | required | JSON object containing the user details (see https://help.zscaler.com/zia/user-management#/users/{userId}-put) | string | |
 
 #### Action Output
 
@@ -840,7 +840,7 @@ PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **category_id** | required | The ID of the category to add the specified URLs to | string | |
 **urls** | optional | A comma-separated list of URLs to add to the specified category | string | |
-**retaining_parent_category_url** | optional | A comma-separated list of URLs to add to the retaining parent category section inside the specified category | string | |
+**retaining_parent_category_url** | optional | A comma-separated list of URLs to add to the category's retaining-parent-category list | string | |
 
 #### Action Output
 
@@ -881,9 +881,9 @@ Read only: **False**
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**category_id** | required | The ID of the category to add the specified URLs to | string | |
+**category_id** | required | The ID of the category to add the specified IP addresses to | string | |
 **ips** | optional | A comma-separated list of IP addresses to add to the specified category | string | |
-**retaining_parent_category_ip** | optional | A comma-separated list of IPs to add to the retaining parent category section inside the specified category | string | |
+**retaining_parent_category_ip** | optional | A comma-separated list of IP addresses to add to the category's retaining-parent-category list | string | |
 
 #### Action Output
 
@@ -924,9 +924,9 @@ Read only: **False**
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**category_id** | required | The ID of the category to add the specified URLs to | string | |
+**category_id** | required | The ID of the category to remove the specified URLs from | string | |
 **urls** | optional | A comma-separated list of URLs to remove from the specified category | string | |
-**retaining_parent_category_url** | optional | A comma-separated list of URLs to remove from the retaining parent category section inside the specified category | string | |
+**retaining_parent_category_url** | optional | A comma-separated list of URLs to remove from the category's retaining-parent-category list | string | |
 
 #### Action Output
 
@@ -967,9 +967,9 @@ Read only: **False**
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**category_id** | required | The ID of the category to add the specified URLs to | string | |
-**ips** | optional | A comma-separated list of IP addresses to add to the specified category | string | |
-**retaining_parent_category_ip** | optional | A comma-separated list of IPs to add to the retaining parent category section inside the specified category | string | |
+**category_id** | required | The ID of the category to remove the specified IP addresses from | string | |
+**ips** | optional | A comma-separated list of IP addresses to remove from the specified category | string | |
+**retaining_parent_category_ip** | optional | A comma-separated list of IP addresses to remove from the category's retaining-parent-category list | string | |
 
 #### Action Output
 
@@ -1010,10 +1010,10 @@ Read only: **False**
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**name** | required | Destination IP group name | string | |
-**type** | required | Destination IP group type (i.e., the group can contain destination IP addresses, countries, URL categories or FQDNs) | string | |
+**name** | required | Destination group name | string | |
+**type** | required | Destination group type. Supported values: DSTN_IP, DSTN_FQDN, DSTN_DOMAIN, and DSTN_OTHER | string | |
 **addresses** | optional | Comma-separated destination IP addresses, FQDNs, or wildcard FQDNs to add to the group | string | |
-**description** | optional | Additional information about the destination IP group. | string | |
+**description** | optional | Additional information about the destination group. | string | |
 **ip_categories** | optional | Destination IP address URL categories | string | |
 **countries** | optional | Destination IP address countries. You can identify destinations based on the location of a server. | string | |
 
@@ -1094,9 +1094,9 @@ Read only: **False**
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **ip_group_id** | required | The unique identifier for the IP destination group | numeric | |
-**name** | optional | Destination IP group name | string | |
+**name** | optional | Destination group name | string | |
 **addresses** | optional | Comma-separated destination IP addresses, FQDNs, or wildcard FQDNs to assign to the group | string | |
-**description** | optional | Additional information about the destination IP group. | string | |
+**description** | optional | Additional information about the destination group. | string | |
 **ip_categories** | optional | Destination IP address URL categories | string | |
 **countries** | optional | Destination IP address countries. You can identify destinations based on the location of a server. | string | |
 **is_non_editable** | optional | If set to true, the destination IP address group is non-editable. This field is applicable only to predefined IP address groups, which cannot be modified | boolean | |
@@ -1163,8 +1163,8 @@ Read only: **True**
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **name** | optional | Filter by department name | string | |
-**page** | optional | Specifies the page offset | numeric | |
-**page_size** | optional | Specifies the page size | numeric | |
+**page** | optional | Page number, starting at 1 | numeric | |
+**page_size** | optional | Number of departments per page, from 1 to 1000 | numeric | |
 
 #### Action Output
 
