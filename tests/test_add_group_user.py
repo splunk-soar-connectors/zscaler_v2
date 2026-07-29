@@ -25,7 +25,7 @@ def test_user_update_payload_does_not_replay_password() -> None:
         {
             "id": 123,
             "name": "Test User",
-            "password": "not-for-update",
+            "password": "not-for-update",  # pragma: allowlist secret
             "groups": [{"id": 10, "name": "Existing"}],
         }
     )
