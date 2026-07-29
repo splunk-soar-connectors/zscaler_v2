@@ -41,6 +41,11 @@ class ManagedZiaTestIdentity(TypedDict):
 
     user_id: int
     target_group_id: int
+    base_group_id: int
+    department_id: int
+    user_name: str
+    user_email: str
+    user_comments: str
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -87,6 +92,9 @@ def managed_zia_test_identity(
     base_group_id: int | None = None
     target_group_id: int | None = None
     user_id: int | None = None
+    user_name = f"PAPP-38277 user {suffix}"
+    user_email = f"papp-38277-{suffix}@{domain}"
+    user_comments = "Temporary resource created by zscaler_v2 live tests"
     cleanup_errors: list[str] = []
 
     with get_client(asset) as client:
@@ -119,11 +127,11 @@ def managed_zia_test_identity(
             target_group_id = int(target_group.id)
 
             user, _response, error = client.zia.user_management.add_user(
-                name=f"PAPP-38277 user {suffix}",
-                email=f"papp-38277-{suffix}@{domain}",
+                name=user_name,
+                email=user_email,
                 groups=[{"id": base_group_id}],
                 department={"id": department_id},
-                comments="Temporary resource created by zscaler_v2 live tests",
+                comments=user_comments,
                 password=f"Zia!9aA-{secrets.token_urlsafe(24)}",
             )
             assert error is None, f"Unable to create test user: {error}"
@@ -134,6 +142,11 @@ def managed_zia_test_identity(
             yield {
                 "user_id": user_id,
                 "target_group_id": target_group_id,
+                "base_group_id": base_group_id,
+                "department_id": department_id,
+                "user_name": user_name,
+                "user_email": user_email,
+                "user_comments": user_comments,
             }
         finally:
             if user_id is not None:

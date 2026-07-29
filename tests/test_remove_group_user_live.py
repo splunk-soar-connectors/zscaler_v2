@@ -44,7 +44,7 @@ def test_remove_group_user_live_removes_is_idempotent_and_restores(
     connector_app: App,
     build_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
-    managed_zia_test_identity: dict[str, int],
+    managed_zia_test_identity: dict[str, Any],
 ) -> None:
     user_id = managed_zia_test_identity["user_id"]
     group_id = managed_zia_test_identity["target_group_id"]
@@ -59,8 +59,13 @@ def test_remove_group_user_live_removes_is_idempotent_and_restores(
         )
         assert group_error is None
         assert group is not None
-        original_user = user.request_format()
-        original_user.pop("password", None)
+        original_user = {
+            "name": managed_zia_test_identity["user_name"],
+            "email": managed_zia_test_identity["user_email"],
+            "groups": [{"id": managed_zia_test_identity["base_group_id"]}],
+            "department": {"id": managed_zia_test_identity["department_id"]},
+            "comments": managed_zia_test_identity["user_comments"],
+        }
 
         prepared, _response, prepare_error = client.zia.user_management.update_user(
             str(user_id),

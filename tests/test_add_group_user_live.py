@@ -25,7 +25,7 @@ def test_add_group_user_live_updates_user_and_preserves_contract(
     connector_app: App,
     build_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
-    managed_zia_test_identity: dict[str, int],
+    managed_zia_test_identity: dict[str, Any],
 ) -> None:
     asset = Asset.model_validate(live_asset_config)
     user_id = managed_zia_test_identity["user_id"]
@@ -41,8 +41,13 @@ def test_add_group_user_live_updates_user_and_preserves_contract(
         assert group_error is None
         assert target_group is not None
         assert group_response is not None
-        original_user = user.request_format()
-        original_user.pop("password", None)
+        original_user = {
+            "name": managed_zia_test_identity["user_name"],
+            "email": managed_zia_test_identity["user_email"],
+            "groups": [{"id": managed_zia_test_identity["base_group_id"]}],
+            "department": {"id": managed_zia_test_identity["department_id"]},
+            "comments": managed_zia_test_identity["user_comments"],
+        }
         assert group_id not in [group.id for group in user.groups]
 
     result = None

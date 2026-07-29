@@ -53,18 +53,19 @@ def test_update_user_live_updates_and_restores_managed_profile(
     connector_app: App,
     build_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
-    managed_zia_test_identity: dict[str, int],
+    managed_zia_test_identity: dict[str, Any],
 ) -> None:
     user_id = managed_zia_test_identity["user_id"]
     asset = Asset.model_validate(live_asset_config)
 
-    with get_client(asset) as client:
-        user, _response, get_error = client.zia.user_management.get_user(user_id)
-        assert get_error is None
-        assert user is not None
-        original_user = user.request_format()
-        original_user.pop("password", None)
-        updated_user = {**original_user, "comments": _UPDATED_COMMENT}
+    original_user = {
+        "name": managed_zia_test_identity["user_name"],
+        "email": managed_zia_test_identity["user_email"],
+        "groups": [{"id": managed_zia_test_identity["base_group_id"]}],
+        "department": {"id": managed_zia_test_identity["department_id"]},
+        "comments": managed_zia_test_identity["user_comments"],
+    }
+    updated_user = {**original_user, "comments": _UPDATED_COMMENT}
 
     result = None
     try:
