@@ -1,0 +1,52 @@
+# Copyright (c) 2026 Splunk Inc.
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#     http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+from pathlib import Path
+
+import pytest
+from soar_sdk.models.vault_attachment import VaultAttachment
+
+from src.actions.submit_file import _select_vault_attachment
+
+
+def _attachment(*, attachment_id: int, path: Path) -> VaultAttachment:
+    return VaultAttachment(
+        id=attachment_id,
+        container="test container",
+        create_time="2026-07-30T00:00:00Z",
+        name=path.name,
+        user="test user",
+        vault_document=attachment_id,
+        hash="test hash",
+        vault_id="test vault id",
+        size=0,
+        path=str(path),
+        container_id=1,
+    )
+
+
+def test_select_vault_attachment_rejects_missing_file() -> None:
+    with pytest.raises(
+        RuntimeError,
+        match="Vault file could not be found with the supplied vault ID",
+    ):
+        _select_vault_attachment([])
+
+
+def test_select_vault_attachment_deterministically_accepts_duplicate_records(
+    tmp_path: Path,
+) -> None:
+    older = _attachment(attachment_id=10, path=tmp_path / "older.bin")
+    newer = _attachment(attachment_id=20, path=tmp_path / "newer.bin")
+
+    assert _select_vault_attachment([newer, older]) is older

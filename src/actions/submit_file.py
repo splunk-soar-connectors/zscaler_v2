@@ -13,8 +13,9 @@
 # limitations under the License.
 from soar_sdk.abstract import SOARClient
 from soar_sdk.action_results import ActionOutput, OutputField
-from soar_sdk.exceptions import ActionFailure
+from soar_sdk.exceptions import ActionFailure, SoarAPIError
 from soar_sdk.logging import getLogger
+from soar_sdk.models.vault_attachment import VaultAttachment
 from soar_sdk.params import Param, Params
 
 from ..asset import Asset
@@ -48,6 +49,14 @@ class SubmitFileOutput(ActionOutput):
     virusType: str = OutputField(example_values=["test Virus"])
 
 
+def _select_vault_attachment(
+    attachments: list[VaultAttachment],
+) -> VaultAttachment:
+    if not attachments:
+        raise RuntimeError("Vault file could not be found with the supplied vault ID")
+    return min(attachments, key=lambda attachment: attachment.id)
+
+
 def submit_file(
     params: SubmitFileParams, soar: SOARClient, asset: Asset
 ) -> SubmitFileOutput:
@@ -61,15 +70,13 @@ def submit_file(
         raise ActionFailure(message)
 
     try:
-        attachments = soar.vault.get_attachment(vault_id=params.vault_id)
-        if not attachments:
+        try:
+            attachments = soar.vault.get_attachment(vault_id=params.vault_id)
+        except SoarAPIError as exc:
             raise RuntimeError(
                 "Vault file could not be found with the supplied vault ID"
-            )
-        if len(attachments) != 1:
-            raise RuntimeError("The supplied vault ID resolved to multiple vault files")
-
-        attachment = attachments[0]
+            ) from exc
+        attachment = _select_vault_attachment(attachments)
         with get_client(asset) as client:
             submission, response, error = client.zia.sandbox.submit_file(
                 file_path=attachment.path,
