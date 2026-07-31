@@ -42,7 +42,7 @@ def test_remove_group_user_rejects_invalid_ids(
 
 def test_remove_group_user_live_removes_is_idempotent_and_restores(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
     managed_zia_test_identity: dict[str, Any],
 ) -> None:
@@ -81,7 +81,7 @@ def test_remove_group_user_live_removes_is_idempotent_and_restores(
     first_result = None
     second_result = None
     try:
-        input_data = build_soar_action_input(
+        input_data = build_live_soar_action_input(
             action="remove_group_user",
             parameters={"user_id": user_id, "group_id": group_id},
         )

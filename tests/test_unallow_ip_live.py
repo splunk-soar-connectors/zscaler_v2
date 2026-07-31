@@ -13,7 +13,7 @@ _TEST_IP = "192.0.2.80"
 
 def test_unallow_ip_live_is_reversible_and_idempotent(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
 ) -> None:
     asset = Asset.model_validate(live_asset_config)
@@ -34,7 +34,7 @@ def test_unallow_ip_live_is_reversible_and_idempotent(
         for _ in range(2):
             connector_app.handle(
                 json.dumps(
-                    build_soar_action_input(
+                    build_live_soar_action_input(
                         action="unallow_ip", parameters={"ip": _TEST_IP}
                     )
                 )

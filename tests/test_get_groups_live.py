@@ -20,9 +20,9 @@ from soar_sdk.app import App
 
 def test_get_groups_live_preserves_legacy_rows(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
-    input_data = build_soar_action_input(
+    input_data = build_live_soar_action_input(
         action="get_groups",
         parameters={"limit": 3},
     )
@@ -52,9 +52,9 @@ def test_get_groups_live_preserves_legacy_rows(
 
 def test_get_groups_live_filters_by_search(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
-    initial_input = build_soar_action_input(
+    initial_input = build_live_soar_action_input(
         action="get_groups",
         parameters={"limit": 1},
     )
@@ -63,7 +63,7 @@ def test_get_groups_live_filters_by_search(
     assert initial_result.get_status() is True, initial_result.get_message()
     group_name = initial_result.get_data()[0]["name"]
 
-    filtered_input = build_soar_action_input(
+    filtered_input = build_live_soar_action_input(
         action="get_groups",
         parameters={"search": group_name, "limit": 10},
     )

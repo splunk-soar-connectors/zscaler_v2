@@ -45,7 +45,7 @@ def test_edit_destination_group_rejects_fractional_id(
 
 def test_edit_destination_group_live_edits_activates_and_cleans_up(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
 ) -> None:
     asset = Asset.model_validate(live_asset_config)
@@ -69,7 +69,7 @@ def test_edit_destination_group_live_edits_activates_and_cleans_up(
 
     result = None
     try:
-        input_data = build_soar_action_input(
+        input_data = build_live_soar_action_input(
             action="edit_destination_group",
             parameters={
                 "ip_group_id": group_id,
@@ -113,7 +113,7 @@ def test_edit_destination_group_live_edits_activates_and_cleans_up(
 
 def test_edit_destination_group_live_preserves_omissions_and_clears_lists(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
 ) -> None:
     asset = Asset.model_validate(live_asset_config)
@@ -156,7 +156,7 @@ def test_edit_destination_group_live_preserves_omissions_and_clears_lists(
     updated_name = f"PAPP-38277 edit optional result {uuid4().hex}"
     result = None
     try:
-        input_data = build_soar_action_input(
+        input_data = build_live_soar_action_input(
             action="edit_destination_group",
             parameters={
                 "ip_group_id": group_id,

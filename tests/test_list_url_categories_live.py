@@ -20,9 +20,9 @@ from soar_sdk.app import App
 
 def test_list_url_categories_live_returns_full_oneapi_response(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
-    input_data = build_soar_action_input(
+    input_data = build_live_soar_action_input(
         action="list_url_categories",
         parameters={"get_ids_and_names_only": False},
     )
@@ -45,9 +45,9 @@ def test_list_url_categories_live_returns_full_oneapi_response(
 
 def test_list_url_categories_live_supports_ids_and_names_only(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
-    input_data = build_soar_action_input(
+    input_data = build_live_soar_action_input(
         action="list_url_categories",
         parameters={"get_ids_and_names_only": True},
     )

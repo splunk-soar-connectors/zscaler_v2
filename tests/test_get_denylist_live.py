@@ -21,10 +21,10 @@ from soar_sdk.app import App
 
 def _run_get_denylist(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     parameters: dict[str, Any] | None = None,
 ) -> Any:
-    input_data = build_soar_action_input(
+    input_data = build_live_soar_action_input(
         action="get_denylist",
         parameters=parameters,
     )
@@ -34,9 +34,9 @@ def _run_get_denylist(
 
 def test_get_denylist_live(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
-    result = _run_get_denylist(connector_app, build_soar_action_input)
+    result = _run_get_denylist(connector_app, build_live_soar_action_input)
 
     assert result.get_status() is True, result.get_message()
     assert result.get_message() == "Denylist retrieved"
@@ -50,11 +50,11 @@ def test_get_denylist_live(
 
 def test_get_denylist_live_filters_ip_entries(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
     result = _run_get_denylist(
         connector_app,
-        build_soar_action_input,
+        build_live_soar_action_input,
         {"filter": "ip", "query": ".*"},
     )
 
@@ -65,11 +65,11 @@ def test_get_denylist_live_filters_ip_entries(
 
 def test_get_denylist_live_filters_url_entries(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
     result = _run_get_denylist(
         connector_app,
-        build_soar_action_input,
+        build_live_soar_action_input,
         {"filter": "url", "query": ".*"},
     )
 

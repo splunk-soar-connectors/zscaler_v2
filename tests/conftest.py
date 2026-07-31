@@ -183,17 +183,28 @@ def connector_app() -> App:
 
 
 @pytest.fixture
-def build_soar_action_input(
-    live_asset_config: dict[str, str],
+def offline_asset_config() -> RedactedAssetConfig:
+    return RedactedAssetConfig(
+        vanity_domain="offline-test",
+        client_id="offline-client",
+        client_secret="offline-secret",  # pragma: allowlist secret
+        cloud="PRODUCTION",
+        sandbox_token="offline-sandbox-token",  # pragma: allowlist secret
+        sandbox_cloud="zscaler",
+    )
+
+
+def _action_input_builder(
+    asset_config: dict[str, str],
 ) -> Callable[..., dict[str, Any]]:
     def _build_soar_action_input(
         *, action: str, parameters: dict[str, Any] | None = None
     ) -> dict[str, Any]:
         asset_id = os.environ.get("SOAR_ASSET_ID", "123")
-        asset_config = dict(live_asset_config)
+        encrypted_asset_config = dict(asset_config)
         for sensitive_key in ("client_secret", "sandbox_token"):
-            if value := asset_config.get(sensitive_key):
-                asset_config[sensitive_key] = encryption_helper.encrypt(
+            if value := encrypted_asset_config.get(sensitive_key):
+                encrypted_asset_config[sensitive_key] = encryption_helper.encrypt(
                     value,
                     salt=asset_id,
                 )
@@ -207,9 +218,23 @@ def build_soar_action_input(
                 "app_version": "1.0.0",
                 "directory": ".",
                 "main_module": "src.app:app",
-                **asset_config,
+                **encrypted_asset_config,
             },
             "parameters": [parameters or {}],
         }
 
     return _build_soar_action_input
+
+
+@pytest.fixture
+def build_soar_action_input(
+    offline_asset_config: dict[str, str],
+) -> Callable[..., dict[str, Any]]:
+    return _action_input_builder(offline_asset_config)
+
+
+@pytest.fixture
+def build_live_soar_action_input(
+    live_asset_config: dict[str, str],
+) -> Callable[..., dict[str, Any]]:
+    return _action_input_builder(live_asset_config)

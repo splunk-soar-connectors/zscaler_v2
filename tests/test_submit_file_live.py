@@ -31,7 +31,7 @@ _EXPECTED_MD5 = "a8f53963f2b499e50faf621f7c117f96"  # pragma: allowlist secret
 
 def test_submit_file_live_forces_submission_and_fetches_returned_report(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
     assert _SANDBOX_TEST_FILE.is_file(), (
         f"Sandbox test fixture not found: {_SANDBOX_TEST_FILE}"
@@ -41,7 +41,7 @@ def test_submit_file_live_forces_submission_and_fetches_returned_report(
         file_location=str(_SANDBOX_TEST_FILE),
         file_name=_SANDBOX_TEST_FILE.name,
     )
-    input_data = build_soar_action_input(
+    input_data = build_live_soar_action_input(
         action="submit_file",
         parameters={"vault_id": vault_id, "force": True},
     )
@@ -67,7 +67,7 @@ def test_submit_file_live_forces_submission_and_fetches_returned_report(
         "virusType",
     } <= rows[0].keys()
 
-    report_input = build_soar_action_input(
+    report_input = build_live_soar_action_input(
         action="get_report",
         parameters={"file_hash": rows[0]["md5"]},
     )

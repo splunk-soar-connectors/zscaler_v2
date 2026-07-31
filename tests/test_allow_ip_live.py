@@ -25,7 +25,7 @@ _TEST_IP = "192.0.2.79"
 
 def test_allow_ip_live_updates_activates_and_is_idempotent(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
 ) -> None:
     asset = Asset.model_validate(live_asset_config)
@@ -40,13 +40,13 @@ def test_allow_ip_live_updates_activates_and_is_idempotent(
     first_result = None
     second_result = None
     try:
-        first_input = build_soar_action_input(
+        first_input = build_live_soar_action_input(
             action="allow_ip", parameters={"ip": _TEST_IP}
         )
         connector_app.handle(json.dumps(first_input))
         first_result = connector_app.actions_manager.get_action_results()[-1]
 
-        second_input = build_soar_action_input(
+        second_input = build_live_soar_action_input(
             action="allow_ip", parameters={"ip": _TEST_IP}
         )
         connector_app.handle(json.dumps(second_input))

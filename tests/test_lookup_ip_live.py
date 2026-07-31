@@ -20,9 +20,9 @@ from soar_sdk.app import App
 
 def test_lookup_ip_live_preserves_legacy_arrays(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
-    input_data = build_soar_action_input(
+    input_data = build_live_soar_action_input(
         action="lookup_ip",
         parameters={"ip": "8.8.8.8, 208.67.222.222"},
     )

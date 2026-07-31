@@ -23,7 +23,7 @@ from src.zscaler_client import get_client
 
 def test_add_group_user_live_updates_user_and_preserves_contract(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
     managed_zia_test_identity: dict[str, Any],
 ) -> None:
@@ -53,7 +53,7 @@ def test_add_group_user_live_updates_user_and_preserves_contract(
     result = None
     idempotent_result = None
     try:
-        input_data = build_soar_action_input(
+        input_data = build_live_soar_action_input(
             action="add_group_user",
             parameters={"user_id": user_id, "group_id": group_id},
         )

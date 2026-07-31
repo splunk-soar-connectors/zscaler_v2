@@ -41,9 +41,9 @@ def test_get_departments_rejects_invalid_pagination(
 
 def test_get_departments_live_returns_oneapi_rows(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
-    input_data = build_soar_action_input(
+    input_data = build_live_soar_action_input(
         action="get_departments",
         parameters={"page": 1, "page_size": 2},
     )
@@ -71,9 +71,9 @@ def test_get_departments_live_returns_oneapi_rows(
 
 def test_get_departments_live_filters_by_name(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
-    initial_input = build_soar_action_input(
+    initial_input = build_live_soar_action_input(
         action="get_departments",
         parameters={"page": 1, "page_size": 1},
     )
@@ -82,7 +82,7 @@ def test_get_departments_live_filters_by_name(
     assert initial_result.get_status() is True, initial_result.get_message()
     department_name = initial_result.get_data()[0]["name"]
 
-    filtered_input = build_soar_action_input(
+    filtered_input = build_live_soar_action_input(
         action="get_departments",
         parameters={"name": department_name, "page": 1, "page_size": 100},
     )

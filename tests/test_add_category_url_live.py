@@ -41,7 +41,7 @@ def test_add_category_url_requires_a_url_value(
 
 def test_add_category_url_live_updates_activates_and_returns_oneapi_lists(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
 ) -> None:
     asset = Asset.model_validate(live_asset_config)
@@ -65,7 +65,7 @@ def test_add_category_url_live_updates_activates_and_returns_oneapi_lists(
 
     result = None
     try:
-        input_data = build_soar_action_input(
+        input_data = build_live_soar_action_input(
             action="add_category_url",
             parameters={
                 "category_id": category_id,

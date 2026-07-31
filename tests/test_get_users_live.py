@@ -23,9 +23,9 @@ from src.zscaler_client import get_client
 
 def test_get_users_live_returns_oneapi_rows(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
-    input_data = build_soar_action_input(
+    input_data = build_live_soar_action_input(
         action="get_users",
         parameters={"limit": 2},
     )
@@ -50,9 +50,9 @@ def test_get_users_live_returns_oneapi_rows(
 
 def test_get_users_live_filters_by_department(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
-    initial_input = build_soar_action_input(
+    initial_input = build_live_soar_action_input(
         action="get_users",
         parameters={"limit": 10},
     )
@@ -65,7 +65,7 @@ def test_get_users_live_filters_by_department(
         if user.get("department")
     )
 
-    filtered_input = build_soar_action_input(
+    filtered_input = build_live_soar_action_input(
         action="get_users",
         parameters={"department": department_name, "limit": 10},
     )
@@ -82,7 +82,7 @@ def test_get_users_live_filters_by_department(
 
 def test_get_users_live_filters_managed_user_by_name_and_group(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
     managed_zia_test_identity: dict[str, Any],
 ) -> None:
@@ -99,7 +99,7 @@ def test_get_users_live_filters_managed_user_by_name_and_group(
         assert isinstance(group.name, str)
         base_group_name = group.name
 
-    name_input = build_soar_action_input(
+    name_input = build_live_soar_action_input(
         action="get_users",
         parameters={"name": user_name, "limit": 10},
     )
@@ -110,7 +110,7 @@ def test_get_users_live_filters_managed_user_by_name_and_group(
     name_rows = name_result.get_data()
     assert {row["id"] for row in name_rows} == {user_id}
 
-    group_input = build_soar_action_input(
+    group_input = build_live_soar_action_input(
         action="get_users",
         parameters={"group": base_group_name, "limit": 100},
     )

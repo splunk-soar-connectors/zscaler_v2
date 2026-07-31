@@ -41,9 +41,9 @@ def test_get_category_details_rejects_empty_category_ids(
 
 def test_get_category_details_live_returns_oneapi_lists(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
-    list_input = build_soar_action_input(
+    list_input = build_live_soar_action_input(
         action="list_url_categories",
         parameters={"get_ids_and_names_only": True},
     )
@@ -53,7 +53,7 @@ def test_get_category_details_live_returns_oneapi_lists(
     category_ids = [row["id"] for row in list_result.get_data()[:2]]
     assert category_ids
 
-    details_input = build_soar_action_input(
+    details_input = build_live_soar_action_input(
         action="get_category_details",
         parameters={"category_ids": ", ".join(category_ids)},
     )

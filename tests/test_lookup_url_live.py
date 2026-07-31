@@ -20,9 +20,9 @@ from soar_sdk.app import App
 
 def test_lookup_url_live_preserves_legacy_arrays_and_strips_protocol(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
-    input_data = build_soar_action_input(
+    input_data = build_live_soar_action_input(
         action="lookup_url",
         parameters={"url": "https://example.com, google.com"},
     )

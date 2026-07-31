@@ -29,7 +29,7 @@ def test_delete_destination_group_requires_group_ids() -> None:
 
 def test_delete_destination_group_live_returns_one_row_per_deleted_group(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
 ) -> None:
     asset = Asset.model_validate(live_asset_config)
@@ -52,7 +52,7 @@ def test_delete_destination_group_live_returns_one_row_per_deleted_group(
 
     result = None
     try:
-        input_data = build_soar_action_input(
+        input_data = build_live_soar_action_input(
             action="delete_destination_group",
             parameters={"ip_group_ids": ",".join(map(str, group_ids))},
         )
@@ -88,7 +88,7 @@ def test_delete_destination_group_live_returns_one_row_per_deleted_group(
 
 def test_delete_destination_group_live_reports_partial_success(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
 ) -> None:
     asset = Asset.model_validate(live_asset_config)
@@ -112,7 +112,7 @@ def test_delete_destination_group_live_reports_partial_success(
         assert isinstance(created.id, int)
         created_group_id = created.id
 
-    input_data = build_soar_action_input(
+    input_data = build_live_soar_action_input(
         action="delete_destination_group",
         parameters={
             "ip_group_ids": f"{created_group_id},{missing_group_id}",

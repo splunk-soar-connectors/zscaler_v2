@@ -64,7 +64,7 @@ def _category_urls(asset: Asset, category_id: str) -> list[str]:
 )
 def test_allow_category_live_lifecycle_is_idempotent(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
     add_action: str,
     remove_action: str,
@@ -80,7 +80,7 @@ def test_allow_category_live_lifecycle_is_idempotent(
         for action in (add_action, add_action, remove_action, remove_action):
             connector_app.handle(
                 json.dumps(
-                    build_soar_action_input(
+                    build_live_soar_action_input(
                         action=action,
                         parameters={
                             parameter_name: endpoint,
@@ -134,7 +134,7 @@ def test_allow_category_live_lifecycle_is_idempotent(
 )
 def test_block_category_live_lifecycle_is_idempotent(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
     add_action: str,
     remove_action: str,
@@ -150,7 +150,7 @@ def test_block_category_live_lifecycle_is_idempotent(
         for action in (add_action, add_action, remove_action, remove_action):
             connector_app.handle(
                 json.dumps(
-                    build_soar_action_input(
+                    build_live_soar_action_input(
                         action=action,
                         parameters={
                             parameter_name: endpoint,

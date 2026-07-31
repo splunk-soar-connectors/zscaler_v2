@@ -41,7 +41,7 @@ def test_add_category_ip_requires_an_ip_value(
 
 def test_add_category_ip_live_updates_activates_and_returns_oneapi_lists(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
 ) -> None:
     asset = Asset.model_validate(live_asset_config)
@@ -65,7 +65,7 @@ def test_add_category_ip_live_updates_activates_and_returns_oneapi_lists(
 
     result = None
     try:
-        input_data = build_soar_action_input(
+        input_data = build_live_soar_action_input(
             action="add_category_ip",
             parameters={
                 "category_id": category_id,

@@ -25,7 +25,7 @@ _TEST_URL = "papp-38277-block.example"
 
 def test_block_url_live_strips_protocol_updates_and_is_idempotent(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
 ) -> None:
     asset = Asset.model_validate(live_asset_config)
@@ -40,14 +40,14 @@ def test_block_url_live_strips_protocol_updates_and_is_idempotent(
     first_result = None
     second_result = None
     try:
-        first_input = build_soar_action_input(
+        first_input = build_live_soar_action_input(
             action="block_url",
             parameters={"url": f"https://{_TEST_URL}"},
         )
         connector_app.handle(json.dumps(first_input))
         first_result = connector_app.actions_manager.get_action_results()[-1]
 
-        second_input = build_soar_action_input(
+        second_input = build_live_soar_action_input(
             action="block_url",
             parameters={"url": _TEST_URL},
         )

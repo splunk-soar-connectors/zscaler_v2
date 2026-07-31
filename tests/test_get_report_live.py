@@ -33,7 +33,7 @@ _SANDBOX_TEST_FILE = (
 
 def test_get_report_live_fetches_full_legacy_report(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
 ) -> None:
     assert _SANDBOX_TEST_FILE.is_file()
@@ -51,7 +51,7 @@ def test_get_report_live_fetches_full_legacy_report(
         file_hash = submission.get("md5")
         assert isinstance(file_hash, str)
 
-    input_data = build_soar_action_input(
+    input_data = build_live_soar_action_input(
         action="get_report",
         parameters={"file_hash": file_hash},
     )
@@ -86,9 +86,9 @@ def test_get_report_rejects_invalid_md5_without_api_request(
 
 def test_get_report_live_rejects_unknown_md5(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
-    input_data = build_soar_action_input(
+    input_data = build_live_soar_action_input(
         action="get_report",
         parameters={"file_hash": uuid4().hex},
     )

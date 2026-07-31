@@ -14,7 +14,7 @@ _TEST_URL = "papp-38277-unallow.example"
 
 def test_unallow_url_live_is_reversible_and_idempotent(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
 ) -> None:
     asset = Asset.model_validate(live_asset_config)
@@ -35,7 +35,7 @@ def test_unallow_url_live_is_reversible_and_idempotent(
         for value in (f"https://{_TEST_URL}", _TEST_URL):
             connector_app.handle(
                 json.dumps(
-                    build_soar_action_input(
+                    build_live_soar_action_input(
                         action="unallow_url", parameters={"url": value}
                     )
                 )

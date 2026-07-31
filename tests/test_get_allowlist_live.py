@@ -20,9 +20,9 @@ from soar_sdk.app import App
 
 def test_get_allowlist_live(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
-    input_data = build_soar_action_input(action="get_allowlist")
+    input_data = build_live_soar_action_input(action="get_allowlist")
 
     connector_app.handle(json.dumps(input_data))
 

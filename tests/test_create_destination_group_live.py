@@ -26,7 +26,7 @@ _TEST_ADDRESSES = ["192.0.2.201", "192.0.2.202"]
 
 def test_create_destination_group_live_creates_activates_and_cleans_up(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
 ) -> None:
     asset = Asset.model_validate(live_asset_config)
@@ -35,7 +35,7 @@ def test_create_destination_group_live_creates_activates_and_cleans_up(
     result = None
 
     try:
-        input_data = build_soar_action_input(
+        input_data = build_live_soar_action_input(
             action="create_destination_group",
             parameters={
                 "name": group_name,
@@ -101,7 +101,7 @@ def test_create_destination_group_live_creates_activates_and_cleans_up(
 
 def test_create_destination_group_live_supports_all_non_ip_types(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
 ) -> None:
     asset = Asset.model_validate(live_asset_config)
@@ -147,7 +147,7 @@ def test_create_destination_group_live_supports_all_non_ip_types(
         for group_type, type_parameters in cases:
             group_name = f"PAPP-38277 {group_type} {uuid4().hex}"
             attempted_group_names.append(group_name)
-            input_data = build_soar_action_input(
+            input_data = build_live_soar_action_input(
                 action="create_destination_group",
                 parameters={
                     "name": group_name,

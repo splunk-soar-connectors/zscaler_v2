@@ -38,9 +38,9 @@ def test_list_destination_group_rejects_invalid_ids(
 
 def test_list_destination_group_live_supports_full_and_lite_id_queries(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
-    list_input = build_soar_action_input(
+    list_input = build_live_soar_action_input(
         action="list_destination_group",
         parameters={"limit": 2, "lite": False},
     )
@@ -56,7 +56,7 @@ def test_list_destination_group_live_supports_full_and_lite_id_queries(
     assert list_result.get_summary() == {"total_destination_groups": len(full_rows)}
 
     group_ids = [str(row["id"]) for row in full_rows]
-    lite_input = build_soar_action_input(
+    lite_input = build_live_soar_action_input(
         action="list_destination_group",
         parameters={
             "ip_group_ids": ", ".join(group_ids),
@@ -78,9 +78,9 @@ def test_list_destination_group_live_supports_full_and_lite_id_queries(
 
 def test_list_destination_group_live_excludes_requested_type(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
-    initial_input = build_soar_action_input(
+    initial_input = build_live_soar_action_input(
         action="list_destination_group",
         parameters={"limit": 10},
     )
@@ -89,7 +89,7 @@ def test_list_destination_group_live_excludes_requested_type(
     assert initial_result.get_status() is True, initial_result.get_message()
     excluded_type = initial_result.get_data()[0]["type"]
 
-    filtered_input = build_soar_action_input(
+    filtered_input = build_live_soar_action_input(
         action="list_destination_group",
         parameters={"exclude_type": excluded_type, "limit": 10},
     )

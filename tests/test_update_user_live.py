@@ -51,7 +51,7 @@ def test_update_user_rejects_invalid_payloads(
 
 def test_update_user_live_updates_and_restores_managed_profile(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
     managed_zia_test_identity: dict[str, Any],
 ) -> None:
@@ -69,7 +69,7 @@ def test_update_user_live_updates_and_restores_managed_profile(
 
     result = None
     try:
-        input_data = build_soar_action_input(
+        input_data = build_live_soar_action_input(
             action="update_user",
             parameters={"user_id": user_id, "user": json.dumps(updated_user)},
         )

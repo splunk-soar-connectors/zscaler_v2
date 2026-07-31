@@ -20,9 +20,9 @@ from soar_sdk.app import App
 
 def test_connectivity_live(
     connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
-    input_data = build_soar_action_input(action="test_connectivity")
+    input_data = build_live_soar_action_input(action="test_connectivity")
 
     connector_app.handle(json.dumps(input_data))
 
