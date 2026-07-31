@@ -20,6 +20,7 @@ from soar_sdk.params import Param, Params
 
 from ..asset import Asset
 from ..zscaler_client import get_client
+from ._inputs import validated_ip_values
 
 logger = getLogger()
 
@@ -59,19 +60,11 @@ def _summary(updated: list[str], ignored: list[str]) -> UnblockIpSummary:
 def unblock_ip(
     params: UnblockIpParams, soar: SOARClient, asset: Asset
 ) -> list[UnblockIpOutput]:
-    endpoints = [
-        endpoint.strip() for endpoint in params.ip.split(",") if endpoint.strip()
-    ]
+    endpoints = validated_ip_values(params.ip, soar)
     if not endpoints:
         message = "Provide at least one non-empty IP address"
         soar.set_message(message)
         raise ActionFailure(message)
-    for index, endpoint in enumerate(endpoints):
-        if endpoint.startswith("http://"):
-            endpoints[index] = endpoint[len("http://") :]
-        elif endpoint.startswith("https://"):
-            endpoints[index] = endpoint[len("https://") :]
-
     try:
         rows: list[UnblockIpOutput] = []
         with get_client(asset) as client:

@@ -51,3 +51,33 @@ def test_policy_actions_reject_empty_comma_separated_input(
 
     assert result.get_status() is False
     assert f"Provide at least one non-empty {expected_kind}" in result.get_message()
+
+
+@pytest.mark.parametrize(
+    ("action", "parameters"),
+    [
+        ("lookup_ip", {"ip": "not-an-ip"}),
+        ("allow_ip", {"ip": "not-an-ip"}),
+        ("block_ip", {"ip": "not-an-ip"}),
+        ("unallow_ip", {"ip": "not-an-ip"}),
+        ("unblock_ip", {"ip": "not-an-ip"}),
+        ("add_category_ip", {"category_id": "CUSTOM_01", "ips": "not-an-ip"}),
+        (
+            "remove_category_ip",
+            {"category_id": "CUSTOM_01", "ips": "not-an-ip"},
+        ),
+    ],
+)
+def test_ip_actions_reject_non_ip_values_before_api_call(
+    action: str,
+    parameters: dict[str, str],
+    connector_app: App,
+    build_soar_action_input: Callable[..., dict[str, Any]],
+) -> None:
+    input_data = build_soar_action_input(action=action, parameters=parameters)
+
+    connector_app.handle(json.dumps(input_data))
+
+    result = connector_app.actions_manager.get_action_results()[-1]
+    assert result.get_status() is False
+    assert "Invalid IP address value(s): not-an-ip" in result.get_message()

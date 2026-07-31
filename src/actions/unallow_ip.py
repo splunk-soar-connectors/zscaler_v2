@@ -20,6 +20,7 @@ from soar_sdk.params import Param, Params
 
 from ..asset import Asset
 from ..zscaler_client import get_client
+from ._inputs import validated_ip_values
 
 logger = getLogger()
 
@@ -60,7 +61,7 @@ def _summary(updated: list[str], ignored: list[str]) -> UnallowIpSummary:
 def unallow_ip(
     params: UnallowIpParams, soar: SOARClient, asset: Asset
 ) -> list[UnallowIpOutput]:
-    endpoints = [value.strip() for value in params.ip.split(",") if value.strip()]
+    endpoints = validated_ip_values(params.ip, soar)
     if not endpoints:
         message = "Provide at least one non-empty IP address"
         soar.set_message(message)

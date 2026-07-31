@@ -19,6 +19,7 @@ from soar_sdk.params import Param, Params
 
 from ..asset import Asset
 from ..zscaler_client import get_client
+from ._inputs import validated_ip_values
 
 logger = getLogger()
 
@@ -51,9 +52,7 @@ class LookupIpOutput(PermissiveActionOutput):
 def lookup_ip(
     params: LookupIpParams, soar: SOARClient, asset: Asset
 ) -> list[LookupIpOutput]:
-    endpoints = [
-        endpoint.strip() for endpoint in params.ip.split(",") if endpoint.strip()
-    ]
+    endpoints = validated_ip_values(params.ip, soar)
     if not endpoints:
         message = "Please provide a valid list of IPs"
         soar.set_message(message)

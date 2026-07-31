@@ -20,6 +20,7 @@ from soar_sdk.params import Param, Params
 
 from ..asset import Asset
 from ..zscaler_client import get_client
+from ._inputs import url_values
 
 logger = getLogger()
 
@@ -64,18 +65,11 @@ def _summary(updated: list[str], ignored: list[str]) -> AllowUrlSummary:
 def allow_url(
     params: AllowUrlParams, soar: SOARClient, asset: Asset
 ) -> list[AllowUrlOutput]:
-    endpoints = [
-        endpoint.strip() for endpoint in params.url.split(",") if endpoint.strip()
-    ]
+    endpoints = url_values(params.url)
     if not endpoints:
         message = "Provide at least one non-empty URL"
         soar.set_message(message)
         raise ActionFailure(message)
-    for index, endpoint in enumerate(endpoints):
-        if endpoint.startswith("http://"):
-            endpoints[index] = endpoint[len("http://") :]
-        elif endpoint.startswith("https://"):
-            endpoints[index] = endpoint[len("https://") :]
     if any(len(endpoint) > 1024 for endpoint in endpoints):
         message = (
             "Please provide valid comma-separated values in the action parameter. "

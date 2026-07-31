@@ -19,6 +19,7 @@ from soar_sdk.params import Param, Params
 
 from ..asset import Asset
 from ..zscaler_client import get_client
+from ._inputs import url_values
 
 logger = getLogger()
 
@@ -51,14 +52,7 @@ class LookupUrlOutput(PermissiveActionOutput):
 def lookup_url(
     params: LookupUrlParams, soar: SOARClient, asset: Asset
 ) -> list[LookupUrlOutput]:
-    endpoints = [
-        endpoint.strip() for endpoint in params.url.split(",") if endpoint.strip()
-    ]
-    for index, endpoint in enumerate(endpoints):
-        if endpoint.startswith("http://"):
-            endpoints[index] = endpoint[len("http://") :]
-        elif endpoint.startswith("https://"):
-            endpoints[index] = endpoint[len("https://") :]
+    endpoints = url_values(params.url)
 
     if not endpoints:
         message = "Please provide a valid list of URLs"

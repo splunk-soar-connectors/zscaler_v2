@@ -19,6 +19,7 @@ from soar_sdk.params import Param, Params
 
 from ..asset import Asset
 from ..zscaler_client import get_client
+from ._inputs import validated_ip_values
 
 logger = getLogger()
 
@@ -66,12 +67,8 @@ class RemoveCategoryIpOutput(PermissiveActionOutput):
 def remove_category_ip(
     params: RemoveCategoryIpParams, soar: SOARClient, asset: Asset
 ) -> RemoveCategoryIpOutput:
-    ips = [item.strip() for item in (params.ips or "").split(",") if item.strip()]
-    parent_ips = [
-        item.strip()
-        for item in (params.retaining_parent_category_ip or "").split(",")
-        if item.strip()
-    ]
+    ips = validated_ip_values(params.ips, soar)
+    parent_ips = validated_ip_values(params.retaining_parent_category_ip, soar)
     if not ips and not parent_ips:
         message = "Provide at least one IP in ips or retaining_parent_category_ip"
         soar.set_message(message)

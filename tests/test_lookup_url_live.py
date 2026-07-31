@@ -24,7 +24,7 @@ def test_lookup_url_live_preserves_legacy_arrays_and_strips_protocol(
 ) -> None:
     input_data = build_live_soar_action_input(
         action="lookup_url",
-        parameters={"url": "https://example.com, google.com"},
+        parameters={"url": "HTTPS://example.com, google.com"},
     )
 
     connector_app.handle(json.dumps(input_data))

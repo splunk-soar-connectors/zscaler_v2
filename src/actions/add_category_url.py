@@ -19,6 +19,7 @@ from soar_sdk.params import Param, Params
 
 from ..asset import Asset
 from ..zscaler_client import get_client
+from ._inputs import url_values
 
 logger = getLogger()
 
@@ -65,12 +66,8 @@ class AddCategoryUrlOutput(PermissiveActionOutput):
 def add_category_url(
     params: AddCategoryUrlParams, soar: SOARClient, asset: Asset
 ) -> AddCategoryUrlOutput:
-    urls = [item.strip() for item in (params.urls or "").split(",") if item.strip()]
-    parent_urls = [
-        item.strip()
-        for item in (params.retaining_parent_category_url or "").split(",")
-        if item.strip()
-    ]
+    urls = url_values(params.urls)
+    parent_urls = url_values(params.retaining_parent_category_url)
     if not urls and not parent_urls:
         message = "Provide at least one URL in urls or retaining_parent_category_url"
         soar.set_message(message)
