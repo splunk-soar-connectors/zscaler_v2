@@ -11,7 +11,12 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import re
+
+from pydantic import field_validator
 from soar_sdk.asset import BaseAsset, AssetField
+
+_VANITY_DOMAIN_PATTERN = re.compile(r"^[A-Za-z0-9](?:[A-Za-z0-9-]{0,61}[A-Za-z0-9])?$")
 
 
 class Asset(BaseAsset):
@@ -51,3 +56,13 @@ class Asset(BaseAsset):
         ),
         required=False,
     )
+
+    @field_validator("vanity_domain")
+    @classmethod
+    def validate_vanity_domain(cls, value: str) -> str:
+        if not _VANITY_DOMAIN_PATTERN.fullmatch(value):
+            raise ValueError(
+                "vanity_domain must be a domain prefix containing only letters, "
+                "numbers, and internal hyphens"
+            )
+        return value
