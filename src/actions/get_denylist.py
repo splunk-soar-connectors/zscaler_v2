@@ -12,7 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 import ipaddress
-import re
+import time
+
+import regex
 
 from soar_sdk.abstract import SOARClient
 from soar_sdk.action_results import ActionOutput, OutputField
@@ -24,6 +26,22 @@ from ..asset import Asset
 from ..zscaler_client import get_client
 
 logger = getLogger()
+
+_REGEX_TIMEOUT_SECONDS = 5.0
+
+
+def _matches_query(pattern: regex.Pattern[str], value: str, *, deadline: float) -> bool:
+    remaining = deadline - time.monotonic()
+    if remaining <= 0:
+        raise RuntimeError(
+            "Denylist regular expression exceeded the 5-second evaluation limit"
+        )
+    try:
+        return pattern.fullmatch(value, timeout=remaining) is not None
+    except TimeoutError as exc:
+        raise RuntimeError(
+            "Denylist regular expression exceeded the 5-second evaluation limit"
+        ) from exc
 
 
 class GetDenylistParams(Params):
@@ -50,7 +68,10 @@ def get_denylist(
     params: GetDenylistParams, soar: SOARClient, asset: Asset
 ) -> list[GetDenylistOutput]:
     try:
-        query_pattern = re.compile(params.query) if params.query else None
+        query_pattern = regex.compile(params.query) if params.query else None
+        query_deadline = (
+            time.monotonic() + _REGEX_TIMEOUT_SECONDS if query_pattern else None
+        )
 
         with get_client(asset) as client:
             settings, _response, error = (
@@ -78,7 +99,13 @@ def get_denylist(
                 continue
             if params.filter == "url" and is_ip:
                 continue
-            if query_pattern and not query_pattern.fullmatch(blocked_value):
+            if (
+                query_pattern
+                and query_deadline is not None
+                and not _matches_query(
+                    query_pattern, blocked_value, deadline=query_deadline
+                )
+            ):
                 continue
             rows.append(GetDenylistOutput(url=blocked_value))
     except Exception as exc:
