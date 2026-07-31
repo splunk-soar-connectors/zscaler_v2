@@ -49,7 +49,7 @@ def test_list_destination_group_live_supports_full_and_lite_id_queries(
     assert list_result.get_status() is True, list_result.get_message()
 
     full_rows = list_result.get_data()
-    assert 0 < len(full_rows) <= 2
+    assert len(full_rows) == 2
     assert all(isinstance(row["id"], int) for row in full_rows)
     assert all(isinstance(row["name"], str) for row in full_rows)
     assert all(isinstance(row["type"], str) for row in full_rows)
@@ -61,6 +61,7 @@ def test_list_destination_group_live_supports_full_and_lite_id_queries(
         parameters={
             "ip_group_ids": ", ".join(group_ids),
             "category_type": ",".join({row["type"] for row in full_rows}),
+            "limit": 1,
             "lite": True,
         },
     )

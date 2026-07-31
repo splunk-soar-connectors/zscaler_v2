@@ -74,13 +74,6 @@ class ListDestinationGroupSummary(ActionOutput):
 def list_destination_group(
     params: ListDestinationGroupParams, soar: SOARClient, asset: Asset
 ) -> list[ListDestinationGroupOutput]:
-    limit_value = 50 if params.limit is None else params.limit
-    if not float(limit_value).is_integer() or limit_value <= 0:
-        message = "Limit must be a positive integer."
-        soar.set_message(message)
-        raise ActionFailure(message)
-    limit = int(limit_value)
-
     group_ids = [
         group_id.strip()
         for group_id in (params.ip_group_ids or "").split(",")
@@ -97,7 +90,15 @@ def list_destination_group(
         soar.set_message(message)
         raise ActionFailure(message)
 
-    numeric_group_ids = numeric_group_ids[:limit]
+    limit_value = 50 if params.limit is None else params.limit
+    if not numeric_group_ids and (
+        not float(limit_value).is_integer() or limit_value <= 0
+    ):
+        message = "Limit must be a positive integer."
+        soar.set_message(message)
+        raise ActionFailure(message)
+    limit = int(limit_value)
+
     category_types = {
         category_type.strip()
         for category_type in (params.category_type or "").split(",")
