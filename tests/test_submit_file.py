@@ -16,7 +16,11 @@ from pathlib import Path
 import pytest
 from soar_sdk.models.vault_attachment import VaultAttachment
 
-from src.actions.submit_file import _select_vault_attachment
+from src.actions.submit_file import (
+    SubmitFileOutput,
+    _select_vault_attachment,
+    _submission_message,
+)
 
 
 def _attachment(*, attachment_id: int, path: Path) -> VaultAttachment:
@@ -50,3 +54,45 @@ def test_select_vault_attachment_deterministically_accepts_duplicate_records(
     newer = _attachment(attachment_id=20, path=tmp_path / "newer.bin")
 
     assert _select_vault_attachment([newer, older]) is older
+
+
+@pytest.mark.parametrize(
+    ("submission", "expected"),
+    [
+        (
+            {"code": 200, "message": "/submit response OK"},
+            "Successfully submitted the file to Sandbox",
+        ),
+        (
+            {
+                "code": 200,
+                "sandboxSubmission": "Submitted",
+                "message": "Queued for analysis",
+            },
+            "Status Code: 200. Data from server: Submitted. Queued for analysis",
+        ),
+        (
+            {"code": 200, "sandboxSubmission": "Virus", "message": "virus"},
+            "Status Code: 200. Data from server: Virus",
+        ),
+        ({"code": 200}, "Successfully submitted the file to Sandbox"),
+    ],
+)
+def test_submission_message_preserves_response_details(
+    submission: dict[str, object], expected: str
+) -> None:
+    assert _submission_message(submission) == expected
+
+
+def test_submit_file_output_preserves_variable_response_fields() -> None:
+    output = SubmitFileOutput(
+        code=200,
+        message="Queued",
+        requestId="sandbox-request-1",
+    )
+
+    assert output.model_dump(exclude_none=True) == {
+        "code": 200.0,
+        "message": "Queued",
+        "requestId": "sandbox-request-1",
+    }

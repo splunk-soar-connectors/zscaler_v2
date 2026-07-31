@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from soar_sdk.abstract import SOARClient
-from soar_sdk.action_results import ActionOutput, OutputField
+from soar_sdk.action_results import OutputField, PermissiveActionOutput
 from soar_sdk.exceptions import ActionFailure, SoarAPIError
 from soar_sdk.logging import getLogger
 from soar_sdk.models.vault_attachment import VaultAttachment
@@ -37,16 +37,36 @@ class SubmitFileParams(Params):
     )
 
 
-class SubmitFileOutput(ActionOutput):
-    code: float = OutputField(example_values=[200])
-    fileType: str = OutputField(example_values=["test zip"])
-    md5: str = OutputField(
+class SubmitFileOutput(PermissiveActionOutput):
+    code: float | None = OutputField(example_values=[200])
+    fileType: str | None = OutputField(example_values=["test zip"])
+    md5: str | None = OutputField(
         cef_types=["md5"], example_values=["test 6CE6F415D8475545BE5BA114F208B0FF"]
     )
-    message: str = OutputField(example_values=["test /submit response OK"])
-    sandboxSubmission: str = OutputField(example_values=["test Virus"])
-    virusName: str = OutputField(example_values=["test EICAR_Test_File"])
-    virusType: str = OutputField(example_values=["test Virus"])
+    message: str | None = OutputField(example_values=["test /submit response OK"])
+    sandboxSubmission: str | None = OutputField(example_values=["test Virus"])
+    virusName: str | None = OutputField(example_values=["test EICAR_Test_File"])
+    virusType: str | None = OutputField(example_values=["test Virus"])
+
+
+def _submission_message(submission: dict[str, object]) -> str:
+    response_message = submission.get("message")
+    sandbox_submission = submission.get("sandboxSubmission")
+    if response_message == "/submit response OK":
+        return _SUCCESS_MESSAGE
+
+    details = [
+        str(value)
+        for value in (sandbox_submission, response_message)
+        if value is not None and str(value)
+    ]
+    if len(details) == 2 and details[0].casefold() == details[1].casefold():
+        details.pop()
+    if not details:
+        return _SUCCESS_MESSAGE
+
+    code = submission.get("code")
+    return f"Status Code: {code}. Data from server: {'. '.join(details)}"
 
 
 def _select_vault_attachment(
@@ -105,5 +125,5 @@ def submit_file(
         soar.set_message(message)
         raise ActionFailure(message) from exc
 
-    soar.set_message(_SUCCESS_MESSAGE)
+    soar.set_message(_submission_message(raw_submission))
     return SubmitFileOutput(**raw_submission)
