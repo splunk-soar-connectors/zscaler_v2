@@ -8,7 +8,7 @@ authors = [
 ]
 dependencies = [
     "regex>=2026.7.19",
-    "splunk-soar-sdk>=3.26.2",
+    "splunk-soar-sdk>=3.26.5",
     "zscaler-sdk-python>=1.9.16",
 ]
 
