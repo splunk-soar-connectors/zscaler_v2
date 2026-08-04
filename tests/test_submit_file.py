@@ -18,6 +18,7 @@ from soar_sdk.models.vault_attachment import VaultAttachment
 
 from src.actions.submit_file import (
     SubmitFileOutput,
+    _redact_sandbox_token,
     _select_vault_attachment,
     _submission_message,
 )
@@ -96,3 +97,18 @@ def test_submit_file_output_preserves_variable_response_fields() -> None:
         "message": "Queued",
         "requestId": "sandbox-request-1",
     }
+
+
+@pytest.mark.parametrize("parameter_name", ["api_token", "API_TOKEN"])
+def test_sandbox_token_is_redacted_from_sdk_errors(parameter_name: str) -> None:
+    error = (
+        "HTTPSConnectionPool failed with url: "
+        f"/zscsb/submit?force=0&{parameter_name}=sensitive%2Ftoken "
+        "(Caused by connection error)"
+    )
+
+    safe_error = _redact_sandbox_token(error)
+
+    assert "sensitive" not in safe_error
+    assert f"{parameter_name}=<redacted>" in safe_error
+    assert "force=0" in safe_error

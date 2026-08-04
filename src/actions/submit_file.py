@@ -11,6 +11,8 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+import re
+
 from soar_sdk.abstract import SOARClient
 from soar_sdk.action_results import OutputField, PermissiveActionOutput
 from soar_sdk.exceptions import ActionFailure, SoarAPIError
@@ -24,6 +26,10 @@ from ..zscaler_client import get_client
 logger = getLogger()
 
 _SUCCESS_MESSAGE = "Successfully submitted the file to Sandbox"
+_SANDBOX_TOKEN_PATTERN = re.compile(
+    r"([?&]api_token=)[^&\s'\"]+",
+    flags=re.IGNORECASE,
+)
 
 
 class SubmitFileParams(Params):
@@ -69,6 +75,11 @@ def _submission_message(submission: dict[str, object]) -> str:
     return f"Status Code: {code}. Data from server: {'. '.join(details)}"
 
 
+def _redact_sandbox_token(error: object) -> str:
+    """Remove Sandbox API tokens embedded in SDK request URLs."""
+    return _SANDBOX_TOKEN_PATTERN.sub(r"\1<redacted>", str(error))
+
+
 def _select_vault_attachment(
     attachments: list[VaultAttachment],
 ) -> VaultAttachment:
@@ -103,7 +114,7 @@ def submit_file(
                 force=bool(params.force),
             )
             if error is not None:
-                raise RuntimeError(f"Zscaler API error: {error}")
+                raise RuntimeError(f"Zscaler API error: {_redact_sandbox_token(error)}")
             if submission is None or response is None:
                 raise RuntimeError("Zscaler API returned no Sandbox submission")
 
@@ -120,8 +131,9 @@ def submit_file(
     except ActionFailure:
         raise
     except Exception as exc:
-        logger.exception("Submit file failed")
-        message = f"Submit file failed: {exc}"
+        safe_error = _redact_sandbox_token(exc)
+        logger.error("Submit file failed: %s", safe_error)
+        message = f"Submit file failed: {safe_error}"
         soar.set_message(message)
         raise ActionFailure(message) from exc
 
