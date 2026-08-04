@@ -73,12 +73,9 @@ def list_url_categories(
 ) -> list[ListUrlCategoriesOutput]:
     try:
         with get_client(asset) as client:
-            categories, response, error = client.zia.url_categories.list_categories()
+            _categories, response, error = client.zia.url_categories.list_categories()
             if error is not None:
                 raise RuntimeError(f"Zscaler API error: {error}")
-            if not isinstance(categories, list) or response is None:
-                raise RuntimeError("Zscaler API returned an invalid category list")
-
             raw_categories = response.get_results()
             if not isinstance(raw_categories, list):
                 raise RuntimeError("Zscaler API returned an invalid category list")
