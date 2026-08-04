@@ -17,6 +17,7 @@
 # so mypy rejects ordinary action functions even though App.register_action
 # accepts them at runtime.
 from soar_sdk.app import App
+from soar_sdk.meta.actions import ActionLock
 
 from .get_report import get_report
 from .list_url_categories import ListUrlCategoriesSummary, list_url_categories
@@ -57,6 +58,9 @@ from .get_departments import GetDepartmentsSummary, get_departments
 from .get_category_details import GetCategoryDetailsSummary, get_category_details
 
 
+_ASSET_MUTATION_LOCK = ActionLock()
+
+
 def register_actions(app: App) -> App:
     """Register the extracted Zscaler v2 actions.
 
@@ -85,6 +89,7 @@ def register_actions(app: App) -> App:
         description="Block an IP",
         action_type="contain",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
         summary_type=BlockIpSummary,
         verbose="If a <b>url_category</b> is specified, it will add the IP(s) as a rule to that category. If it is left blank, it will instead add the IP(s) to the global blocklist.",
     )
@@ -94,6 +99,7 @@ def register_actions(app: App) -> App:
         description="Block a URL",
         action_type="contain",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
         summary_type=BlockUrlSummary,
         verbose="If a <b>url_category</b> is specified, it will add the URL(s) as a rule to that category. If it is left blank, it will instead add the URL(s) to the global blocklist.",
     )
@@ -103,6 +109,7 @@ def register_actions(app: App) -> App:
         description="Unblock an IP",
         action_type="correct",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
         summary_type=UnblockIpSummary,
         verbose="If a <b>url_category</b> is specified, it will remove the IP(s) from that category. If it is left blank, it will instead remove the IP(s) from the global blocklist.",
     )
@@ -112,6 +119,7 @@ def register_actions(app: App) -> App:
         description="Unblock a URL",
         action_type="correct",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
         summary_type=UnblockUrlSummary,
         verbose="If a <b>url_category</b> is specified, it will remove the URL(s) from that category. If it is left blank, it will instead remove the URL(s) from the global blocklist.",
     )
@@ -121,6 +129,7 @@ def register_actions(app: App) -> App:
         description="Add an IP address to the allowlist",
         action_type="contain",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
         summary_type=AllowIpSummary,
         verbose="If a <b>url_category</b> is specified, the action adds the IPs to that category. If it is left blank, the action adds the IPs to the global allowlist.",
     )
@@ -130,6 +139,7 @@ def register_actions(app: App) -> App:
         description="Add a URL to the allowlist",
         action_type="contain",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
         summary_type=AllowUrlSummary,
         verbose="If a <b>url_category</b> is specified, the action adds the URLs to that category. If it is left blank, the action adds the URLs to the global allowlist.",
     )
@@ -139,6 +149,7 @@ def register_actions(app: App) -> App:
         description="Remove an IP address from the allowlist",
         action_type="correct",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
         summary_type=UnallowIpSummary,
         verbose="If a <b>url_category</b> is specified, it will remove the IP(s) from that category. If it is left blank, it will instead remove the IP(s) from the global allowlist.",
     )
@@ -148,6 +159,7 @@ def register_actions(app: App) -> App:
         description="Remove a URL from the allowlist",
         action_type="correct",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
         summary_type=UnallowUrlSummary,
         verbose="If a <b>url_category</b> is specified, the action removes the URLs from that category. If it is left blank, the action removes the URLs from the global allowlist.",
     )
@@ -205,6 +217,7 @@ def register_actions(app: App) -> App:
         description="Add a user to a group",
         action_type="generic",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
         verbose="Add a group to the user's profile.",
     )
 
@@ -213,6 +226,7 @@ def register_actions(app: App) -> App:
         description="Remove a user from a group",
         action_type="correct",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
         verbose="Remove a group from the user's profile.",
     )
 
@@ -237,6 +251,7 @@ def register_actions(app: App) -> App:
         description="Update the user with the specified ID",
         action_type="correct",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
     )
 
     app.register_action(
@@ -244,6 +259,7 @@ def register_actions(app: App) -> App:
         description="Add URLs to a category",
         action_type="generic",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
     )
 
     app.register_action(
@@ -251,6 +267,7 @@ def register_actions(app: App) -> App:
         description="Add IPs to a category",
         action_type="generic",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
     )
 
     app.register_action(
@@ -258,6 +275,7 @@ def register_actions(app: App) -> App:
         description="Remove URLs from a category",
         action_type="generic",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
     )
 
     app.register_action(
@@ -265,6 +283,7 @@ def register_actions(app: App) -> App:
         description="Remove IPs from a category",
         action_type="generic",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
     )
 
     app.register_action(
@@ -272,6 +291,7 @@ def register_actions(app: App) -> App:
         description="Create a destination group",
         action_type="generic",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
     )
 
     app.register_action(
@@ -288,6 +308,7 @@ def register_actions(app: App) -> App:
         description="Edit a destination group",
         action_type="generic",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
     )
 
     app.register_action(
@@ -295,6 +316,7 @@ def register_actions(app: App) -> App:
         description="Delete destination groups",
         action_type="generic",
         read_only=False,
+        lock=_ASSET_MUTATION_LOCK,
         summary_type=DeleteDestinationGroupSummary,
     )
 
