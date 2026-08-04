@@ -84,14 +84,8 @@ def add_group_user(
             message = f"Please provide a valid integer value in the {key}"
             soar.set_message(message)
             raise ActionFailure(message)
-        if value < 0:
-            message = f"Please provide a valid non-negative integer value in the {key}"
-            soar.set_message(message)
-            raise ActionFailure(message)
-        if value == 0:
-            message = (
-                f"Please provide a valid non-zero positive integer value in the {key}"
-            )
+        if value <= 0:
+            message = f"Please provide a valid positive integer value in the {key}"
             soar.set_message(message)
             raise ActionFailure(message)
 
