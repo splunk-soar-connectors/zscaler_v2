@@ -41,10 +41,10 @@ def test_get_groups_live_preserves_legacy_rows(
     assert all(isinstance(row["id"], int) for row in rows)
     assert all(isinstance(row["name"], str) for row in rows)
     assert all(
-        "comments" not in row or isinstance(row["comments"], str) for row in rows
+        row.get("comments") is None or isinstance(row["comments"], str) for row in rows
     )
     assert all(
-        "isNonEditable" not in row or isinstance(row["isNonEditable"], bool)
+        row.get("isNonEditable") is None or isinstance(row["isNonEditable"], bool)
         for row in rows
     )
     assert result.get_summary() == {"total_groups": len(rows)}

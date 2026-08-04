@@ -13,7 +13,6 @@
 # limitations under the License.
 from typing import Any
 
-from pydantic import Field
 from soar_sdk.abstract import SOARClient
 from soar_sdk.action_results import ActionOutput, OutputField
 from soar_sdk.exceptions import ActionFailure
@@ -47,17 +46,13 @@ class GetGroupsOutput(ActionOutput):
         column_name="Group Name",
         example_values=["test Frothly Internet Access"],
     )
-    comments: str = Field(
-        json_schema_extra={
-            "column_name": "Comments",
-            "examples": ["test This is for testing"],
-        }
+    comments: str | None = OutputField(
+        column_name="Comments",
+        example_values=["test This is for testing"],
     )
-    isNonEditable: bool = Field(
-        json_schema_extra={
-            "column_name": "Non-editable",
-            "examples": [True],
-        }
+    isNonEditable: bool | None = OutputField(
+        column_name="Non-editable",
+        example_values=[True],
     )
 
 
@@ -127,7 +122,7 @@ def get_groups(
                 group["isNonEditable"], bool
             ):
                 raise RuntimeError("Zscaler API returned an invalid group record")
-            rows.append(GetGroupsOutput.model_construct(**group))
+            rows.append(GetGroupsOutput(**group))
     except Exception as exc:
         logger.exception("Get groups failed")
         message = f"Get groups failed: {exc}"

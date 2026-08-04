@@ -11,7 +11,6 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-from pydantic import Field
 from soar_sdk.abstract import SOARClient
 from soar_sdk.action_results import ActionOutput, OutputField
 from soar_sdk.exceptions import ActionFailure
@@ -41,7 +40,9 @@ class GetDepartmentsParams(Params):
 class GetDepartmentsOutput(ActionOutput):
     id: int = OutputField(column_name="Department Id")
     name: str = OutputField(column_name="Department Name")
-    isNonEditable: bool = Field(json_schema_extra={"column_name": "Non-editable"})
+    isNonEditable: bool | None = OutputField(
+        column_name="Non-editable",
+    )
 
 
 class GetDepartmentsSummary(ActionOutput):
@@ -102,7 +103,7 @@ def get_departments(
                 department["isNonEditable"], bool
             ):
                 raise RuntimeError("Zscaler API returned an invalid department record")
-            rows.append(GetDepartmentsOutput.model_construct(**department))
+            rows.append(GetDepartmentsOutput(**department))
     except Exception as exc:
         logger.exception("Get departments failed")
         message = f"Get departments failed: {exc}"

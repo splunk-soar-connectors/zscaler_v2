@@ -61,7 +61,7 @@ def test_get_departments_live_returns_oneapi_rows(
     assert all(isinstance(row["id"], int) for row in rows)
     assert all(isinstance(row["name"], str) for row in rows)
     assert all(
-        "isNonEditable" not in row or isinstance(row["isNonEditable"], bool)
+        row.get("isNonEditable") is None or isinstance(row["isNonEditable"], bool)
         for row in rows
     )
     assert result.get_summary() == {
