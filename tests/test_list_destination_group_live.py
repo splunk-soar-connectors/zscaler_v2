@@ -56,6 +56,24 @@ def test_list_destination_group_live_supports_full_and_lite_id_queries(
     assert list_result.get_summary() == {"total_destination_groups": len(full_rows)}
 
     group_ids = [str(row["id"]) for row in full_rows]
+    lite_list_input = build_live_soar_action_input(
+        action="list_destination_group",
+        parameters={
+            "category_type": full_rows[0]["type"],
+            "limit": 2,
+            "lite": True,
+        },
+    )
+    connector_app.handle(json.dumps(lite_list_input))
+    lite_list_result = connector_app.actions_manager.get_action_results()[-1]
+
+    assert lite_list_result.get_status() is True, lite_list_result.get_message()
+    lite_list_rows = lite_list_result.get_data()
+    assert lite_list_rows
+    assert len(lite_list_rows) <= 2
+    assert all(row["type"] == full_rows[0]["type"] for row in lite_list_rows)
+    assert all(set(row) == {"id", "name", "type"} for row in lite_list_rows)
+
     lite_input = build_live_soar_action_input(
         action="list_destination_group",
         parameters={

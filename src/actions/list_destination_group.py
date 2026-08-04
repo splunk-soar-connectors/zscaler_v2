@@ -127,16 +127,22 @@ def list_destination_group(
                     raw_groups.append(raw_group)
             else:
                 page = 1
-                remaining = limit
-                while remaining > 0:
-                    _groups, response, error = (
-                        client.zia.cloud_firewall.list_ip_destination_groups(
-                            exclude_type=params.exclude_type,
-                            query_params={
-                                "page": page,
-                                "pageSize": min(remaining, _MAX_PAGE_SIZE),
-                            },
-                        )
+                while len(raw_groups) < limit:
+                    query_params: dict[str, str | int] = {
+                        "page": page,
+                        "pageSize": min(limit - len(raw_groups), _MAX_PAGE_SIZE),
+                    }
+                    if params.lite and params.category_type:
+                        query_params["type"] = params.category_type
+
+                    list_groups = (
+                        client.zia.cloud_firewall.list_ip_destination_groups_lite
+                        if params.lite
+                        else client.zia.cloud_firewall.list_ip_destination_groups
+                    )
+                    _groups, response, error = list_groups(
+                        exclude_type=params.exclude_type,
+                        query_params=query_params,
                     )
                     if error is not None:
                         raise RuntimeError(f"Zscaler API error: {error}")
@@ -151,8 +157,22 @@ def list_destination_group(
                         )
                     if not page_groups:
                         break
-                    raw_groups.extend(page_groups[:remaining])
-                    remaining -= len(page_groups)
+                    for page_group in page_groups:
+                        if not isinstance(page_group, dict):
+                            raise RuntimeError(
+                                "Zscaler API returned an invalid destination group"
+                            )
+                        # Retain local filtering because zscaler-sdk-python 1.9.38's
+                        # lite helper currently routes requests to the full endpoint.
+                        if (
+                            params.lite
+                            and category_types
+                            and page_group.get("type") not in category_types
+                        ):
+                            continue
+                        raw_groups.append(page_group)
+                        if len(raw_groups) == limit:
+                            break
                     page += 1
 
         rows: list[ListDestinationGroupOutput] = []
