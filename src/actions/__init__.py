@@ -31,8 +31,10 @@ from .allow_web_destination import (
     AllowWebDestinationSummary,
     allow_web_destination,
 )
-from .unallow_ip import UnallowIpSummary, unallow_ip
-from .unallow_url import UnallowUrlSummary, unallow_url
+from .remove_allowed_web_destination import (
+    RemoveAllowedWebDestinationSummary,
+    remove_allowed_web_destination,
+)
 from .lookup_ip import lookup_ip
 from .lookup_url import lookup_url
 from .submit_file import submit_file
@@ -138,23 +140,16 @@ def register_actions(app: App) -> App:
     )
 
     app.register_action(
-        action=unallow_ip,
-        description="Remove an IP address from the allowlist",
+        action=remove_allowed_web_destination,
+        description="Remove web destinations from the global allowlist",
         action_type="correct",
         read_only=False,
         lock=_ASSET_MUTATION_LOCK,
-        summary_type=UnallowIpSummary,
-        verbose="If a <b>url_category</b> is specified, it will remove the IP(s) from that category. If it is left blank, it will instead remove the IP(s) from the global allowlist.",
-    )
-
-    app.register_action(
-        action=unallow_url,
-        description="Remove a URL from the allowlist",
-        action_type="correct",
-        read_only=False,
-        lock=_ASSET_MUTATION_LOCK,
-        summary_type=UnallowUrlSummary,
-        verbose="If a <b>url_category</b> is specified, the action removes the URLs from that category. If it is left blank, the action removes the URLs from the global allowlist.",
+        summary_type=RemoveAllowedWebDestinationSummary,
+        verbose=(
+            "Removes URLs, domains, IPv4 addresses, and IPv6 addresses from the "
+            "global ZIA allowlist. HTTP and HTTPS schemes are removed before submission."
+        ),
     )
 
     app.register_action(

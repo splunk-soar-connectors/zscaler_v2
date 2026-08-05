@@ -30,8 +30,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [unblock ip](#action-unblock-ip) - Unblock an IP <br>
 [unblock url](#action-unblock-url) - Unblock a URL <br>
 [allow web destination](#action-allow-web-destination) - Add web destinations to the global allowlist <br>
-[unallow ip](#action-unallow-ip) - Remove an IP address from the allowlist <br>
-[unallow url](#action-unallow-url) - Remove a URL from the allowlist <br>
+[remove allowed web destination](#action-remove-allowed-web-destination) - Remove web destinations from the global allowlist <br>
 [lookup ip](#action-lookup-ip) - Look up the categories related to an IP <br>
 [lookup url](#action-lookup-url) - Look up the categories related to a URL <br>
 [submit file](#action-submit-file) - Submit a file to Zscaler Sandbox <br>
@@ -290,21 +289,20 @@ action_result.summary.updated.\* | string | | test 192.0.2.10 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
-## action: 'unallow ip'
+## action: 'remove allowed web destination'
 
-Remove an IP address from the allowlist
+Remove web destinations from the global allowlist
 
 Type: **correct** <br>
 Read only: **False**
 
-If a <b>url_category</b> is specified, it will remove the IP(s) from that category. If it is left blank, it will instead remove the IP(s) from the global allowlist.
+Removes URLs, domains, IPv4 addresses, and IPv6 addresses from the global ZIA allowlist. HTTP and HTTPS schemes are removed before submission.
 
 #### Action Parameters
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**ip** | required | A list of IPs | string | `ip` `ipv6` |
-**url_category** | optional | Remove from this category | string | `zscaler url category` |
+**destinations** | required | A comma-separated list of URLs, domains, IPv4 addresses, or IPv6 addresses | string | `url` `domain` `ip` `ipv6` `url list` |
 
 #### Action Output
 
@@ -312,53 +310,10 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string | | success failure |
 action_result.message | string | | |
-action_result.parameter.ip | string | `ip` `ipv6` | |
-action_result.parameter.url_category | string | `zscaler url category` | |
-action_result.data.\*.configuredName | string | | test Test-Allowlist |
-action_result.data.\*.customCategory | boolean | | True False |
-action_result.data.\*.dbCategorizedUrls.\* | string | | |
-action_result.data.\*.description | string | | |
-action_result.data.\*.id | string | | test CUSTOM_01 |
-action_result.data.\*.val | numeric | | 128 |
-action_result.data.\*.whitelistUrls.\* | string | | |
-action_result.summary.ignored.\* | string | | test 8.8.8.8 |
-action_result.summary.updated.\* | string | | test 208.67.222.222 |
-summary.total_objects | numeric | | 1 |
-summary.total_objects_successful | numeric | | 1 |
-
-## action: 'unallow url'
-
-Remove a URL from the allowlist
-
-Type: **correct** <br>
-Read only: **False**
-
-If a <b>url_category</b> is specified, the action removes the URLs from that category. If it is left blank, the action removes the URLs from the global allowlist.
-
-#### Action Parameters
-
-PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
---------- | -------- | ----------- | ---- | --------
-**url** | required | A list of URLs | string | `url` `domain` `url list` |
-**url_category** | optional | Remove from this category | string | `zscaler url category` |
-
-#### Action Output
-
-DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
---------- | ---- | -------- | --------------
-action_result.status | string | | success failure |
-action_result.message | string | | |
-action_result.parameter.url | string | `url` `domain` `url list` | |
-action_result.parameter.url_category | string | `zscaler url category` | |
-action_result.data.\*.configuredName | string | | test Test-Allowlist |
-action_result.data.\*.customCategory | boolean | | True False |
-action_result.data.\*.dbCategorizedUrls.\* | string | | |
-action_result.data.\*.description | string | | |
-action_result.data.\*.id | string | | test CUSTOM_01 |
-action_result.data.\*.val | numeric | | 128 |
-action_result.data.\*.whitelistUrls.\* | string | | |
-action_result.summary.ignored.\* | string | | test www.test.com |
-action_result.summary.updated.\* | string | | test www.test123.com |
+action_result.parameter.destinations | string | `url` `domain` `ip` `ipv6` `url list` | |
+action_result.data.\*.whitelistUrls.\* | string | | test example.com |
+action_result.summary.ignored.\* | string | | test example.com |
+action_result.summary.updated.\* | string | | test 192.0.2.10 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 

@@ -32,8 +32,7 @@ EXPECTED_ACTION_SUMMARIES = {
     "get_users": {"action_result.summary.total_users"},
     "list_destination_group": {"action_result.summary.total_destination_groups"},
     "list_url_categories": {"action_result.summary.total_url_categories"},
-    "unallow_ip": POLICY_CHANGE_SUMMARY,
-    "unallow_url": POLICY_CHANGE_SUMMARY,
+    "remove_allowed_web_destination": POLICY_CHANGE_SUMMARY,
     "unblock_ip": POLICY_CHANGE_SUMMARY,
     "unblock_url": POLICY_CHANGE_SUMMARY,
 }
