@@ -132,9 +132,6 @@ def block_ip(
                 )
                 if error is not None:
                     raise RuntimeError(f"Zscaler API error: {error}")
-                if settings is None or not isinstance(settings.blacklist_urls, list):
-                    raise RuntimeError("Zscaler API returned an invalid blocklist")
-
                 updated = list(set(endpoints) - set(settings.blacklist_urls))
                 ignored = list(set(endpoints) - set(updated))
                 if not updated:

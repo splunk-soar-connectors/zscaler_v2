@@ -143,8 +143,6 @@ def allow_url(
                 )
                 if error is not None:
                     raise RuntimeError(f"Zscaler API error: {error}")
-                if settings is None or not isinstance(settings.whitelist_urls, list):
-                    raise RuntimeError("Zscaler API returned an invalid allowlist")
                 existing = settings.whitelist_urls
                 updated = list(set(endpoints) - set(existing))
                 ignored = list(set(endpoints) - set(updated))
