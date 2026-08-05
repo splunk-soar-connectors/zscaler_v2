@@ -41,8 +41,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [get denylist](#action-get-denylist) - Get URLs on the denylist <br>
 [update user](#action-update-user) - Update the user with the specified ID <br>
 [add category destination](#action-add-category-destination) - Add web destinations to a custom URL category <br>
-[remove category url](#action-remove-category-url) - Remove URLs from a category <br>
-[remove category ip](#action-remove-category-ip) - Remove IPs from a category <br>
+[remove category destination](#action-remove-category-destination) - Remove web destinations from a custom URL category <br>
 [create destination group](#action-create-destination-group) - Create a destination group <br>
 [list destination group](#action-list-destination-group) - List destination groups <br>
 [edit destination group](#action-edit-destination-group) - Edit a destination group <br>
@@ -652,52 +651,9 @@ action_result.data.\*.ipRangesRetainingParentCategoryCount | numeric | | |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
-## action: 'remove category url'
+## action: 'remove category destination'
 
-Remove URLs from a category
-
-Type: **generic** <br>
-Read only: **False**
-
-#### Action Parameters
-
-PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
---------- | -------- | ----------- | ---- | --------
-**category_id** | required | The ID of the category to remove the specified URLs from | string | |
-**urls** | optional | A comma-separated list of URLs to remove from the specified category | string | |
-**retaining_parent_category_url** | optional | A comma-separated list of URLs to remove from the category's retaining-parent-category list | string | |
-
-#### Action Output
-
-DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
---------- | ---- | -------- | --------------
-action_result.status | string | | success failure |
-action_result.message | string | | |
-action_result.parameter.category_id | string | | |
-action_result.parameter.urls | string | | |
-action_result.parameter.retaining_parent_category_url | string | | |
-action_result.data.\*.id | string | | |
-action_result.data.\*.val | numeric | | |
-action_result.data.\*.type | string | | |
-action_result.data.\*.urls.\* | string | | |
-action_result.data.\*.scopes.\*.Type | string | | |
-action_result.data.\*.editable | boolean | | True False |
-action_result.data.\*.keywords.\* | string | | |
-action_result.data.\*.description | string | | |
-action_result.data.\*.configuredName | string | | |
-action_result.data.\*.customCategory | boolean | | True False |
-action_result.data.\*.customUrlsCount | numeric | | |
-action_result.data.\*.dbCategorizedUrls.\* | string | | |
-action_result.data.\*.customIpRangesCount | numeric | | |
-action_result.data.\*.keywordsRetainingParentCategory.\* | string | | |
-action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | |
-action_result.data.\*.ipRangesRetainingParentCategoryCount | numeric | | |
-summary.total_objects | numeric | | 1 |
-summary.total_objects_successful | numeric | | 1 |
-
-## action: 'remove category ip'
-
-Remove IPs from a category
+Remove web destinations from a custom URL category
 
 Type: **generic** <br>
 Read only: **False**
@@ -706,9 +662,9 @@ Read only: **False**
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**category_id** | required | The ID of the category to remove the specified IP addresses from | string | |
-**ips** | optional | A comma-separated list of IP addresses to remove from the specified category | string | |
-**retaining_parent_category_ip** | optional | A comma-separated list of IP addresses to remove from the category's retaining-parent-category list | string | |
+**category_id** | required | The ID of the custom category to update | string | `zscaler url category` |
+**destinations** | optional | Comma-separated destinations to remove from the category | string | `url` `domain` `ip` `ipv6` `url list` |
+**retaining_parent_category_destinations** | optional | Comma-separated destinations to remove from the retaining-parent-category list | string | `url` `domain` `ip` `ipv6` `url list` |
 
 #### Action Output
 
@@ -716,9 +672,9 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string | | success failure |
 action_result.message | string | | |
-action_result.parameter.category_id | string | | |
-action_result.parameter.ips | string | | |
-action_result.parameter.retaining_parent_category_ip | string | | |
+action_result.parameter.category_id | string | `zscaler url category` | |
+action_result.parameter.destinations | string | `url` `domain` `ip` `ipv6` `url list` | |
+action_result.parameter.retaining_parent_category_destinations | string | `url` `domain` `ip` `ipv6` `url list` | |
 action_result.data.\*.id | string | | |
 action_result.data.\*.val | numeric | | |
 action_result.data.\*.type | string | | |

@@ -48,8 +48,7 @@ from .get_allowlist import GetAllowlistSummary, get_allowlist
 from .get_denylist import GetDenylistSummary, get_denylist
 from .update_user import update_user
 from .add_category_destination import add_category_destination
-from .remove_category_url import remove_category_url
-from .remove_category_ip import remove_category_ip
+from .remove_category_destination import remove_category_destination
 from .create_destination_group import create_destination_group
 from .list_destination_group import (
     ListDestinationGroupSummary,
@@ -237,16 +236,8 @@ def register_actions(app: App) -> App:
     )
 
     app.register_action(
-        action=remove_category_url,
-        description="Remove URLs from a category",
-        action_type="generic",
-        read_only=False,
-        lock=_ASSET_MUTATION_LOCK,
-    )
-
-    app.register_action(
-        action=remove_category_ip,
-        description="Remove IPs from a category",
+        action=remove_category_destination,
+        description="Remove web destinations from a custom URL category",
         action_type="generic",
         read_only=False,
         lock=_ASSET_MUTATION_LOCK,
