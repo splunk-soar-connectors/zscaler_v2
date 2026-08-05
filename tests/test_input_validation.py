@@ -64,17 +64,21 @@ def test_read_actions_reject_non_positive_or_fractional_limits(
 @pytest.mark.parametrize(
     ("action", "parameter_name", "value", "expected_message"),
     [
-        ("lookup_ip", "ip", " , ", "valid list of IPs"),
-        ("lookup_url", "url", " , ", "valid list of URLs"),
         (
-            "lookup_url",
-            "url",
+            "lookup_web_destination",
+            "destinations",
+            " , ",
+            "Provide at least one non-empty web destination",
+        ),
+        (
+            "lookup_web_destination",
+            "destinations",
             "x" * 1025,
-            "Max allowed length for each value is 1024",
+            "Max allowed length for each web destination is 1024",
         ),
     ],
 )
-def test_lookup_actions_reject_invalid_values_before_api_call(
+def test_lookup_web_destination_rejects_invalid_values_before_api_call(
     connector_app: App,
     build_soar_action_input: Callable[..., dict[str, Any]],
     action: str,

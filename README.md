@@ -30,8 +30,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [remove blocked web destination](#action-remove-blocked-web-destination) - Remove web destinations from the global blocklist <br>
 [allow web destination](#action-allow-web-destination) - Add web destinations to the global allowlist <br>
 [remove allowed web destination](#action-remove-allowed-web-destination) - Remove web destinations from the global allowlist <br>
-[lookup ip](#action-lookup-ip) - Look up the categories related to an IP <br>
-[lookup url](#action-lookup-url) - Look up the categories related to a URL <br>
+[lookup web destination](#action-lookup-web-destination) - Look up ZIA classifications for web destinations <br>
 [submit file](#action-submit-file) - Submit a file to Zscaler Sandbox <br>
 [get admin users](#action-get-admin-users) - Get a list of admin users <br>
 [get users](#action-get-users) - Get users, optionally filtered by name, department, or group <br>
@@ -269,9 +268,9 @@ action_result.summary.updated.\* | string | | test 192.0.2.10 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
-## action: 'lookup ip'
+## action: 'lookup web destination'
 
-Look up the categories related to an IP
+Look up ZIA classifications for web destinations
 
 Type: **investigate** <br>
 Read only: **True**
@@ -280,7 +279,7 @@ Read only: **True**
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**ip** | required | A list of IPs | string | `ip` `ipv6` |
+**destinations** | required | A comma-separated list of URLs, domains, IPv4 addresses, or IPv6 addresses | string | `url` `domain` `ip` `ipv6` `url list` |
 
 #### Action Output
 
@@ -288,36 +287,9 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string | | success failure |
 action_result.message | string | | |
-action_result.parameter.ip | string | `ip` `ipv6` | |
-action_result.data.\*.url | string | `ip` `ipv6` | test 208.67.222.222 test 8.8.8.8 |
+action_result.parameter.destinations | string | `url` `domain` `ip` `ipv6` `url list` | |
+action_result.data.\*.destination | string | `url` `domain` `ip` `ipv6` | test example.com test 8.8.8.8 |
 action_result.data.\*.urlClassifications.\* | string | | test WEB_SEARCH |
-action_result.data.\*.urlClassificationsWithSecurityAlert.\* | string | | |
-action_result.data.\*.blocklisted | boolean | | True False |
-summary.total_objects | numeric | | 1 |
-summary.total_objects_successful | numeric | | 1 |
-
-## action: 'lookup url'
-
-Look up the categories related to a URL
-
-Type: **investigate** <br>
-Read only: **True**
-
-#### Action Parameters
-
-PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
---------- | -------- | ----------- | ---- | --------
-**url** | required | A list of URLs | string | `url` `domain` `url list` |
-
-#### Action Output
-
-DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
---------- | ---- | -------- | --------------
-action_result.status | string | | success failure |
-action_result.message | string | | |
-action_result.parameter.url | string | `url` `domain` `url list` | |
-action_result.data.\*.url | string | `url` `domain` `url list` | test www.test.com |
-action_result.data.\*.urlClassifications.\* | string | | test MISCELLANEOUS_OR_UNKNOWN |
 action_result.data.\*.urlClassificationsWithSecurityAlert.\* | string | | |
 action_result.data.\*.blocklisted | boolean | | True False |
 summary.total_objects | numeric | | 1 |

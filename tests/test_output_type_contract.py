@@ -46,7 +46,7 @@ def test_collection_outputs_use_wildcard_datapaths() -> None:
             "action_result.data.*.countries.*",
             "action_result.data.*.ipCategories.*",
         },
-        "lookup_url": {
+        "lookup_web_destination": {
             "action_result.data.*.urlClassifications.*",
             "action_result.data.*.urlClassificationsWithSecurityAlert.*",
         },

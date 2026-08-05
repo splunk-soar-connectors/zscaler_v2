@@ -37,8 +37,7 @@ from .remove_allowed_web_destination import (
     RemoveAllowedWebDestinationSummary,
     remove_allowed_web_destination,
 )
-from .lookup_ip import lookup_ip
-from .lookup_url import lookup_url
+from .lookup_web_destination import lookup_web_destination
 from .submit_file import submit_file
 from .get_admin_users import GetAdminUsersSummary, get_admin_users
 from .get_users import GetUsersSummary, get_users
@@ -148,15 +147,8 @@ def register_actions(app: App) -> App:
     )
 
     app.register_action(
-        action=lookup_ip,
-        description="Look up the categories related to an IP",
-        action_type="investigate",
-        render_as="table",
-    )
-
-    app.register_action(
-        action=lookup_url,
-        description="Look up the categories related to a URL",
+        action=lookup_web_destination,
+        description="Look up ZIA classifications for web destinations",
         action_type="investigate",
         render_as="table",
     )

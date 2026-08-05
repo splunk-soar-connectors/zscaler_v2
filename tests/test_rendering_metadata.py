@@ -53,8 +53,12 @@ EXPECTED_TABLE_COLUMNS = {
         "Custom",
         "Editable",
     ],
-    "lookup_ip": ["IP", "Classifications", "Security Alerts", "Blocklisted"],
-    "lookup_url": ["URL", "Classifications", "Security Alerts", "Blocklisted"],
+    "lookup_web_destination": [
+        "Destination",
+        "Classifications",
+        "Security Alerts",
+        "Blocklisted",
+    ],
 }
 
 
