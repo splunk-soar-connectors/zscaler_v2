@@ -15,18 +15,32 @@ import json
 from collections.abc import Callable
 from typing import Any
 
+import pytest
 from soar_sdk.app import App
 from src.app import create_zscaler_soar_connector_app
 
 
+@pytest.mark.parametrize(
+    "parameters",
+    [
+        {"category_id": "CUSTOM_01"},
+        {"category_id": "CUSTOM_01", "destinations": " , , "},
+        {
+            "category_id": "CUSTOM_01",
+            "retaining_parent_category_destinations": " , , ",
+        },
+    ],
+)
 def test_remove_category_destination_requires_a_destination(
-    connector_app: App, build_soar_action_input: Callable[..., dict[str, Any]]
+    connector_app: App,
+    build_soar_action_input: Callable[..., dict[str, Any]],
+    parameters: dict[str, str],
 ) -> None:
     connector_app.handle(
         json.dumps(
             build_soar_action_input(
                 action="remove_category_destination",
-                parameters={"category_id": "CUSTOM_01"},
+                parameters=parameters,
             )
         )
     )

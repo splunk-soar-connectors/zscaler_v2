@@ -33,14 +33,12 @@ class RemoveCategoryDestinationParams(Params):
     destinations: str | None = Param(
         description="Comma-separated destinations to remove from the category",
         primary=True,
-        cef_types=["url", "domain", "ip", "ipv6", "url list"],
         allow_list=True,
         default=None,
     )
     retaining_parent_category_destinations: str | None = Param(
         description="Comma-separated destinations to remove from the retaining-parent-category list",
         primary=True,
-        cef_types=["url", "domain", "ip", "ipv6", "url list"],
         allow_list=True,
         default=None,
     )

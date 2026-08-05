@@ -18,7 +18,15 @@ from typing import Any
 import pytest
 from soar_sdk.app import App
 
-POLICY_ACTIONS = ()
+from src.app import create_zscaler_soar_connector_app
+
+POLICY_ACTIONS = (
+    ("allow_web_destination", "destinations", "web destination"),
+    ("block_web_destination", "destinations", "web destination"),
+    ("remove_allowed_web_destination", "destinations", "web destination"),
+    ("remove_blocked_web_destination", "destinations", "web destination"),
+    ("lookup_web_destination", "destinations", "web destination"),
+)
 
 
 @pytest.mark.parametrize(
@@ -45,19 +53,28 @@ def test_policy_actions_reject_empty_comma_separated_input(
 
 
 @pytest.mark.parametrize(
-    ("action", "parameters"),
-    [],
+    ("action", "parameter_name"),
+    [
+        ("allow_web_destination", "destinations"),
+        ("block_web_destination", "destinations"),
+        ("remove_allowed_web_destination", "destinations"),
+        ("remove_blocked_web_destination", "destinations"),
+        ("lookup_web_destination", "destinations"),
+        ("add_category_destination", "destinations"),
+        ("add_category_destination", "retaining_parent_category_destinations"),
+        ("remove_category_destination", "destinations"),
+        ("remove_category_destination", "retaining_parent_category_destinations"),
+    ],
 )
-def test_ip_actions_reject_non_ip_values_before_api_call(
+def test_mixed_destination_parameters_defer_validation_to_the_action(
     action: str,
-    parameters: dict[str, str],
-    connector_app: App,
-    build_soar_action_input: Callable[..., dict[str, Any]],
+    parameter_name: str,
 ) -> None:
-    input_data = build_soar_action_input(action=action, parameters=parameters)
+    actions = {
+        item.identifier: item
+        for item in create_zscaler_soar_connector_app().actions_manager.get_actions_meta_list()
+    }
+    parameter = actions[action].model_dump()["parameters"][parameter_name]
 
-    connector_app.handle(json.dumps(input_data))
-
-    result = connector_app.actions_manager.get_action_results()[-1]
-    assert result.get_status() is False
-    assert "Invalid IP address value(s): not-an-ip" in result.get_message()
+    assert parameter["allow_list"] is True
+    assert "contains" not in parameter

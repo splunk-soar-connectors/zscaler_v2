@@ -33,14 +33,12 @@ class AddCategoryDestinationParams(Params):
     destinations: str | None = Param(
         description="Comma-separated destinations to add to the category",
         primary=True,
-        cef_types=["url", "domain", "ip", "ipv6", "url list"],
         allow_list=True,
         default=None,
     )
     retaining_parent_category_destinations: str | None = Param(
         description="Comma-separated destinations to add while retaining their parent category",
         primary=True,
-        cef_types=["url", "domain", "ip", "ipv6", "url list"],
         allow_list=True,
         default=None,
     )

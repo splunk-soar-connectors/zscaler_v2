@@ -68,4 +68,4 @@ def test_block_web_destination_replaces_old_actions() -> None:
     assert serialized["lock"] == {"enabled": True, "concurrency": False}
     assert parameter["required"] is True
     assert parameter["allow_list"] is True
-    assert parameter["contains"] == ["url", "domain", "ip", "ipv6", "url list"]
+    assert "contains" not in parameter

@@ -49,10 +49,6 @@ def test_remove_allowed_web_destination_replaces_old_actions() -> None:
     assert action.type == "correct"
     assert action.read_only is False
     assert serialized["lock"] == {"enabled": True, "concurrency": False}
-    assert serialized["parameters"]["destinations"]["contains"] == [
-        "url",
-        "domain",
-        "ip",
-        "ipv6",
-        "url list",
-    ]
+    parameter = serialized["parameters"]["destinations"]
+    assert parameter["allow_list"] is True
+    assert "contains" not in parameter

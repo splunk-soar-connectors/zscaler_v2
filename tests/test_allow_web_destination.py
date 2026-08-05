@@ -102,7 +102,7 @@ def test_allow_web_destination_replaces_old_actions_and_has_expected_contract() 
     assert serialized["lock"] == {"enabled": True, "concurrency": False}
     assert parameter["required"] is True
     assert parameter["allow_list"] is True
-    assert parameter["contains"] == ["url", "domain", "ip", "ipv6", "url list"]
+    assert "contains" not in parameter
     assert outputs["action_result.data.*.whitelistUrls.*"] == "string"
     assert outputs["action_result.summary.updated.*"] == "string"
     assert outputs["action_result.summary.ignored.*"] == "string"

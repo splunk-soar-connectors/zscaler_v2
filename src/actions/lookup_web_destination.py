@@ -28,7 +28,6 @@ class LookupWebDestinationParams(Params):
     destinations: str = Param(
         description="A comma-separated list of URLs, domains, IPv4 addresses, or IPv6 addresses",
         primary=True,
-        cef_types=["url", "domain", "ip", "ipv6", "url list"],
         allow_list=True,
     )
 

@@ -169,7 +169,7 @@ Adds URLs, domains, IPv4 addresses, and IPv6 addresses to the global ZIA blockli
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**destinations** | required | A comma-separated list of URLs, domains, IPv4 addresses, or IPv6 addresses | string | `url` `domain` `ip` `ipv6` `url list` |
+**destinations** | required | A comma-separated list of URLs, domains, IPv4 addresses, or IPv6 addresses | string | |
 
 #### Action Output
 
@@ -177,7 +177,7 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string | | success failure |
 action_result.message | string | | |
-action_result.parameter.destinations | string | `url` `domain` `ip` `ipv6` `url list` | |
+action_result.parameter.destinations | string | | |
 action_result.summary.ignored.\* | string | | test example.com |
 action_result.summary.updated.\* | string | | test 192.0.2.10 |
 summary.total_objects | numeric | | 1 |
@@ -196,7 +196,7 @@ Removes URLs, domains, IPv4 addresses, and IPv6 addresses from the global ZIA bl
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**destinations** | required | A comma-separated list of URLs, domains, IPv4 addresses, or IPv6 addresses | string | `url` `domain` `ip` `ipv6` `url list` |
+**destinations** | required | A comma-separated list of URLs, domains, IPv4 addresses, or IPv6 addresses | string | |
 
 #### Action Output
 
@@ -204,7 +204,7 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string | | success failure |
 action_result.message | string | | |
-action_result.parameter.destinations | string | `url` `domain` `ip` `ipv6` `url list` | |
+action_result.parameter.destinations | string | | |
 action_result.summary.ignored.\* | string | | test example.com |
 action_result.summary.updated.\* | string | | test 192.0.2.10 |
 summary.total_objects | numeric | | 1 |
@@ -223,7 +223,7 @@ Adds URLs, domains, IPv4 addresses, and IPv6 addresses to the global ZIA allowli
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**destinations** | required | A comma-separated list of URLs, domains, IPv4 addresses, or IPv6 addresses | string | `url` `domain` `ip` `ipv6` `url list` |
+**destinations** | required | A comma-separated list of URLs, domains, IPv4 addresses, or IPv6 addresses | string | |
 
 #### Action Output
 
@@ -231,7 +231,7 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string | | success failure |
 action_result.message | string | | |
-action_result.parameter.destinations | string | `url` `domain` `ip` `ipv6` `url list` | |
+action_result.parameter.destinations | string | | |
 action_result.data.\*.whitelistUrls.\* | string | | test example.com test 192.0.2.10 |
 action_result.summary.ignored.\* | string | | test example.com |
 action_result.summary.updated.\* | string | | test 192.0.2.10 |
@@ -251,7 +251,7 @@ Removes URLs, domains, IPv4 addresses, and IPv6 addresses from the global ZIA al
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**destinations** | required | A comma-separated list of URLs, domains, IPv4 addresses, or IPv6 addresses | string | `url` `domain` `ip` `ipv6` `url list` |
+**destinations** | required | A comma-separated list of URLs, domains, IPv4 addresses, or IPv6 addresses | string | |
 
 #### Action Output
 
@@ -259,7 +259,7 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string | | success failure |
 action_result.message | string | | |
-action_result.parameter.destinations | string | `url` `domain` `ip` `ipv6` `url list` | |
+action_result.parameter.destinations | string | | |
 action_result.data.\*.whitelistUrls.\* | string | | test example.com |
 action_result.summary.ignored.\* | string | | test example.com |
 action_result.summary.updated.\* | string | | test 192.0.2.10 |
@@ -277,7 +277,7 @@ Read only: **True**
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**destinations** | required | A comma-separated list of URLs, domains, IPv4 addresses, or IPv6 addresses | string | `url` `domain` `ip` `ipv6` `url list` |
+**destinations** | required | A comma-separated list of URLs, domains, IPv4 addresses, or IPv6 addresses | string | |
 
 #### Action Output
 
@@ -285,7 +285,7 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string | | success failure |
 action_result.message | string | | |
-action_result.parameter.destinations | string | `url` `domain` `ip` `ipv6` `url list` | |
+action_result.parameter.destinations | string | | |
 action_result.data.\*.destination | string | `url` `domain` `ip` `ipv6` | test example.com test 8.8.8.8 |
 action_result.data.\*.urlClassifications.\* | string | | test WEB_SEARCH |
 action_result.data.\*.urlClassificationsWithSecurityAlert.\* | string | | |
@@ -620,8 +620,8 @@ Read only: **False**
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **category_id** | required | The ID of the custom category to update | string | `zscaler url category` |
-**destinations** | optional | Comma-separated destinations to add to the category | string | `url` `domain` `ip` `ipv6` `url list` |
-**retaining_parent_category_destinations** | optional | Comma-separated destinations to add while retaining their parent category | string | `url` `domain` `ip` `ipv6` `url list` |
+**destinations** | optional | Comma-separated destinations to add to the category | string | |
+**retaining_parent_category_destinations** | optional | Comma-separated destinations to add while retaining their parent category | string | |
 
 #### Action Output
 
@@ -630,8 +630,8 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.category_id | string | `zscaler url category` | |
-action_result.parameter.destinations | string | `url` `domain` `ip` `ipv6` `url list` | |
-action_result.parameter.retaining_parent_category_destinations | string | `url` `domain` `ip` `ipv6` `url list` | |
+action_result.parameter.destinations | string | | |
+action_result.parameter.retaining_parent_category_destinations | string | | |
 action_result.data.\*.id | string | | |
 action_result.data.\*.val | numeric | | |
 action_result.data.\*.type | string | | |
@@ -663,8 +663,8 @@ Read only: **False**
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
 **category_id** | required | The ID of the custom category to update | string | `zscaler url category` |
-**destinations** | optional | Comma-separated destinations to remove from the category | string | `url` `domain` `ip` `ipv6` `url list` |
-**retaining_parent_category_destinations** | optional | Comma-separated destinations to remove from the retaining-parent-category list | string | `url` `domain` `ip` `ipv6` `url list` |
+**destinations** | optional | Comma-separated destinations to remove from the category | string | |
+**retaining_parent_category_destinations** | optional | Comma-separated destinations to remove from the retaining-parent-category list | string | |
 
 #### Action Output
 
@@ -673,8 +673,8 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.category_id | string | `zscaler url category` | |
-action_result.parameter.destinations | string | `url` `domain` `ip` `ipv6` `url list` | |
-action_result.parameter.retaining_parent_category_destinations | string | `url` `domain` `ip` `ipv6` `url list` | |
+action_result.parameter.destinations | string | | |
+action_result.parameter.retaining_parent_category_destinations | string | | |
 action_result.data.\*.id | string | | |
 action_result.data.\*.val | numeric | | |
 action_result.data.\*.type | string | | |
