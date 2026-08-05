@@ -71,16 +71,12 @@ def lookup_url(
             lookup_results, lookup_error = client.zia.url_categories.lookup(endpoints)
             if lookup_error is not None:
                 raise RuntimeError(f"Zscaler API error: {lookup_error}")
-            if not isinstance(lookup_results, list):
-                raise RuntimeError("Zscaler API returned an invalid lookup response")
 
             settings, _response, settings_error = (
                 client.zia.security_policy_settings.get_blacklist()
             )
             if settings_error is not None:
                 raise RuntimeError(f"Zscaler API error: {settings_error}")
-            if settings is None or not isinstance(settings.blacklist_urls, list):
-                raise RuntimeError("Zscaler API returned an invalid blocklist")
 
         blocklist = set(settings.blacklist_urls)
         rows: list[LookupUrlOutput] = []
