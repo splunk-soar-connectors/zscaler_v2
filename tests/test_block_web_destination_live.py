@@ -21,9 +21,10 @@ from src.asset import Asset
 from src.zscaler_client import get_client
 
 _TEST_URL = "papp-38277-block.example"
+_TEST_IP = "192.0.2.77"
 
 
-def test_block_url_live_strips_protocol_updates_and_is_idempotent(
+def test_block_web_destination_live_handles_mixed_inputs_and_is_idempotent(
     connector_app: App,
     build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
@@ -33,26 +34,24 @@ def test_block_url_live_strips_protocol_updates_and_is_idempotent(
         initial, _response, error = client.zia.security_policy_settings.get_blacklist()
         assert error is None
         assert initial is not None
-        assert _TEST_URL not in initial.blacklist_urls, (
-            f"{_TEST_URL} must not exist before this test"
-        )
+        assert _TEST_URL not in initial.blacklist_urls
+        assert _TEST_IP not in initial.blacklist_urls
 
-    first_result = None
-    second_result = None
+    results = []
     try:
-        first_input = build_live_soar_action_input(
-            action="block_url",
-            parameters={"url": f"https://{_TEST_URL}"},
-        )
-        connector_app.handle(json.dumps(first_input))
-        first_result = connector_app.actions_manager.get_action_results()[-1]
-
-        second_input = build_live_soar_action_input(
-            action="block_url",
-            parameters={"url": _TEST_URL},
-        )
-        connector_app.handle(json.dumps(second_input))
-        second_result = connector_app.actions_manager.get_action_results()[-1]
+        for destinations in (
+            f"HTTPS://{_TEST_URL}, {_TEST_IP}, {_TEST_URL}",
+            f"{_TEST_URL}, {_TEST_IP}",
+        ):
+            connector_app.handle(
+                json.dumps(
+                    build_live_soar_action_input(
+                        action="block_web_destination",
+                        parameters={"destinations": destinations},
+                    )
+                )
+            )
+            results.append(connector_app.actions_manager.get_action_results()[-1])
 
         with get_client(asset) as client:
             changed, _response, error = (
@@ -61,24 +60,26 @@ def test_block_url_live_strips_protocol_updates_and_is_idempotent(
             assert error is None
             assert changed is not None
             assert _TEST_URL in changed.blacklist_urls
+            assert _TEST_IP in changed.blacklist_urls
     finally:
         with get_client(asset) as client:
-            cleaned, _response, cleanup_error = (
+            cleaned, _response, error = (
                 client.zia.security_policy_settings.delete_urls_from_blacklist(
-                    [_TEST_URL]
+                    [_TEST_URL, _TEST_IP]
                 )
             )
-            assert cleanup_error is None
+            assert error is None
             assert cleaned is not None
-            activation, _response, activation_error = client.zia.activate.activate()
-            assert activation_error is None
+            activation, _response, error = client.zia.activate.activate()
+            assert error is None
             assert activation is not None
 
-    assert first_result is not None
-    assert first_result.get_status() is True, first_result.get_message()
-    assert first_result.get_summary() == {"updated": [_TEST_URL], "ignored": []}
-
-    assert second_result is not None
-    assert second_result.get_status() is True, second_result.get_message()
-    assert second_result.get_message() == "Blocklist contains all of these endpoints"
-    assert second_result.get_summary() == {"updated": [], "ignored": [_TEST_URL]}
+    first, second = results
+    assert first.get_status() is True, first.get_message()
+    assert first.get_summary() == {"updated": [_TEST_URL, _TEST_IP], "ignored": []}
+    assert second.get_status() is True, second.get_message()
+    assert second.get_message() == "Blocklist contains all of these destinations"
+    assert second.get_summary() == {
+        "updated": [],
+        "ignored": [_TEST_URL, _TEST_IP],
+    }

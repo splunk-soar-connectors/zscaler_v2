@@ -33,7 +33,7 @@ def test_collection_outputs_use_wildcard_datapaths() -> None:
             "action_result.summary.ignored.*",
             "action_result.summary.updated.*",
         },
-        "block_ip": {
+        "block_web_destination": {
             "action_result.summary.ignored.*",
             "action_result.summary.updated.*",
         },

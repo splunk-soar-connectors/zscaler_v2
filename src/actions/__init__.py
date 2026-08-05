@@ -21,8 +21,10 @@ from soar_sdk.meta.actions import ActionLock
 
 from .get_report import get_report
 from .list_url_categories import ListUrlCategoriesSummary, list_url_categories
-from .block_ip import BlockIpSummary, block_ip
-from .block_url import BlockUrlSummary, block_url
+from .block_web_destination import (
+    BlockWebDestinationSummary,
+    block_web_destination,
+)
 from .unblock_ip import UnblockIpSummary, unblock_ip
 from .unblock_url import UnblockUrlSummary, unblock_url
 from .allow_web_destination import (
@@ -88,23 +90,17 @@ def register_actions(app: App) -> App:
     )
 
     app.register_action(
-        action=block_ip,
-        description="Block an IP",
+        action=block_web_destination,
+        description="Add web destinations to the global blocklist",
         action_type="contain",
         read_only=False,
         lock=_ASSET_MUTATION_LOCK,
-        summary_type=BlockIpSummary,
-        verbose="If a <b>url_category</b> is specified, it will add the IP(s) as a rule to that category. If it is left blank, it will instead add the IP(s) to the global blocklist.",
-    )
-
-    app.register_action(
-        action=block_url,
-        description="Block a URL",
-        action_type="contain",
-        read_only=False,
-        lock=_ASSET_MUTATION_LOCK,
-        summary_type=BlockUrlSummary,
-        verbose="If a <b>url_category</b> is specified, it will add the URL(s) as a rule to that category. If it is left blank, it will instead add the URL(s) to the global blocklist.",
+        summary_type=BlockWebDestinationSummary,
+        verbose=(
+            "Adds URLs, domains, IPv4 addresses, and IPv6 addresses to the "
+            "global ZIA blocklist. HTTP and HTTPS schemes are removed before "
+            "submission."
+        ),
     )
 
     app.register_action(
