@@ -25,8 +25,10 @@ from .block_ip import BlockIpSummary, block_ip
 from .block_url import BlockUrlSummary, block_url
 from .unblock_ip import UnblockIpSummary, unblock_ip
 from .unblock_url import UnblockUrlSummary, unblock_url
-from .allow_ip import AllowIpSummary, allow_ip
-from .allow_url import AllowUrlSummary, allow_url
+from .allow_web_destination import (
+    AllowWebDestinationSummary,
+    allow_web_destination,
+)
 from .unallow_ip import UnallowIpSummary, unallow_ip
 from .unallow_url import UnallowUrlSummary, unallow_url
 from .lookup_ip import lookup_ip
@@ -126,23 +128,17 @@ def register_actions(app: App) -> App:
     )
 
     app.register_action(
-        action=allow_ip,
-        description="Add an IP address to the allowlist",
+        action=allow_web_destination,
+        description="Add web destinations to the global allowlist",
         action_type="contain",
         read_only=False,
         lock=_ASSET_MUTATION_LOCK,
-        summary_type=AllowIpSummary,
-        verbose="If a <b>url_category</b> is specified, the action adds the IPs to that category. If it is left blank, the action adds the IPs to the global allowlist.",
-    )
-
-    app.register_action(
-        action=allow_url,
-        description="Add a URL to the allowlist",
-        action_type="contain",
-        read_only=False,
-        lock=_ASSET_MUTATION_LOCK,
-        summary_type=AllowUrlSummary,
-        verbose="If a <b>url_category</b> is specified, the action adds the URLs to that category. If it is left blank, the action adds the URLs to the global allowlist.",
+        summary_type=AllowWebDestinationSummary,
+        verbose=(
+            "Adds URLs, domains, IPv4 addresses, and IPv6 addresses to the "
+            "global ZIA allowlist. HTTP and HTTPS schemes are removed before "
+            "submission."
+        ),
     )
 
     app.register_action(

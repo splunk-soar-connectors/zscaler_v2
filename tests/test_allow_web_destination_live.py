@@ -14,40 +14,44 @@
 import json
 from collections.abc import Callable
 from typing import Any
+from uuid import uuid4
 
 from soar_sdk.app import App
 
 from src.asset import Asset
 from src.zscaler_client import get_client
 
-_TEST_IP = "192.0.2.79"
 
-
-def test_allow_ip_live_updates_activates_and_is_idempotent(
+def test_allow_web_destination_live_handles_mixed_inputs_and_is_idempotent(
     connector_app: App,
     build_live_soar_action_input: Callable[..., dict[str, Any]],
     live_asset_config: dict[str, str],
 ) -> None:
+    suffix = uuid4().hex
+    test_url = f"papp-38277-{suffix}.example"
+    test_ip = f"198.51.100.{1 + int(suffix[:2], 16) % 253}"
+    destinations = [test_url, test_ip]
     asset = Asset.model_validate(live_asset_config)
+
     with get_client(asset) as client:
         initial, _response, error = client.zia.security_policy_settings.get_whitelist()
         assert error is None
         assert initial is not None
-        assert _TEST_IP not in initial.whitelist_urls, (
-            f"{_TEST_IP} must not exist before this test"
-        )
+        assert all(item not in initial.whitelist_urls for item in destinations)
 
     first_result = None
     second_result = None
     try:
         first_input = build_live_soar_action_input(
-            action="allow_ip", parameters={"ip": _TEST_IP}
+            action="allow_web_destination",
+            parameters={"destinations": f"HTTPS://{test_url}, {test_ip}, {test_url}"},
         )
         connector_app.handle(json.dumps(first_input))
         first_result = connector_app.actions_manager.get_action_results()[-1]
 
         second_input = build_live_soar_action_input(
-            action="allow_ip", parameters={"ip": _TEST_IP}
+            action="allow_web_destination",
+            parameters={"destinations": f"{test_url}, {test_ip}"},
         )
         connector_app.handle(json.dumps(second_input))
         second_result = connector_app.actions_manager.get_action_results()[-1]
@@ -58,12 +62,12 @@ def test_allow_ip_live_updates_activates_and_is_idempotent(
             )
             assert error is None
             assert changed is not None
-            assert _TEST_IP in changed.whitelist_urls
+            assert all(item in changed.whitelist_urls for item in destinations)
     finally:
         with get_client(asset) as client:
             cleaned, _response, cleanup_error = (
                 client.zia.security_policy_settings.delete_urls_from_whitelist(
-                    [_TEST_IP]
+                    destinations
                 )
             )
             assert cleanup_error is None
@@ -74,10 +78,18 @@ def test_allow_ip_live_updates_activates_and_is_idempotent(
 
     assert first_result is not None
     assert first_result.get_status() is True, first_result.get_message()
-    assert _TEST_IP in first_result.get_data()[0]["whitelistUrls"]
-    assert first_result.get_summary() == {"updated": [_TEST_IP], "ignored": []}
+    assert all(
+        item in first_result.get_data()[0]["whitelistUrls"] for item in destinations
+    )
+    assert first_result.get_summary() == {
+        "updated": destinations,
+        "ignored": [],
+    }
 
     assert second_result is not None
     assert second_result.get_status() is True, second_result.get_message()
-    assert second_result.get_message() == "Allowlist contains all of these endpoints"
-    assert second_result.get_summary() == {"updated": [], "ignored": [_TEST_IP]}
+    assert second_result.get_message() == "Allowlist contains all of these destinations"
+    assert second_result.get_summary() == {
+        "updated": [],
+        "ignored": destinations,
+    }

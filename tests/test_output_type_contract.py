@@ -28,6 +28,11 @@ def test_collection_outputs_use_wildcard_datapaths() -> None:
     outputs = _outputs_by_action()
 
     expected_collection_paths = {
+        "allow_web_destination": {
+            "action_result.data.*.whitelistUrls.*",
+            "action_result.summary.ignored.*",
+            "action_result.summary.updated.*",
+        },
         "block_ip": {
             "action_result.summary.ignored.*",
             "action_result.summary.updated.*",

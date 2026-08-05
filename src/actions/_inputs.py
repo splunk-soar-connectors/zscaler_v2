@@ -17,12 +17,8 @@ from soar_sdk.abstract import SOARClient
 from soar_sdk.exceptions import ActionFailure
 
 
-def comma_separated_values(value: str | None) -> list[str]:
-    return [item.strip() for item in (value or "").split(",") if item.strip()]
-
-
 def url_values(value: str | None) -> list[str]:
-    values = comma_separated_values(value)
+    values = [item.strip() for item in (value or "").split(",") if item.strip()]
     normalized: list[str] = []
     for item in values:
         scheme, separator, remainder = item.partition("://")
@@ -34,7 +30,7 @@ def url_values(value: str | None) -> list[str]:
 
 
 def ip_values(value: str | None) -> list[str]:
-    values = comma_separated_values(value)
+    values = [item.strip() for item in (value or "").split(",") if item.strip()]
     invalid: list[str] = []
     for item in values:
         try:

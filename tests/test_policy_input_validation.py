@@ -19,8 +19,6 @@ import pytest
 from soar_sdk.app import App
 
 POLICY_ACTIONS = (
-    ("allow_ip", "ip", "IP address"),
-    ("allow_url", "url", "URL"),
     ("block_ip", "ip", "IP address"),
     ("block_url", "url", "URL"),
     ("unallow_ip", "ip", "IP address"),
@@ -57,7 +55,6 @@ def test_policy_actions_reject_empty_comma_separated_input(
     ("action", "parameters"),
     [
         ("lookup_ip", {"ip": "not-an-ip"}),
-        ("allow_ip", {"ip": "not-an-ip"}),
         ("block_ip", {"ip": "not-an-ip"}),
         ("unallow_ip", {"ip": "not-an-ip"}),
         ("unblock_ip", {"ip": "not-an-ip"}),

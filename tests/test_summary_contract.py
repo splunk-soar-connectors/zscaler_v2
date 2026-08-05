@@ -20,8 +20,7 @@ POLICY_CHANGE_SUMMARY = {
 }
 
 EXPECTED_ACTION_SUMMARIES = {
-    "allow_ip": POLICY_CHANGE_SUMMARY,
-    "allow_url": POLICY_CHANGE_SUMMARY,
+    "allow_web_destination": POLICY_CHANGE_SUMMARY,
     "block_ip": POLICY_CHANGE_SUMMARY,
     "block_url": POLICY_CHANGE_SUMMARY,
     "delete_destination_group": {"action_result.summary.deleted_destination_groups"},
