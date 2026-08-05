@@ -79,12 +79,8 @@ def get_denylist(
             )
             if error is not None:
                 raise RuntimeError(f"Zscaler API error: {error}")
-            if settings is None:
-                raise RuntimeError("Zscaler API returned no denylist settings")
 
             urls = settings.blacklist_urls
-            if not isinstance(urls, list):
-                raise RuntimeError("Zscaler API returned an invalid denylist")
 
         rows: list[GetDenylistOutput] = []
         for blocked in urls:

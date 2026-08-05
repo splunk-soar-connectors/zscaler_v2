@@ -41,12 +41,8 @@ def get_allowlist(
             )
             if error is not None:
                 raise RuntimeError(f"Zscaler API error: {error}")
-            if settings is None:
-                raise RuntimeError("Zscaler API returned no allowlist settings")
 
             urls = settings.whitelist_urls
-            if not isinstance(urls, list):
-                raise RuntimeError("Zscaler API returned an invalid allowlist")
     except Exception as exc:
         logger.exception("Get allowlist failed")
         message = f"Get allowlist failed: {exc}"
