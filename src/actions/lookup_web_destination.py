@@ -85,19 +85,19 @@ def lookup_web_destination(
         for result in lookup_results:
             if not isinstance(result, dict):
                 raise RuntimeError("Zscaler API returned an invalid lookup record")
-            destination = result.get("url")
-            if not isinstance(destination, str):
+            lookup_destination = result.get("url")
+            if not isinstance(lookup_destination, str):
                 raise RuntimeError(
                     "Zscaler API returned a lookup record without a destination"
                 )
             rows.append(
                 LookupWebDestinationOutput(
-                    destination=destination,
+                    destination=lookup_destination,
                     urlClassifications=result.get("urlClassifications", []),
                     urlClassificationsWithSecurityAlert=result.get(
                         "urlClassificationsWithSecurityAlert", []
                     ),
-                    blocklisted=destination in blocklist,
+                    blocklisted=lookup_destination in blocklist,
                 )
             )
     except Exception as exc:
