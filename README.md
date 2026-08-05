@@ -27,8 +27,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [get report](#action-get-report) - Fetch a sandbox report for the provided MD5 file hash <br>
 [list url categories](#action-list-url-categories) - List all URL categories <br>
 [block web destination](#action-block-web-destination) - Add web destinations to the global blocklist <br>
-[unblock ip](#action-unblock-ip) - Unblock an IP <br>
-[unblock url](#action-unblock-url) - Unblock a URL <br>
+[remove blocked web destination](#action-remove-blocked-web-destination) - Remove web destinations from the global blocklist <br>
 [allow web destination](#action-allow-web-destination) - Add web destinations to the global allowlist <br>
 [remove allowed web destination](#action-remove-allowed-web-destination) - Remove web destinations from the global allowlist <br>
 [lookup ip](#action-lookup-ip) - Look up the categories related to an IP <br>
@@ -187,21 +186,20 @@ action_result.summary.updated.\* | string | | test 192.0.2.10 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
-## action: 'unblock ip'
+## action: 'remove blocked web destination'
 
-Unblock an IP
+Remove web destinations from the global blocklist
 
 Type: **correct** <br>
 Read only: **False**
 
-If a <b>url_category</b> is specified, it will remove the IP(s) from that category. If it is left blank, it will instead remove the IP(s) from the global blocklist.
+Removes URLs, domains, IPv4 addresses, and IPv6 addresses from the global ZIA blocklist. HTTP and HTTPS schemes are removed before submission.
 
 #### Action Parameters
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**ip** | required | A list of IPs | string | `ip` `ipv6` |
-**url_category** | optional | Remove from this category | string | `zscaler url category` |
+**destinations** | required | A comma-separated list of URLs, domains, IPv4 addresses, or IPv6 addresses | string | `url` `domain` `ip` `ipv6` `url list` |
 
 #### Action Output
 
@@ -209,55 +207,9 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string | | success failure |
 action_result.message | string | | |
-action_result.parameter.ip | string | `ip` `ipv6` | |
-action_result.parameter.url_category | string | `zscaler url category` | |
-action_result.data.\*.configuredName | string | | test Test-Block |
-action_result.data.\*.customCategory | boolean | | True False |
-action_result.data.\*.dbCategorizedUrls.\* | string | | |
-action_result.data.\*.description | string | | |
-action_result.data.\*.id | string | | test CUSTOM_01 |
-action_result.data.\*.val | numeric | | 128 |
-action_result.summary.ignored.\* | string | | test 8.8.8.8 |
-action_result.summary.updated.\* | string | | test 208.67.222.222 |
-summary.total_objects | numeric | | 1 |
-summary.total_objects_successful | numeric | | 1 |
-
-## action: 'unblock url'
-
-Unblock a URL
-
-Type: **correct** <br>
-Read only: **False**
-
-If a <b>url_category</b> is specified, it will remove the URL(s) from that category. If it is left blank, it will instead remove the URL(s) from the global blocklist.
-
-#### Action Parameters
-
-PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
---------- | -------- | ----------- | ---- | --------
-**url** | required | A list of URLs | string | `url` `url list` `domain` |
-**url_category** | optional | Remove from this category | string | `zscaler url category` |
-
-#### Action Output
-
-DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
---------- | ---- | -------- | --------------
-action_result.status | string | | success failure |
-action_result.message | string | | |
-action_result.parameter.url | string | `url` `url list` `domain` | |
-action_result.parameter.url_category | string | `zscaler url category` | |
-action_result.data.\*.configuredName | string | | test Test-Block |
-action_result.data.\*.customCategory | boolean | | True False |
-action_result.data.\*.customUrlsCount | numeric | | 0 |
-action_result.data.\*.dbCategorizedUrls.\* | string | | |
-action_result.data.\*.description | string | | |
-action_result.data.\*.editable | boolean | | True False |
-action_result.data.\*.id | string | | test CUSTOM_01 |
-action_result.data.\*.type | string | | test URL_CATEGORY |
-action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | 1 |
-action_result.data.\*.val | numeric | | 128 |
-action_result.summary.ignored.\* | string | | test www.test.com |
-action_result.summary.updated.\* | string | | test www.test123.com |
+action_result.parameter.destinations | string | `url` `domain` `ip` `ipv6` `url list` | |
+action_result.summary.ignored.\* | string | | test example.com |
+action_result.summary.updated.\* | string | | test 192.0.2.10 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 

@@ -18,10 +18,7 @@ from typing import Any
 import pytest
 from soar_sdk.app import App
 
-POLICY_ACTIONS = (
-    ("unblock_ip", "ip", "IP address"),
-    ("unblock_url", "url", "URL"),
-)
+POLICY_ACTIONS = ()
 
 
 @pytest.mark.parametrize(
@@ -51,7 +48,6 @@ def test_policy_actions_reject_empty_comma_separated_input(
     ("action", "parameters"),
     [
         ("lookup_ip", {"ip": "not-an-ip"}),
-        ("unblock_ip", {"ip": "not-an-ip"}),
         ("add_category_ip", {"category_id": "CUSTOM_01", "ips": "not-an-ip"}),
         (
             "remove_category_ip",

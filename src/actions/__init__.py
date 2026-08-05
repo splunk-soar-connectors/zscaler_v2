@@ -25,8 +25,10 @@ from .block_web_destination import (
     BlockWebDestinationSummary,
     block_web_destination,
 )
-from .unblock_ip import UnblockIpSummary, unblock_ip
-from .unblock_url import UnblockUrlSummary, unblock_url
+from .remove_blocked_web_destination import (
+    RemoveBlockedWebDestinationSummary,
+    remove_blocked_web_destination,
+)
 from .allow_web_destination import (
     AllowWebDestinationSummary,
     allow_web_destination,
@@ -106,23 +108,16 @@ def register_actions(app: App) -> App:
     )
 
     app.register_action(
-        action=unblock_ip,
-        description="Unblock an IP",
+        action=remove_blocked_web_destination,
+        description="Remove web destinations from the global blocklist",
         action_type="correct",
         read_only=False,
         lock=_ASSET_MUTATION_LOCK,
-        summary_type=UnblockIpSummary,
-        verbose="If a <b>url_category</b> is specified, it will remove the IP(s) from that category. If it is left blank, it will instead remove the IP(s) from the global blocklist.",
-    )
-
-    app.register_action(
-        action=unblock_url,
-        description="Unblock a URL",
-        action_type="correct",
-        read_only=False,
-        lock=_ASSET_MUTATION_LOCK,
-        summary_type=UnblockUrlSummary,
-        verbose="If a <b>url_category</b> is specified, it will remove the URL(s) from that category. If it is left blank, it will instead remove the URL(s) from the global blocklist.",
+        summary_type=RemoveBlockedWebDestinationSummary,
+        verbose=(
+            "Removes URLs, domains, IPv4 addresses, and IPv6 addresses from the "
+            "global ZIA blocklist. HTTP and HTTPS schemes are removed before submission."
+        ),
     )
 
     app.register_action(
