@@ -40,8 +40,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [get allowlist](#action-get-allowlist) - Get URLs on the allowlist <br>
 [get denylist](#action-get-denylist) - Get URLs on the denylist <br>
 [update user](#action-update-user) - Update the user with the specified ID <br>
-[add category url](#action-add-category-url) - Add URLs to a category <br>
-[add category ip](#action-add-category-ip) - Add IPs to a category <br>
+[add category destination](#action-add-category-destination) - Add web destinations to a custom URL category <br>
 [remove category url](#action-remove-category-url) - Remove URLs from a category <br>
 [remove category ip](#action-remove-category-ip) - Remove IPs from a category <br>
 [create destination group](#action-create-destination-group) - Create a destination group <br>
@@ -610,52 +609,9 @@ action_result.data.\*.name | string | | test First Last |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
-## action: 'add category url'
+## action: 'add category destination'
 
-Add URLs to a category
-
-Type: **generic** <br>
-Read only: **False**
-
-#### Action Parameters
-
-PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
---------- | -------- | ----------- | ---- | --------
-**category_id** | required | The ID of the category to add the specified URLs to | string | |
-**urls** | optional | A comma-separated list of URLs to add to the specified category | string | |
-**retaining_parent_category_url** | optional | A comma-separated list of URLs to add to the category's retaining-parent-category list | string | |
-
-#### Action Output
-
-DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
---------- | ---- | -------- | --------------
-action_result.status | string | | success failure |
-action_result.message | string | | |
-action_result.parameter.category_id | string | | |
-action_result.parameter.urls | string | | |
-action_result.parameter.retaining_parent_category_url | string | | |
-action_result.data.\*.id | string | | |
-action_result.data.\*.val | numeric | | |
-action_result.data.\*.type | string | | |
-action_result.data.\*.urls.\* | string | | |
-action_result.data.\*.scopes.\*.Type | string | | |
-action_result.data.\*.editable | boolean | | True False |
-action_result.data.\*.keywords.\* | string | | |
-action_result.data.\*.description | string | | |
-action_result.data.\*.configuredName | string | | |
-action_result.data.\*.customCategory | boolean | | True False |
-action_result.data.\*.customUrlsCount | numeric | | |
-action_result.data.\*.dbCategorizedUrls.\* | string | | |
-action_result.data.\*.customIpRangesCount | numeric | | |
-action_result.data.\*.keywordsRetainingParentCategory.\* | string | | |
-action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | |
-action_result.data.\*.ipRangesRetainingParentCategoryCount | numeric | | |
-summary.total_objects | numeric | | 1 |
-summary.total_objects_successful | numeric | | 1 |
-
-## action: 'add category ip'
-
-Add IPs to a category
+Add web destinations to a custom URL category
 
 Type: **generic** <br>
 Read only: **False**
@@ -664,9 +620,9 @@ Read only: **False**
 
 PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
 --------- | -------- | ----------- | ---- | --------
-**category_id** | required | The ID of the category to add the specified IP addresses to | string | |
-**ips** | optional | A comma-separated list of IP addresses to add to the specified category | string | |
-**retaining_parent_category_ip** | optional | A comma-separated list of IP addresses to add to the category's retaining-parent-category list | string | |
+**category_id** | required | The ID of the custom category to update | string | `zscaler url category` |
+**destinations** | optional | Comma-separated destinations to add to the category | string | `url` `domain` `ip` `ipv6` `url list` |
+**retaining_parent_category_destinations** | optional | Comma-separated destinations to add while retaining their parent category | string | `url` `domain` `ip` `ipv6` `url list` |
 
 #### Action Output
 
@@ -674,9 +630,9 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string | | success failure |
 action_result.message | string | | |
-action_result.parameter.category_id | string | | |
-action_result.parameter.ips | string | | |
-action_result.parameter.retaining_parent_category_ip | string | | |
+action_result.parameter.category_id | string | `zscaler url category` | |
+action_result.parameter.destinations | string | `url` `domain` `ip` `ipv6` `url list` | |
+action_result.parameter.retaining_parent_category_destinations | string | `url` `domain` `ip` `ipv6` `url list` | |
 action_result.data.\*.id | string | | |
 action_result.data.\*.val | numeric | | |
 action_result.data.\*.type | string | | |

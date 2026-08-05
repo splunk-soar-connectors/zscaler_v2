@@ -47,8 +47,7 @@ from .remove_group_user import remove_group_user
 from .get_allowlist import GetAllowlistSummary, get_allowlist
 from .get_denylist import GetDenylistSummary, get_denylist
 from .update_user import update_user
-from .add_category_url import add_category_url
-from .add_category_ip import add_category_ip
+from .add_category_destination import add_category_destination
 from .remove_category_url import remove_category_url
 from .remove_category_ip import remove_category_ip
 from .create_destination_group import create_destination_group
@@ -230,16 +229,8 @@ def register_actions(app: App) -> App:
     )
 
     app.register_action(
-        action=add_category_url,
-        description="Add URLs to a category",
-        action_type="generic",
-        read_only=False,
-        lock=_ASSET_MUTATION_LOCK,
-    )
-
-    app.register_action(
-        action=add_category_ip,
-        description="Add IPs to a category",
+        action=add_category_destination,
+        description="Add web destinations to a custom URL category",
         action_type="generic",
         read_only=False,
         lock=_ASSET_MUTATION_LOCK,

@@ -47,7 +47,6 @@ def test_policy_actions_reject_empty_comma_separated_input(
 @pytest.mark.parametrize(
     ("action", "parameters"),
     [
-        ("add_category_ip", {"category_id": "CUSTOM_01", "ips": "not-an-ip"}),
         (
             "remove_category_ip",
             {"category_id": "CUSTOM_01", "ips": "not-an-ip"},
