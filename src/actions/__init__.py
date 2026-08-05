@@ -56,6 +56,7 @@ from .delete_destination_group import (
 )
 from .get_departments import GetDepartmentsSummary, get_departments
 from .get_category_details import GetCategoryDetailsSummary, get_category_details
+from .make_request import make_request
 
 
 _ASSET_MUTATION_LOCK = ActionLock()
@@ -335,5 +336,17 @@ def register_actions(app: App) -> App:
         render_as="table",
         summary_type=GetCategoryDetailsSummary,
     )
+
+    make_request_action = app.make_request()(make_request)
+    make_request_action.meta.description = (
+        "Send an authenticated request to a ZIA OneAPI endpoint"
+    )
+    make_request_action.meta.verbose = (
+        "Sends an authenticated request using the asset's Zscaler OneAPI OAuth "
+        "credentials. Provide a relative /zia/api/v1 path; full URLs and Sandbox "
+        "endpoints are not accepted. Mutating requests do not automatically activate "
+        "pending ZIA changes."
+    )
+    make_request_action.meta.lock = _ASSET_MUTATION_LOCK
 
     return app

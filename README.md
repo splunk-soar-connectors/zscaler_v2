@@ -54,7 +54,8 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [edit destination group](#action-edit-destination-group) - Edit a destination group <br>
 [delete destination group](#action-delete-destination-group) - Delete destination groups <br>
 [get departments](#action-get-departments) - Get a list of departments <br>
-[get category details](#action-get-category-details) - Get the URLs and keywords of a category
+[get category details](#action-get-category-details) - Get the URLs and keywords of a category <br>
+[make request](#action-make-request) - Send an authenticated request to a ZIA OneAPI endpoint
 
 ## action: 'test connectivity'
 
@@ -1219,6 +1220,45 @@ action_result.data.\*.type | string | | test URL_CATEGORY |
 action_result.data.\*.urlsRetainingParentCategoryCount | numeric | | 0 |
 action_result.data.\*.val | numeric | | 1 |
 action_result.summary.total_categories | numeric | | 97 |
+summary.total_objects | numeric | | 1 |
+summary.total_objects_successful | numeric | | 1 |
+
+## action: 'make request'
+
+Send an authenticated request to a ZIA OneAPI endpoint
+
+Type: **generic** <br>
+Read only: **False**
+
+Sends an authenticated request using the asset's Zscaler OneAPI OAuth credentials. Provide a relative /zia/api/v1 path; full URLs and Sandbox endpoints are not accepted. Mutating requests do not automatically activate pending ZIA changes.
+
+#### Action Parameters
+
+PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
+--------- | -------- | ----------- | ---- | --------
+**http_method** | required | The HTTP method to use for the request. | string | |
+**endpoint** | required | ZIA API path relative to the OneAPI gateway, for example '/zia/api/v1/status'. Do not include a base URL or query string. | string | |
+**headers** | optional | The headers to send with the request (JSON object). An example is {'Content-Type': 'application/json'} | string | |
+**query_parameters** | optional | Parameters to append to the URL (JSON object or query string). An example is ?key=value&key2=value2 | string | |
+**body** | optional | The body to send with the request (JSON object). An example is {'key': 'value', 'key2': 'value2'} | string | |
+**timeout** | optional | Request timeout in seconds. Must be between 1 and 240. Default is 240. | numeric | |
+**verify_ssl** | optional | Verify the TLS certificate. This must be true. | boolean | |
+
+#### Action Output
+
+DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
+--------- | ---- | -------- | --------------
+action_result.status | string | | success failure |
+action_result.message | string | | |
+action_result.parameter.http_method | string | | |
+action_result.parameter.endpoint | string | | |
+action_result.parameter.headers | string | | |
+action_result.parameter.query_parameters | string | | |
+action_result.parameter.body | string | | |
+action_result.parameter.timeout | numeric | | |
+action_result.parameter.verify_ssl | boolean | | |
+action_result.data.\*.status_code | numeric | | 200 404 500 |
+action_result.data.\*.response_body | string | | {"key": "value"} |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
