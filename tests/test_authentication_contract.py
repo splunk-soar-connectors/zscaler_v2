@@ -30,17 +30,11 @@ def test_asset_uses_oneapi_authentication_contract() -> None:
         "password",
         "sandbox_base_url",
         "sandbox_api_token",
+        "sandbox_token",
+        "sandbox_cloud",
     }.isdisjoint(configuration)
 
     assert configuration["vanity_domain"]["required"] is True
     assert configuration["client_id"]["required"] is True
     assert configuration["client_secret"]["required"] is True
     assert configuration["client_secret"]["data_type"] == "password"
-
-
-def test_sandbox_credentials_are_separate_and_optional() -> None:
-    configuration = Asset.to_json_schema()
-
-    assert configuration["sandbox_token"]["required"] is False
-    assert configuration["sandbox_token"]["data_type"] == "password"
-    assert configuration["sandbox_cloud"]["required"] is False

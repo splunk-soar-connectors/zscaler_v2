@@ -25,8 +25,6 @@ REQUIRED_ASSET_ENV_KEYS = {
 }
 OPTIONAL_ASSET_ENV_KEYS = {
     "cloud": "ZSCALER_CLOUD",
-    "sandbox_token": "ZSCALER_SANDBOX_TOKEN",
-    "sandbox_cloud": "ZSCALER_SANDBOX_CLOUD",
 }
 
 

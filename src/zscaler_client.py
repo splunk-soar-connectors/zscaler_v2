@@ -31,8 +31,6 @@ def get_client(
             "clientSecret": asset.client_secret,
             "vanityDomain": asset.vanity_domain,
             "cloud": asset.cloud,
-            "sandboxToken": asset.sandbox_token or "",
-            "sandboxCloud": asset.sandbox_cloud or "",
             "partnerId": SPLUNK_ZSCALER_PARTNER_ID,
             "requestTimeout": request_timeout,
             "rateLimit": {

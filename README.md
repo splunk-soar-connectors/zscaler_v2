@@ -18,20 +18,16 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 **client_id** | required | string | OAuth client ID for the Zscaler OneAPI API client |
 **client_secret** | required | password | OAuth client secret for the Zscaler OneAPI API client |
 **cloud** | optional | string | Zscaler OneAPI cloud environment used to derive OAuth and API endpoints |
-**sandbox_token** | optional | password | Optional ZIA Sandbox Submission API token required only by submit file |
-**sandbox_cloud** | optional | string | Optional ZIA Sandbox cloud name used with the Sandbox Submission API token |
 
 ### Supported Actions
 
 [test connectivity](#action-test-connectivity) - Authenticate through OneAPI and read the ZIA configuration activation status. <br>
-[get report](#action-get-report) - Fetch a sandbox report for the provided MD5 file hash <br>
 [list url categories](#action-list-url-categories) - List all URL categories <br>
 [block web destination](#action-block-web-destination) - Add web destinations to the global blocklist <br>
 [remove blocked web destination](#action-remove-blocked-web-destination) - Remove web destinations from the global blocklist <br>
 [allow web destination](#action-allow-web-destination) - Add web destinations to the global allowlist <br>
 [remove allowed web destination](#action-remove-allowed-web-destination) - Remove web destinations from the global allowlist <br>
 [lookup web destination](#action-lookup-web-destination) - Look up ZIA classifications for web destinations <br>
-[submit file](#action-submit-file) - Submit a file to Zscaler Sandbox <br>
 [get admin users](#action-get-admin-users) - Get a list of admin users <br>
 [get users](#action-get-users) - Get users, optionally filtered by name, department, or group <br>
 [get groups](#action-get-groups) - Get a list of groups <br>
@@ -69,53 +65,6 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string | | success failure |
 action_result.message | string | | |
-summary.total_objects | numeric | | 1 |
-summary.total_objects_successful | numeric | | 1 |
-
-## action: 'get report'
-
-Fetch a sandbox report for the provided MD5 file hash
-
-Type: **investigate** <br>
-Read only: **True**
-
-#### Action Parameters
-
-PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
---------- | -------- | ----------- | ---- | --------
-**file_hash** | required | The MD5 file hash | string | `md5` |
-
-#### Action Output
-
-DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
---------- | ---- | -------- | --------------
-action_result.status | string | | success failure |
-action_result.message | string | | |
-action_result.parameter.file_hash | string | `md5` | |
-action_result.data.\*.Full Details.Classification.Category | string | | test BENIGN |
-action_result.data.\*.Full Details.Classification.DetectedMalware | string | | |
-action_result.data.\*.Full Details.Classification.Score | numeric | | 10 |
-action_result.data.\*.Full Details.Classification.Type | string | | test BENIGN |
-action_result.data.\*.Full Details.FileProperties.DigitalCerificate | string | | |
-action_result.data.\*.Full Details.FileProperties.FileSize | numeric | | 350084 |
-action_result.data.\*.Full Details.FileProperties.FileType | string | | test EXE |
-action_result.data.\*.Full Details.FileProperties.Issuer | string | | |
-action_result.data.\*.Full Details.FileProperties.MD5 | string | `md5` | test 1043ca3fc2e83f0c6f100e46d2ea16be |
-action_result.data.\*.Full Details.FileProperties.RootCA | string | | |
-action_result.data.\*.Full Details.FileProperties.SHA1 | string | `sha1` | test efbd493b33543341d43df6db4c92de2473cf49f3 |
-action_result.data.\*.Full Details.FileProperties.SSDeep | string | | test 6144:IFkS+8dpN9EtEnROO4T0LbTbHiXuFW0XPBGunX9v62HCTAA1PSahJj3zDbSJ8:CkMy4TGWXuFR5JAxS6Lnbu8 |
-action_result.data.\*.Full Details.FileProperties.Sha256 | string | `sha256` | test 0e7fd4dde827a7f0bda82bbfbce4b92a551d0cd296f72e936b8968310d2181cd |
-action_result.data.\*.Full Details.Origin.Country | string | | test United States |
-action_result.data.\*.Full Details.Origin.Language | string | | test English |
-action_result.data.\*.Full Details.Origin.Risk | string | | test LOW |
-action_result.data.\*.Full Details.Summary.Category | string | | test EXECS |
-action_result.data.\*.Full Details.Summary.Duration | numeric | | 524114 |
-action_result.data.\*.Full Details.Summary.FileType | string | | test EXE |
-action_result.data.\*.Full Details.Summary.StartTime | numeric | | 1520334357 |
-action_result.data.\*.Full Details.Summary.Status | string | | test COMPLETED |
-action_result.data.\*.Full Details.SystemSummary.\*.Risk | string | | test LOW |
-action_result.data.\*.Full Details.SystemSummary.\*.Signature | string | | test Binary contains paths to development resources |
-action_result.data.\*.Full Details.SystemSummary.\*.SignatureSources | string | | test no activity detected |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
@@ -290,40 +239,6 @@ action_result.data.\*.destination | string | `url` `domain` `ip` `ipv6` | test e
 action_result.data.\*.urlClassifications.\* | string | | test WEB_SEARCH |
 action_result.data.\*.urlClassificationsWithSecurityAlert.\* | string | | |
 action_result.data.\*.blocklisted | boolean | | True False |
-summary.total_objects | numeric | | 1 |
-summary.total_objects_successful | numeric | | 1 |
-
-## action: 'submit file'
-
-Submit a file to Zscaler Sandbox
-
-Type: **generic** <br>
-Read only: **False**
-
-This action requires a Sandbox Submission API token. By default, Zscaler antivirus (AV) scans files before submitting them to the sandbox for a verdict. If a verdict already exists, set the 'force' parameter to make the sandbox analyze the file again. You can submit up to 100 files per day.
-
-#### Action Parameters
-
-PARAMETER | REQUIRED | DESCRIPTION | TYPE | CONTAINS
---------- | -------- | ----------- | ---- | --------
-**vault_id** | required | Vault ID of file to submit | string | `vault id` `sha1` |
-**force** | optional | Submit file to sandbox even if found malicious during AV scan and a verdict already exists | boolean | |
-
-#### Action Output
-
-DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
---------- | ---- | -------- | --------------
-action_result.status | string | | success failure |
-action_result.message | string | | |
-action_result.parameter.vault_id | string | `vault id` `sha1` | |
-action_result.parameter.force | boolean | | |
-action_result.data.\*.code | numeric | | 200 |
-action_result.data.\*.fileType | string | | test zip |
-action_result.data.\*.md5 | string | `md5` | test 6CE6F415D8475545BE5BA114F208B0FF |
-action_result.data.\*.message | string | | test /submit response OK |
-action_result.data.\*.sandboxSubmission | string | | test Virus |
-action_result.data.\*.virusName | string | | test EICAR_Test_File |
-action_result.data.\*.virusType | string | | test Virus |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
