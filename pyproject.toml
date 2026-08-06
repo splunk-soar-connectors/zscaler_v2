@@ -15,6 +15,12 @@ dependencies = [
 [tool.soar.app]
 main_module = "src.app:app"
 
+[tool.pytest.ini_options]
+addopts = ["-m", "not live"]
+markers = [
+    "live: tests that require credentials and access to a live Zscaler tenant",
+]
+
 ### YOU SHOULD NOT NEED TO TOUCH ANYTHING BELOW THIS LINE ###
 
 [dependency-groups]

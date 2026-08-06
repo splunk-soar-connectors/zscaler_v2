@@ -53,6 +53,14 @@ def load_dotenv() -> None:
     test_config.load_dotenv_file()
 
 
+def pytest_collection_modifyitems(items: list[pytest.Item]) -> None:
+    """Mark tests named ``*_live.py`` as requiring a live Zscaler tenant."""
+    live = pytest.mark.live
+    for item in items:
+        if item.path.name.endswith("_live.py"):
+            item.add_marker(live)
+
+
 @pytest.fixture(scope="session")
 def live_asset_config(load_dotenv: None) -> RedactedAssetConfig:
     config = RedactedAssetConfig()
@@ -66,7 +74,7 @@ def live_asset_config(load_dotenv: None) -> RedactedAssetConfig:
             missing.append(env_key)
 
     if missing:
-        raise AssertionError(
+        pytest.skip(
             "Missing required live test environment variables: " + ", ".join(missing)
         )
 
