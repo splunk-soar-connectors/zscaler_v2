@@ -35,10 +35,10 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [get admin users](#action-get-admin-users) - Get a list of admin users <br>
 [get users](#action-get-users) - Get users, optionally filtered by name, department, or group <br>
 [get groups](#action-get-groups) - Get a list of groups <br>
-[add group user](#action-add-group-user) - Add a user to a group <br>
-[remove group user](#action-remove-group-user) - Remove a user from a group <br>
-[get allowlist](#action-get-allowlist) - Get URLs on the allowlist <br>
-[get denylist](#action-get-denylist) - Get URLs on the denylist <br>
+[add user to group](#action-add-user-to-group) - Add a user to a group <br>
+[remove user from group](#action-remove-user-from-group) - Remove a user from a group <br>
+[get allowlist](#action-get-allowlist) - Get web destinations on the allowlist <br>
+[get denylist](#action-get-denylist) - Get web destinations on the denylist <br>
 [update user](#action-update-user) - Update the user with the specified ID <br>
 [add category destination](#action-add-category-destination) - Add web destinations to a custom URL category <br>
 [remove category destination](#action-remove-category-destination) - Remove web destinations from a custom URL category <br>
@@ -452,7 +452,7 @@ action_result.summary.total_groups | numeric | | 4 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
-## action: 'add group user'
+## action: 'add user to group'
 
 Add a user to a group
 
@@ -488,7 +488,7 @@ action_result.data.\*.name | string | | test Test user |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
-## action: 'remove group user'
+## action: 'remove user from group'
 
 Remove a user from a group
 
@@ -526,7 +526,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'get allowlist'
 
-Get URLs on the allowlist
+Get web destinations on the allowlist
 
 Type: **investigate** <br>
 Read only: **True**
@@ -548,7 +548,7 @@ summary.total_objects_successful | numeric | | 1 |
 
 ## action: 'get denylist'
 
-Get URLs on the denylist
+Get web destinations on the denylist
 
 Type: **investigate** <br>
 Read only: **True**

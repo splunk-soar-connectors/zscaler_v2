@@ -76,7 +76,7 @@ def _require_visible_user_name(name: str | None) -> None:
         )
 
 
-def add_group_user(
+def add_user_to_group(
     params: AddGroupUserParams, soar: SOARClient, asset: Asset
 ) -> AddGroupUserOutput:
     for key, value in (("user_id", params.user_id), ("group_id", params.group_id)):

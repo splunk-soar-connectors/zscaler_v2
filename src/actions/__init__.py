@@ -42,8 +42,8 @@ from .submit_file import submit_file
 from .get_admin_users import GetAdminUsersSummary, get_admin_users
 from .get_users import GetUsersSummary, get_users
 from .get_groups import GetGroupsSummary, get_groups
-from .add_group_user import add_group_user
-from .remove_group_user import remove_group_user
+from .add_group_user import add_user_to_group
+from .remove_group_user import remove_user_from_group
 from .get_allowlist import GetAllowlistSummary, get_allowlist
 from .get_denylist import GetDenylistSummary, get_denylist
 from .update_user import update_user
@@ -186,7 +186,7 @@ def register_actions(app: App) -> App:
     )
 
     app.register_action(
-        action=add_group_user,
+        action=add_user_to_group,
         description="Add a user to a group",
         action_type="generic",
         read_only=False,
@@ -195,7 +195,7 @@ def register_actions(app: App) -> App:
     )
 
     app.register_action(
-        action=remove_group_user,
+        action=remove_user_from_group,
         description="Remove a user from a group",
         action_type="correct",
         read_only=False,
@@ -205,7 +205,7 @@ def register_actions(app: App) -> App:
 
     app.register_action(
         action=get_allowlist,
-        description="Get URLs on the allowlist",
+        description="Get web destinations on the allowlist",
         action_type="investigate",
         render_as="table",
         summary_type=GetAllowlistSummary,
@@ -213,7 +213,7 @@ def register_actions(app: App) -> App:
 
     app.register_action(
         action=get_denylist,
-        description="Get URLs on the denylist",
+        description="Get web destinations on the denylist",
         action_type="investigate",
         render_as="table",
         summary_type=GetDenylistSummary,

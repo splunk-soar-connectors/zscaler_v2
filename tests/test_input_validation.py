@@ -116,7 +116,7 @@ def test_add_group_user_rejects_invalid_ids_before_api_call(
     result = _run_action(
         connector_app,
         build_soar_action_input,
-        action="add_group_user",
+        action="add_user_to_group",
         parameters=parameters,
     )
 

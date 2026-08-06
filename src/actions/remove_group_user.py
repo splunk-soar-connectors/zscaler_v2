@@ -52,7 +52,7 @@ class RemoveGroupUserOutput(PermissiveActionOutput):
     name: str | None = OutputField(example_values=["test Elsie"])
 
 
-def remove_group_user(
+def remove_user_from_group(
     params: RemoveGroupUserParams, soar: SOARClient, asset: Asset
 ) -> RemoveGroupUserOutput:
     for key, value in (("user_id", params.user_id), ("group_id", params.group_id)):

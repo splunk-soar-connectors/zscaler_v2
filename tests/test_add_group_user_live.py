@@ -54,7 +54,7 @@ def test_add_group_user_live_updates_user_and_preserves_contract(
     idempotent_result = None
     try:
         input_data = build_live_soar_action_input(
-            action="add_group_user",
+            action="add_user_to_group",
             parameters={"user_id": user_id, "group_id": group_id},
         )
         connector_app.handle(json.dumps(input_data))

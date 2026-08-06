@@ -30,7 +30,7 @@ def test_remove_group_user_rejects_invalid_ids(
         {"user_id": 1, "group_id": 1.5},
     ):
         input_data = build_soar_action_input(
-            action="remove_group_user",
+            action="remove_user_from_group",
             parameters=parameters,
         )
         connector_app.handle(json.dumps(input_data))
@@ -82,7 +82,7 @@ def test_remove_group_user_live_removes_is_idempotent_and_restores(
     second_result = None
     try:
         input_data = build_live_soar_action_input(
-            action="remove_group_user",
+            action="remove_user_from_group",
             parameters={"user_id": user_id, "group_id": group_id},
         )
         connector_app.handle(json.dumps(input_data))
