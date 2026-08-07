@@ -19,7 +19,6 @@
 from soar_sdk.app import App
 from soar_sdk.meta.actions import ActionLock
 
-from .get_report import get_report
 from .list_url_categories import ListUrlCategoriesSummary, list_url_categories
 from .block_web_destination import (
     BlockWebDestinationSummary,
@@ -38,7 +37,6 @@ from .remove_allowed_web_destination import (
     remove_allowed_web_destination,
 )
 from .lookup_web_destination import lookup_web_destination
-from .submit_file import submit_file
 from .get_admin_users import GetAdminUsersSummary, get_admin_users
 from .get_users import GetUsersSummary, get_users
 from .get_groups import GetGroupsSummary, get_groups
@@ -76,12 +74,6 @@ def register_actions(app: App) -> App:
     Returns:
         The app with its extracted actions registered.
     """
-    app.register_action(
-        action=get_report,
-        description="Fetch a sandbox report for the provided MD5 file hash",
-        action_type="investigate",
-    )
-
     app.register_action(
         action=list_url_categories,
         description="List all URL categories",
@@ -149,14 +141,6 @@ def register_actions(app: App) -> App:
         description="Look up ZIA classifications for web destinations",
         action_type="investigate",
         render_as="table",
-    )
-
-    app.register_action(
-        action=submit_file,
-        description="Submit a file to Zscaler Sandbox",
-        action_type="generic",
-        read_only=False,
-        verbose="This action requires a Sandbox Submission API token. By default, Zscaler antivirus (AV) scans files before submitting them to the sandbox for a verdict. If a verdict already exists, set the 'force' parameter to make the sandbox analyze the file again. You can submit up to 100 files per day.",
     )
 
     app.register_action(

@@ -197,8 +197,6 @@ def offline_asset_config() -> RedactedAssetConfig:
         client_id="offline-client",
         client_secret="offline-secret",  # pragma: allowlist secret
         cloud="PRODUCTION",
-        sandbox_token="offline-sandbox-token",  # pragma: allowlist secret
-        sandbox_cloud="zscaler",
     )
 
 
@@ -210,7 +208,7 @@ def _action_input_builder(
     ) -> dict[str, Any]:
         asset_id = os.environ.get("SOAR_ASSET_ID", "123")
         encrypted_asset_config = dict(asset_config)
-        for sensitive_key in ("client_secret", "sandbox_token"):
+        for sensitive_key in ("client_secret",):
             if value := encrypted_asset_config.get(sensitive_key):
                 encrypted_asset_config[sensitive_key] = encryption_helper.encrypt(
                     value,

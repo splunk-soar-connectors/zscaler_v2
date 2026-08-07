@@ -43,19 +43,6 @@ class Asset(BaseAsset):
         default="PRODUCTION",
         required=False,
     )
-    sandbox_token: str | None = AssetField(
-        description=(
-            "Optional ZIA Sandbox Submission API token required only by submit file"
-        ),
-        required=False,
-        sensitive=True,
-    )
-    sandbox_cloud: str | None = AssetField(
-        description=(
-            "Optional ZIA Sandbox cloud name used with the Sandbox Submission API token"
-        ),
-        required=False,
-    )
 
     @field_validator("vanity_domain")
     @classmethod
