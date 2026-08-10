@@ -1,1 +1,3 @@
 **Unreleased**
+
+* Initial release of the Zscaler v2 connector with ZIA actions using Zscaler OneAPI, including an authenticated make request action and unified URL, domain, IPv4, and IPv6 handling for global policy, lookup, and category management.
