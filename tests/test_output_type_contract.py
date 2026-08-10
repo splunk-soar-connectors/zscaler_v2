@@ -12,6 +12,27 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 from src.app import create_zscaler_soar_connector_app
+from src.actions.add_group_user import (
+    AddGroupUserOutput,
+    DepartmentOutput as AddGroupDepartmentOutput,
+    GroupsOutput as AddGroupGroupsOutput,
+)
+from src.actions.get_admin_users import (
+    AdminscopescopeentitiesOutput,
+    AdminscopescopegroupmemberentitiesOutput,
+    GetAdminUsersOutput,
+    RoleOutput,
+)
+from src.actions.remove_group_user import (
+    DepartmentOutput as RemoveGroupDepartmentOutput,
+    GroupsOutput as RemoveGroupGroupsOutput,
+    RemoveGroupUserOutput,
+)
+from src.actions.update_user import (
+    DepartmentOutput as UpdateUserDepartmentOutput,
+    GroupsOutput as UpdateUserGroupsOutput,
+    UpdateUserOutput,
+)
 
 
 def _outputs_by_action() -> dict[str, dict[str, dict[str, object]]]:
@@ -41,7 +62,7 @@ def test_collection_outputs_use_wildcard_datapaths() -> None:
             "action_result.data.*.keywords.*",
             "action_result.data.*.urls.*",
         },
-        "list_destination_group": {
+        "list_destination_groups": {
             "action_result.data.*.addresses.*",
             "action_result.data.*.countries.*",
             "action_result.data.*.ipCategories.*",
@@ -73,3 +94,33 @@ def test_echoed_parameters_keep_numeric_and_boolean_types() -> None:
         ]["data_type"]
         == "boolean"
     )
+
+
+def test_web_destination_list_outputs_have_matching_cef_types() -> None:
+    outputs = _outputs_by_action()
+    expected_cef_types = {"url", "domain", "ip", "ipv6"}
+
+    for action in ("get_allowlist", "get_denylist"):
+        output = outputs[action]["action_result.data.*.url"]
+        assert set(output["contains"]) == expected_cef_types
+
+
+def test_user_and_group_output_identifiers_are_integers() -> None:
+    expected_annotations = (
+        (AddGroupDepartmentOutput, "id", int | None),
+        (AddGroupGroupsOutput, "id", int | None),
+        (AddGroupUserOutput, "id", int | None),
+        (RemoveGroupDepartmentOutput, "id", int),
+        (RemoveGroupGroupsOutput, "id", int),
+        (RemoveGroupUserOutput, "id", int | None),
+        (UpdateUserDepartmentOutput, "id", int),
+        (UpdateUserGroupsOutput, "id", int),
+        (UpdateUserOutput, "id", int | None),
+        (AdminscopescopeentitiesOutput, "id", int),
+        (AdminscopescopegroupmemberentitiesOutput, "id", int),
+        (RoleOutput, "id", int),
+        (GetAdminUsersOutput, "id", int),
+    )
+
+    for output_model, field_name, annotation in expected_annotations:
+        assert output_model.model_fields[field_name].annotation == annotation

@@ -18,13 +18,13 @@ from typing import Any
 from soar_sdk.app import App
 
 
-def test_list_destination_group_rejects_invalid_ids(
+def test_list_destination_groups_rejects_invalid_ids(
     connector_app: App,
     build_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
     for group_ids in ("abc", "1,-2"):
         input_data = build_soar_action_input(
-            action="list_destination_group",
+            action="list_destination_groups",
             parameters={"ip_group_ids": group_ids},
         )
         connector_app.handle(json.dumps(input_data))
@@ -36,12 +36,12 @@ def test_list_destination_group_rejects_invalid_ids(
         )
 
 
-def test_list_destination_group_live_supports_full_and_lite_id_queries(
+def test_list_destination_groups_live_supports_full_and_lite_id_queries(
     connector_app: App,
     build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
     list_input = build_live_soar_action_input(
-        action="list_destination_group",
+        action="list_destination_groups",
         parameters={"limit": 2, "lite": False},
     )
     connector_app.handle(json.dumps(list_input))
@@ -57,7 +57,7 @@ def test_list_destination_group_live_supports_full_and_lite_id_queries(
 
     group_ids = [str(row["id"]) for row in full_rows]
     lite_list_input = build_live_soar_action_input(
-        action="list_destination_group",
+        action="list_destination_groups",
         parameters={
             "category_type": full_rows[0]["type"],
             "limit": 2,
@@ -75,7 +75,7 @@ def test_list_destination_group_live_supports_full_and_lite_id_queries(
     assert all(set(row) == {"id", "name", "type"} for row in lite_list_rows)
 
     lite_input = build_live_soar_action_input(
-        action="list_destination_group",
+        action="list_destination_groups",
         parameters={
             "ip_group_ids": ", ".join(group_ids),
             "category_type": ",".join({row["type"] for row in full_rows}),
@@ -94,12 +94,12 @@ def test_list_destination_group_live_supports_full_and_lite_id_queries(
     assert all(set(row) == {"id", "name", "type"} for row in lite_rows)
 
 
-def test_list_destination_group_live_excludes_requested_type(
+def test_list_destination_groups_live_excludes_requested_type(
     connector_app: App,
     build_live_soar_action_input: Callable[..., dict[str, Any]],
 ) -> None:
     initial_input = build_live_soar_action_input(
-        action="list_destination_group",
+        action="list_destination_groups",
         parameters={"limit": 10},
     )
     connector_app.handle(json.dumps(initial_input))
@@ -108,7 +108,7 @@ def test_list_destination_group_live_excludes_requested_type(
     excluded_type = initial_result.get_data()[0]["type"]
 
     filtered_input = build_live_soar_action_input(
-        action="list_destination_group",
+        action="list_destination_groups",
         parameters={"exclude_type": excluded_type, "limit": 10},
     )
     connector_app.handle(json.dumps(filtered_input))

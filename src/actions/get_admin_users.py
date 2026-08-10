@@ -34,12 +34,12 @@ class GetAdminUsersParams(Params):
 
 
 class AdminscopescopeentitiesOutput(ActionOutput):
-    id: float = OutputField(example_values=[4460340])
+    id: int = OutputField(example_values=[4460340])
     name: str = OutputField(example_values=["test Example App"])
 
 
 class AdminscopescopegroupmemberentitiesOutput(ActionOutput):
-    id: float = OutputField(example_values=[8035054])
+    id: int = OutputField(example_values=[8035054])
 
 
 class ExtensionsOutput(ActionOutput):
@@ -49,7 +49,7 @@ class ExtensionsOutput(ActionOutput):
 
 class RoleOutput(ActionOutput):
     extensions: ExtensionsOutput
-    id: float
+    id: int
     isNameL10nTag: bool = OutputField(example_values=[True])
     name: str = OutputField(
         column_name="Role",
@@ -58,7 +58,7 @@ class RoleOutput(ActionOutput):
 
 
 class GetAdminUsersOutput(PermissiveActionOutput):
-    id: float = OutputField(
+    id: int = OutputField(
         cef_types=["zscaler user id"],
         column_name="Admin ID",
         example_values=[889814],

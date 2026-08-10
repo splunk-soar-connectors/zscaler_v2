@@ -36,7 +36,7 @@ EXPECTED_TABLE_COLUMNS = {
     "get_departments": ["Department Id", "Department Name", "Non-editable"],
     "get_groups": ["Group ID", "Group Name", "Comments", "Non-editable"],
     "get_users": ["User ID", "User Name", "Email", "Department", "Disabled"],
-    "list_destination_group": [
+    "list_destination_groups": [
         "Group ID",
         "Group Name",
         "Type",

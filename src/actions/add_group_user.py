@@ -38,12 +38,12 @@ class AddGroupUserParams(Params):
 
 
 class DepartmentOutput(ActionOutput):
-    id: float | None = OutputField(example_values=[4459551])
+    id: int | None = OutputField(example_values=[4459551])
     name: str | None = OutputField(example_values=["test Service Admin"])
 
 
 class GroupsOutput(ActionOutput):
-    id: float | None = OutputField(example_values=[4460341])
+    id: int | None = OutputField(example_values=[4460341])
     name: str | None = OutputField(example_values=["test Example App"])
 
 
@@ -53,7 +53,7 @@ class AddGroupUserOutput(PermissiveActionOutput):
     department: DepartmentOutput | None
     email: str | None = OutputField(example_values=["test 134@example.us"])
     groups: list[GroupsOutput] | None
-    id: float | None = OutputField(example_values=[9840695])
+    id: int | None = OutputField(example_values=[9840695])
     name: str | None = OutputField(example_values=["test Test user"])
 
 

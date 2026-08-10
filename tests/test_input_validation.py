@@ -40,7 +40,7 @@ def _run_action(
         "get_admin_users",
         "get_groups",
         "get_users",
-        "list_destination_group",
+        "list_destination_groups",
     ],
 )
 @pytest.mark.parametrize("limit", [0, -1, 1.5])

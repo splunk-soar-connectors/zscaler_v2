@@ -39,7 +39,7 @@ VARIABLE | REQUIRED | TYPE | DESCRIPTION
 [add category destination](#action-add-category-destination) - Add web destinations to a custom URL category <br>
 [remove category destination](#action-remove-category-destination) - Remove web destinations from a custom URL category <br>
 [create destination group](#action-create-destination-group) - Create a destination group <br>
-[list destination group](#action-list-destination-group) - List destination groups <br>
+[list destination groups](#action-list-destination-groups) - List destination groups <br>
 [edit destination group](#action-edit-destination-group) - Edit a destination group <br>
 [delete destination group](#action-delete-destination-group) - Delete destination groups <br>
 [get departments](#action-get-departments) - Get a list of departments <br>
@@ -456,7 +456,7 @@ DATA PATH | TYPE | CONTAINS | EXAMPLE VALUES
 --------- | ---- | -------- | --------------
 action_result.status | string | | success failure |
 action_result.message | string | | |
-action_result.data.\*.url | string | | |
+action_result.data.\*.url | string | `url` `domain` `ip` `ipv6` | |
 action_result.summary.total_allowlist_items | numeric | | 10 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
@@ -483,7 +483,7 @@ action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.filter | string | | |
 action_result.parameter.query | string | | |
-action_result.data.\*.url | string | | |
+action_result.data.\*.url | string | `url` `domain` `ip` `ipv6` | |
 action_result.summary.total_denylist_items | numeric | | 10 |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
@@ -651,7 +651,7 @@ action_result.data.\*.creatorContext | string | | |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 
-## action: 'list destination group'
+## action: 'list destination groups'
 
 List destination groups
 

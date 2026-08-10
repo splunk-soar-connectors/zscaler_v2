@@ -36,12 +36,12 @@ class UpdateUserParams(Params):
 
 
 class DepartmentOutput(ActionOutput):
-    id: float = OutputField(example_values=[81896690])
+    id: int = OutputField(example_values=[81896690])
     name: str = OutputField(example_values=["test IT"])
 
 
 class GroupsOutput(ActionOutput):
-    id: float = OutputField(cef_types=["zscaler group id"], example_values=[8894813])
+    id: int = OutputField(cef_types=["zscaler group id"], example_values=[8894813])
     name: str = OutputField(example_values=["test Super Admin"])
 
 
@@ -54,9 +54,7 @@ class UpdateUserOutput(PermissiveActionOutput):
         cef_types=["email"], example_values=["test first.last@domain.com"]
     )
     groups: list[GroupsOutput] | None
-    id: float | None = OutputField(
-        cef_types=["zscaler user id"], example_values=[889814]
-    )
+    id: int | None = OutputField(cef_types=["zscaler user id"], example_values=[889814])
     name: str | None = OutputField(example_values=["test First Last"])
 
 

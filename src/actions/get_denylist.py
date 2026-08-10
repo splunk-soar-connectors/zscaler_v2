@@ -57,7 +57,10 @@ class GetDenylistParams(Params):
 
 
 class GetDenylistOutput(ActionOutput):
-    url: str = OutputField(column_name="URL")
+    url: str = OutputField(
+        column_name="URL",
+        cef_types=["url", "domain", "ip", "ipv6"],
+    )
 
 
 class GetDenylistSummary(ActionOutput):

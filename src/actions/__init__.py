@@ -48,9 +48,9 @@ from .update_user import update_user
 from .add_category_destination import add_category_destination
 from .remove_category_destination import remove_category_destination
 from .create_destination_group import create_destination_group
-from .list_destination_group import (
+from .list_destination_groups import (
     ListDestinationGroupSummary,
-    list_destination_group,
+    list_destination_groups,
 )
 from .edit_destination_group import edit_destination_group
 from .delete_destination_group import (
@@ -236,7 +236,7 @@ def register_actions(app: App) -> App:
     )
 
     app.register_action(
-        action=list_destination_group,
+        action=list_destination_groups,
         description="List destination groups",
         action_type="investigate",
         read_only=True,

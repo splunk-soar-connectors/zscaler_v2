@@ -30,7 +30,7 @@ EXPECTED_ACTION_SUMMARIES = {
     "get_departments": {"action_result.summary.total_departments"},
     "get_groups": {"action_result.summary.total_groups"},
     "get_users": {"action_result.summary.total_users"},
-    "list_destination_group": {"action_result.summary.total_destination_groups"},
+    "list_destination_groups": {"action_result.summary.total_destination_groups"},
     "list_url_categories": {"action_result.summary.total_url_categories"},
     "remove_allowed_web_destination": POLICY_CHANGE_SUMMARY,
     "remove_blocked_web_destination": POLICY_CHANGE_SUMMARY,

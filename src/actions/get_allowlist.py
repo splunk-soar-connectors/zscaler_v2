@@ -24,7 +24,10 @@ logger = getLogger()
 
 
 class GetAllowlistOutput(ActionOutput):
-    url: str = OutputField(column_name="allowlist url")
+    url: str = OutputField(
+        column_name="allowlist url",
+        cef_types=["url", "domain", "ip", "ipv6"],
+    )
 
 
 class GetAllowlistSummary(ActionOutput):

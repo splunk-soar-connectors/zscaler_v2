@@ -33,12 +33,12 @@ class RemoveGroupUserParams(Params):
 
 
 class DepartmentOutput(ActionOutput):
-    id: float = OutputField(example_values=[4459551])
+    id: int = OutputField(example_values=[4459551])
     name: str = OutputField(example_values=["test Service Admin"])
 
 
 class GroupsOutput(ActionOutput):
-    id: float = OutputField(example_values=[4459550])
+    id: int = OutputField(example_values=[4459550])
     name: str = OutputField(example_values=["test Service Admin"])
 
 
@@ -48,7 +48,7 @@ class RemoveGroupUserOutput(PermissiveActionOutput):
     department: DepartmentOutput | None
     email: str | None = OutputField(example_values=["test 134@example.us"])
     groups: list[GroupsOutput] | None
-    id: float | None = OutputField(example_values=[9840695])
+    id: int | None = OutputField(example_values=[9840695])
     name: str | None = OutputField(example_values=["test Elsie"])
 
 

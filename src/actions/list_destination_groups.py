@@ -71,7 +71,7 @@ class ListDestinationGroupSummary(ActionOutput):
     total_destination_groups: int = OutputField(example_values=[10])
 
 
-def list_destination_group(
+def list_destination_groups(
     params: ListDestinationGroupParams, soar: SOARClient, asset: Asset
 ) -> list[ListDestinationGroupOutput]:
     group_ids = [
@@ -195,8 +195,8 @@ def list_destination_group(
                 }
             rows.append(ListDestinationGroupOutput(**group_data))
     except Exception as exc:
-        logger.exception("List destination group failed")
-        message = f"List destination group failed: {exc}"
+        logger.exception("List destination groups failed")
+        message = f"List destination groups failed: {exc}"
         soar.set_message(message)
         raise ActionFailure(message) from exc
 
