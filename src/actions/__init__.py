@@ -80,7 +80,8 @@ def register_actions(app: App) -> App:
         action_type="investigate",
         render_as="table",
         summary_type=ListUrlCategoriesSummary,
-    )
+            read_only=True,
+)
 
     app.register_action(
         action=block_web_destination,
@@ -141,7 +142,8 @@ def register_actions(app: App) -> App:
         description="Look up ZIA classifications for web destinations",
         action_type="investigate",
         render_as="table",
-    )
+            read_only=True,
+)
 
     app.register_action(
         action=get_admin_users,
@@ -149,7 +151,8 @@ def register_actions(app: App) -> App:
         action_type="investigate",
         render_as="table",
         summary_type=GetAdminUsersSummary,
-    )
+            read_only=True,
+)
 
     app.register_action(
         action=get_users,
@@ -158,7 +161,8 @@ def register_actions(app: App) -> App:
         render_as="table",
         summary_type=GetUsersSummary,
         verbose="Get users, optionally filtered by name, department, or group. The name parameter performs a partial match. The department and group parameters perform a 'starts with' match.",
-    )
+            read_only=True,
+)
 
     app.register_action(
         action=get_groups,
@@ -167,7 +171,8 @@ def register_actions(app: App) -> App:
         render_as="table",
         summary_type=GetGroupsSummary,
         verbose="Get groups whose name or comments match the search parameter.",
-    )
+            read_only=True,
+)
 
     app.register_action(
         action=add_user_to_group,
@@ -193,7 +198,8 @@ def register_actions(app: App) -> App:
         action_type="investigate",
         render_as="table",
         summary_type=GetAllowlistSummary,
-    )
+            read_only=True,
+)
 
     app.register_action(
         action=get_denylist,
@@ -201,7 +207,8 @@ def register_actions(app: App) -> App:
         action_type="investigate",
         render_as="table",
         summary_type=GetDenylistSummary,
-    )
+            read_only=True,
+)
 
     app.register_action(
         action=update_user,
@@ -267,7 +274,8 @@ def register_actions(app: App) -> App:
         action_type="investigate",
         render_as="table",
         summary_type=GetDepartmentsSummary,
-    )
+            read_only=True,
+)
 
     app.register_action(
         action=get_category_details,
@@ -275,7 +283,8 @@ def register_actions(app: App) -> App:
         action_type="investigate",
         render_as="table",
         summary_type=GetCategoryDetailsSummary,
-    )
+            read_only=True,
+)
 
     make_request_action = app.make_request()(make_request)
     make_request_action.meta.description = (
