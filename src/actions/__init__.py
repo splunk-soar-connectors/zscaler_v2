@@ -66,7 +66,7 @@ _ASSET_MUTATION_LOCK = ActionLock()
 
 
 def register_actions(app: App) -> App:
-    """Register the extracted Zscaler v2 actions.
+    """Register the extracted Zscaler OneAPI actions.
 
     Args:
         app: SOAR SDK app instance.

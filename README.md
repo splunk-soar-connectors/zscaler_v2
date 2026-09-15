@@ -1,16 +1,16 @@
-# Zscaler v2
+# Zscaler OneAPI
 
 Publisher: Splunk <br>
 Connector Version: 1.0.1 <br>
 Product Vendor: Zscaler <br>
-Product Name: Zscaler v2 <br>
+Product Name: Zscaler OneAPI <br>
 Minimum Product Version: 7.0.0
 
 This app implements containment and investigative actions for Zscaler Internet Access
 
 ### Configuration variables
 
-This table lists the configuration variables required to operate Zscaler v2. These variables are specified when configuring a Zscaler v2 asset in Splunk SOAR.
+This table lists the configuration variables required to operate Zscaler OneAPI. These variables are specified when configuring a Zscaler OneAPI asset in Splunk SOAR.
 
 VARIABLE | REQUIRED | TYPE | DESCRIPTION
 -------- | -------- | ---- | -----------

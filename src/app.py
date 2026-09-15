@@ -19,14 +19,14 @@ from .connectivity import test_connectivity
 
 
 def create_zscaler_soar_connector_app() -> App:
-    """Create and configure the Zscaler v2 connector app."""
+    """Create and configure the Zscaler OneAPI connector app."""
     app = App(
-        name="Zscaler v2",
+        name="Zscaler OneAPI",
         app_type="network security",
         logo="logo_zscaler.svg",
         logo_dark="logo_zscaler_dark.svg",
         product_vendor="Zscaler",
-        product_name="Zscaler v2",
+        product_name="Zscaler OneAPI",
         publisher="Splunk",
         appid="6f172977-769c-4f3f-b521-ded635067483",
         fips_compliant=True,
