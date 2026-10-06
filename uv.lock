@@ -1305,7 +1305,7 @@ wheels = [
 
 [[package]]
 name = "zscaler-sdk-python"
-version = "1.9.38"
+version = "1.11.0"
 source = { registry = "https://pypi.python.org/simple" }
 dependencies = [
     { name = "aenum" },
@@ -1322,9 +1322,9 @@ dependencies = [
     { name = "requests" },
     { name = "urllib3" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/d3/46/7ed6413ae4381e04ca139ea19aafcbcf7685e2530d0971185c21f2011e69/zscaler_sdk_python-1.9.38.tar.gz", hash = "sha256:6d220f4504e8e9f97f5171078ef0855f9c7e9995590f9d9b8e100a73d2653123", size = 722234, upload-time = "2026-07-14T22:52:47.284Z" }
+sdist = { url = "https://files.pythonhosted.org/packages/f3/71/0ab3eee3693a72267dca4065c782f5495f415aadddc9721f55649c3f0718/zscaler_sdk_python-1.11.0.tar.gz", hash = "sha256:7186bd239da15030e19c4f5aa5be69f346982b8937d033ae02b08810795281eb", size = 785548, upload-time = "2026-09-30T00:44:35.867Z" }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/d6/a6/8521dbfa69605951e3cfe28ff976182500f0286457d6f591f79a08413b26/zscaler_sdk_python-1.9.38-py3-none-any.whl", hash = "sha256:c19373be731fbd06b725d4b6ef568ff42505388f4696600a8c2e3cda27f45cc6", size = 1406819, upload-time = "2026-07-14T22:52:45.285Z" },
+    { url = "https://files.pythonhosted.org/packages/2a/59/fdd6df023b0c6a11b059284adb086c7433ed86731998c842d2dd7b549fc0/zscaler_sdk_python-1.11.0-py3-none-any.whl", hash = "sha256:d5d6ba15aada241e709d0a3443f7fcd011e65519a18865ce1a142fa0831d05c6", size = 1518062, upload-time = "2026-09-30T00:44:34.217Z" },
 ]
 
 [[package]]

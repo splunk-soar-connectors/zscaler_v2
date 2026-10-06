@@ -13,8 +13,10 @@
 # limitations under the License.
 import os
 import secrets
+from hashlib import md5, sha256
 from collections.abc import Callable
 from collections.abc import Iterator
+from pathlib import Path
 from typing import Any, TypedDict
 from uuid import uuid4
 
@@ -46,6 +48,10 @@ class ManagedZiaTestIdentity(TypedDict):
     user_name: str
     user_email: str
     user_comments: str
+
+
+SANDBOX_TEST_FILE_MD5 = "a8f53963f2b499e50faf621f7c117f96"  # pragma: allowlist secret
+SANDBOX_TEST_FILE_SHA256 = "7ef166e82439ea3cafcb28754245325bfbf73e4eb94041bd77fd5c961924709c"  # pragma: allowlist secret -- fixture checksum
 
 
 @pytest.fixture(scope="session", autouse=True)
@@ -83,6 +89,35 @@ def live_asset_config(load_dotenv: None) -> RedactedAssetConfig:
             config[asset_key] = value
 
     return config
+
+
+@pytest.fixture(scope="session")
+def sandbox_live_asset_config(
+    live_asset_config: RedactedAssetConfig,
+) -> RedactedAssetConfig:
+    missing = [
+        env_key
+        for asset_key, env_key in (
+            ("sandbox_token", "ZSCALER_SANDBOX_TOKEN"),
+            ("sandbox_cloud", "ZSCALER_SANDBOX_CLOUD"),
+        )
+        if not live_asset_config.get(asset_key)
+    ]
+    assert not missing, (
+        "Missing required Sandbox live test environment variables: "
+        + ", ".join(missing)
+    )
+    return live_asset_config
+
+
+@pytest.fixture(scope="session")
+def sandbox_test_file() -> Path:
+    path = Path(__file__).parent / "resources" / "files" / "test_dll.dll"
+    assert path.is_file(), f"Sandbox test fixture not found: {path}"
+    contents = path.read_bytes()
+    assert md5(contents).hexdigest() == SANDBOX_TEST_FILE_MD5
+    assert sha256(contents).hexdigest() == SANDBOX_TEST_FILE_SHA256
+    return path
 
 
 @pytest.fixture(scope="session")
@@ -197,6 +232,8 @@ def offline_asset_config() -> RedactedAssetConfig:
         client_id="offline-client",
         client_secret="offline-secret",  # pragma: allowlist secret
         cloud="PRODUCTION",
+        sandbox_token="offline-sandbox-token",  # pragma: allowlist secret
+        sandbox_cloud="zscalerbeta",
     )
 
 
@@ -208,7 +245,7 @@ def _action_input_builder(
     ) -> dict[str, Any]:
         asset_id = os.environ.get("SOAR_ASSET_ID", "123")
         encrypted_asset_config = dict(asset_config)
-        for sensitive_key in ("client_secret",):
+        for sensitive_key in ("client_secret", "sandbox_token"):
             if value := encrypted_asset_config.get(sensitive_key):
                 encrypted_asset_config[sensitive_key] = encryption_helper.encrypt(
                     value,
@@ -221,7 +258,7 @@ def _action_input_builder(
             "asset_id": asset_id,
             "container_id": int(os.environ.get("SOAR_CONTAINER_ID", "456")),
             "config": {
-                "app_version": "1.0.0",
+                "app_version": "1.0.1",
                 "directory": ".",
                 "main_module": "src.app:app",
                 **encrypted_asset_config,
