@@ -158,6 +158,7 @@ def register_actions(app: App) -> App:
         action=submit_file,
         description="Submit a file to Zscaler Sandbox",
         action_type="generic",
+        render_as="table",
         read_only=False,
         lock=_ASSET_MUTATION_LOCK,
         verbose=(

@@ -317,13 +317,13 @@ action_result.status | string | | success failure |
 action_result.message | string | | |
 action_result.parameter.vault_id | string | `vault id` `sha1` | |
 action_result.parameter.force | boolean | | |
-action_result.data.\*.code | numeric | | 200 |
-action_result.data.\*.fileType | string | | test zip |
 action_result.data.\*.md5 | string | `md5` | test 6CE6F415D8475545BE5BA114F208B0FF |
+action_result.data.\*.code | numeric | | 200 |
 action_result.data.\*.message | string | | test /submit response OK |
-action_result.data.\*.sandboxSubmission | string | | test Virus |
+action_result.data.\*.fileType | string | | test zip |
 action_result.data.\*.virusName | string | | test EICAR_Test_File |
 action_result.data.\*.virusType | string | | test Virus |
+action_result.data.\*.sandboxSubmission | string | | test Virus |
 summary.total_objects | numeric | | 1 |
 summary.total_objects_successful | numeric | | 1 |
 

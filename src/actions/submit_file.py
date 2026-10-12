@@ -46,15 +46,27 @@ class SubmitFileParams(Params):
 
 
 class SubmitFileOutput(PermissiveActionOutput):
-    code: float | None = OutputField(example_values=[200])
-    fileType: str | None = OutputField(example_values=["test zip"])
     md5: str | None = OutputField(
-        cef_types=["md5"], example_values=["test 6CE6F415D8475545BE5BA114F208B0FF"]
+        cef_types=["md5"],
+        example_values=["test 6CE6F415D8475545BE5BA114F208B0FF"],
+        column_name="MD5",
     )
-    message: str | None = OutputField(example_values=["test /submit response OK"])
-    sandboxSubmission: str | None = OutputField(example_values=["test Virus"])
-    virusName: str | None = OutputField(example_values=["test EICAR_Test_File"])
-    virusType: str | None = OutputField(example_values=["test Virus"])
+    code: float | None = OutputField(example_values=[200], column_name="Code")
+    message: str | None = OutputField(
+        example_values=["test /submit response OK"], column_name="Message"
+    )
+    fileType: str | None = OutputField(
+        example_values=["test zip"], column_name="File Type"
+    )
+    virusName: str | None = OutputField(
+        example_values=["test EICAR_Test_File"], column_name="Virus Name"
+    )
+    virusType: str | None = OutputField(
+        example_values=["test Virus"], column_name="Virus Type"
+    )
+    sandboxSubmission: str | None = OutputField(
+        example_values=["test Virus"], column_name="Sandbox Submission"
+    )
 
 
 def _submission_message(submission: dict[str, object]) -> str:
