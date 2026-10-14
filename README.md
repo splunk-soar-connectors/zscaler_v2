@@ -1,7 +1,7 @@
 # Zscaler OneAPI
 
 Publisher: Splunk <br>
-Connector Version: 1.0.1 <br>
+Connector Version: 1.1.0 <br>
 Product Vendor: Zscaler <br>
 Product Name: Zscaler OneAPI <br>
 Minimum Product Version: 7.0.0
