@@ -22,7 +22,11 @@ DEFAULT_MAX_RETRY_SECONDS = 60
 
 
 def get_client(
-    asset: Asset, *, request_timeout: int = DEFAULT_REQUEST_TIMEOUT
+    asset: Asset,
+    *,
+    request_timeout: int = DEFAULT_REQUEST_TIMEOUT,
+    max_retries: int = DEFAULT_MAX_RETRIES,
+    max_retry_seconds: int = DEFAULT_MAX_RETRY_SECONDS,
 ) -> ZscalerClient:
     """Create the official Zscaler client from an asset."""
     return ZscalerClient(
@@ -31,11 +35,13 @@ def get_client(
             "clientSecret": asset.client_secret,
             "vanityDomain": asset.vanity_domain,
             "cloud": asset.cloud,
+            "sandboxToken": asset.sandbox_token or "",
+            "sandboxCloud": asset.sandbox_cloud or "",
             "partnerId": SPLUNK_ZSCALER_PARTNER_ID,
             "requestTimeout": request_timeout,
             "rateLimit": {
-                "maxRetries": DEFAULT_MAX_RETRIES,
-                "maxRetrySeconds": DEFAULT_MAX_RETRY_SECONDS,
+                "maxRetries": max_retries,
+                "maxRetrySeconds": max_retry_seconds,
             },
         }
     )

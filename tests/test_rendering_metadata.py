@@ -59,6 +59,15 @@ EXPECTED_TABLE_COLUMNS = {
         "Security Alerts",
         "Blocklisted",
     ],
+    "submit_file": [
+        "MD5",
+        "Code",
+        "Message",
+        "File Type",
+        "Virus Name",
+        "Virus Type",
+        "Sandbox Submission",
+    ],
 }
 
 
