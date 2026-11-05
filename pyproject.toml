@@ -3,12 +3,12 @@ name = "zscaler_v2"
 version = "1.1.0"
 description = "This app implements containment and investigative actions for Zscaler Internet Access"
 license = "Copyright (c) 2026 Splunk Inc."
-requires-python = ">=3.13, <3.15"
+requires-python = ">=3.13, <3.14"
 authors = [
 ]
 dependencies = [
     "regex>=2026.7.19",
-    "splunk-soar-sdk>=4.1.2",
+    "splunk-soar-sdk>=7.1.2",
     "zscaler-sdk-python>=1.9.16",
 ]
 
@@ -44,14 +44,9 @@ environments = [
     "sys_platform == 'linux' and platform_machine == 'aarch64' and python_version == '3.13'",
     "sys_platform == 'darwin' and platform_machine == 'x86_64' and python_version == '3.13'",
     "sys_platform == 'darwin' and platform_machine == 'arm64' and python_version == '3.13'",
-    "sys_platform == 'linux' and platform_machine == 'x86_64' and python_version == '3.14'",
-    "sys_platform == 'linux' and platform_machine == 'aarch64' and python_version == '3.14'",
-    "sys_platform == 'darwin' and platform_machine == 'x86_64' and python_version == '3.14'",
-    "sys_platform == 'darwin' and platform_machine == 'arm64' and python_version == '3.14'",
 ]
 required-environments = [
     "sys_platform == 'linux' and platform_machine == 'x86_64' and python_version == '3.13'",
-    "sys_platform == 'linux' and platform_machine == 'x86_64' and python_version == '3.14'",
 ]
 
 [[tool.mypy.overrides]]
